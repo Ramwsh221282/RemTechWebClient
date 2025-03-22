@@ -1,0 +1,8 @@
+<p-panel>
+  <ng-template #header>
+    <app-page-header [text]="'Техника'"></app-page-header>
+  </ng-template>
+  <app-search-bar
+    (subbmitedSearchTerm)="logSearchText($event)"
+  ></app-search-bar>
+</p-panel>

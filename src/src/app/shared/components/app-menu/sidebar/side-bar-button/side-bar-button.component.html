@@ -1,0 +1,14 @@
+<p-button
+  [routerLink]="[navigationRoute]"
+  routerLinkActive="router-link-active"
+  [raised]="true"
+  [plain]="true"
+>
+  <div
+    [@expandCollapse]="isLabelShown ? 'expand' : 'collapse'"
+    class="button-content"
+  >
+    <span class="button-content-item" [ngClass]="icon"></span>
+    <label *ngIf="isLabelShown" class="button-content-item">{{ label }}</label>
+  </div>
+</p-button>

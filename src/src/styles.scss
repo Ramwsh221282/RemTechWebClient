@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./global_styles/font-styles.scss";
+@import "./global_styles/background-color-styles.scss";
+@import "./global_styles/font-color-styles.scss";
+@import "primeicons/primeicons.css";
+@import "./global_styles/shadow-styles.scss";
+
+body {
+  padding: 0;
+  margin: 0;
+}
