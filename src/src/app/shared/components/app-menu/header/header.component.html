@@ -1,0 +1,35 @@
+<nav class="header-layout bg-primary-400 fg-950 shadowed">
+  <div class="header-logo-part">
+    <p-button (onClick)="onMenuButtonClick($event)">
+      <span class="pi pi-bars" style="font-size: 1.5rem"></span>
+    </p-button>
+    <strong>Aggregator</strong>
+  </div>
+  <div class="header-menu-part">
+    <p-button>
+      <span
+        class="pi pi-user-plus"
+        style="font-size: 1.5rem; cursor: pointer"
+      ></span>
+      <label style="font-size: 1.5rem; cursor: pointer">{{
+        "Регистрация"
+      }}</label>
+    </p-button>
+    <p-button>
+      <span
+        class="pi pi-sign-in"
+        style="font-size: 1.5rem; cursor: pointer"
+      ></span>
+      <label style="font-size: 1.5rem; cursor: pointer">{{
+        "Авторизация"
+      }}</label>
+    </p-button>
+    <p-button>
+      <span
+        class="pi pi-user"
+        style="font-size: 1.5rem; cursor: pointer"
+      ></span>
+      <label style="font-size: 1.5rem; cursor: pointer">{{ "Профиль" }}</label>
+    </p-button>
+  </div>
+</nav>

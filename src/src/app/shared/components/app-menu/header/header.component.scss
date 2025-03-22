@@ -1,0 +1,24 @@
+.header-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+  border: solid 1px #1a1a1a;
+}
+
+.header-logo-part {
+  font-size: 1.5rem;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header-menu-part {
+  font-size: 1.5rem;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+}

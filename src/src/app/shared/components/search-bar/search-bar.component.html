@@ -1,0 +1,14 @@
+<p-toolbar>
+  <div class="search-input-layout">
+    <input
+      [(ngModel)]="input"
+      type="text"
+      class="search-input-style"
+      pInputText
+      placeholder="{{ placeHolderText }}"
+      autocomplete="off"
+      (keyup)="onSubmit($event)"
+    />
+    <p-button [icon]="'pi pi-search'" (onClick)="onSubmit($event)" />
+  </div>
+</p-toolbar>
