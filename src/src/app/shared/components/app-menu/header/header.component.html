@@ -1,35 +1,31 @@
-<nav class="header-layout bg-primary-400 fg-950 shadowed">
+<nav class="header-layout bg-primary-400 shadowed p-0.5">
   <div class="header-logo-part">
-    <p-button (onClick)="onMenuButtonClick($event)">
-      <span class="pi pi-bars" style="font-size: 1.5rem"></span>
-    </p-button>
-    <strong>Aggregator</strong>
+    <p-button
+      [icon]="'pi pi-bars'"
+      [fluid]="true"
+      [size]="'large'"
+      label="Aggregator"
+      (onClick)="onMenuButtonClick($event)"
+    />
   </div>
   <div class="header-menu-part">
-    <p-button>
-      <span
-        class="pi pi-user-plus"
-        style="font-size: 1.5rem; cursor: pointer"
-      ></span>
-      <label style="font-size: 1.5rem; cursor: pointer">{{
-        "Регистрация"
-      }}</label>
-    </p-button>
-    <p-button>
-      <span
-        class="pi pi-sign-in"
-        style="font-size: 1.5rem; cursor: pointer"
-      ></span>
-      <label style="font-size: 1.5rem; cursor: pointer">{{
-        "Авторизация"
-      }}</label>
-    </p-button>
-    <p-button>
-      <span
-        class="pi pi-user"
-        style="font-size: 1.5rem; cursor: pointer"
-      ></span>
-      <label style="font-size: 1.5rem; cursor: pointer">{{ "Профиль" }}</label>
-    </p-button>
+    <p-button
+      [fluid]="true"
+      [size]="'large'"
+      [icon]="'pi pi-user-plus'"
+      [label]="'Регистрация'"
+    />
+    <p-button
+      [fluid]="true"
+      [size]="'large'"
+      [icon]="'pi pi-sign-in'"
+      [label]="'Авторизация'"
+    />
+    <p-button
+      [fluid]="true"
+      [size]="'large'"
+      [icon]="'pi pi-user'"
+      [label]="'Профиль'"
+    />
   </div>
 </nav>
