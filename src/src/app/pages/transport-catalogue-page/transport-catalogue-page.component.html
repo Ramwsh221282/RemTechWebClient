@@ -1,8 +1,18 @@
-<p-panel>
-  <ng-template #header>
-    <app-page-header [text]="'Техника'"></app-page-header>
-  </ng-template>
-  <app-search-bar
-    (subbmitedSearchTerm)="logSearchText($event)"
-  ></app-search-bar>
-</p-panel>
+<section class="flex flex-col gap-1">
+  <p-panel class="w-full h-full sticky-panel">
+    <ng-template #header>
+      <app-page-header [text]="'Техника'"></app-page-header>
+    </ng-template>
+    <app-search-bar (subbmitedSearchTerm)="acceptSearchText($event)" />
+  </p-panel>
+  <section class="flex">
+    <div class="w-1/4">
+      <app-transport-items-filter-form></app-transport-items-filter-form>
+    </div>
+    <div class="w-3/4 ml-0.75">
+      <app-transport-items-list
+        [items]="fetchAdvertisements.value() ?? []"
+      ></app-transport-items-list>
+    </div>
+  </section>
+</section>

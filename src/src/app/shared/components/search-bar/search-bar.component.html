@@ -1,6 +1,7 @@
-<p-toolbar>
-  <div class="search-input-layout">
+<!-- <p-toolbar [style]="{ height: 'auto', margin: '0', padding: '0.25rem' }">
+  <div class="search-input-layout" [style]="{ height: 'auto' }">
     <input
+      [style]="{ height: '40px', padding: '1rem' }"
       [(ngModel)]="input"
       type="text"
       class="search-input-style"
@@ -11,4 +12,32 @@
     />
     <p-button [icon]="'pi pi-search'" (onClick)="onSubmit($event)" />
   </div>
-</p-toolbar>
+</p-toolbar> -->
+<div class="flex flex-row w-full justify-between items-center gap-2">
+  <input
+    [(ngModel)]="input"
+    type="text"
+    pInputText
+    [placeholder]="placeHolderText"
+    [fluid]="'true'"
+  />
+  <p-button
+    [size]="'small'"
+    [icon]="'pi pi-search'"
+    (onClick)="onSubmit($event)"
+  />
+</div>
+<!-- <p-toolbar class="w-full h-1 p-0">
+  <div class="search-input-layout" [style]="{ height: 'auto' }">
+    <input
+      [(ngModel)]="input"
+      type="text"
+      class="w-full h-full"
+      pInputText
+      placeholder="{{ placeHolderText }}"
+      autocomplete="off"
+      (keyup)="onSubmit($event)"
+    />
+    <p-button [icon]="'pi pi-search'" (onClick)="onSubmit($event)" />
+  </div>
+</p-toolbar> -->

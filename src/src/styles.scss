@@ -3,6 +3,9 @@
 @import "./global_styles/font-color-styles.scss";
 @import "primeicons/primeicons.css";
 @import "./global_styles/shadow-styles.scss";
+@import "../node_modules/tailwindcss-primeui/v4/index.css";
+@import "../node_modules/tailwindcss/index.css";
+@import "tailwindcss";
 
 body {
   padding: 0;
