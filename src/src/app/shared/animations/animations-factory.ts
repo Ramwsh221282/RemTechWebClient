@@ -21,4 +21,17 @@ export class AnimationsFactory {
     ]);
     return animation;
   }
+
+  public static fadeInOutAnimation(
+    styleValueAfter: number,
+    styleValueBefore: number
+  ) {
+    const animation = trigger('fadeInOut', [
+      state('fadeIn', style({ opacity: String(styleValueAfter) })),
+      state('fadeOut', style({ opacity: String(styleValueBefore) })),
+      transition('fadeIn => fadeOut', [animate('1s ease-out')]),
+      transition('fadeOut => fadeIn', [animate('1s ease-out')]),
+    ]);
+    return animation;
+  }
 }
