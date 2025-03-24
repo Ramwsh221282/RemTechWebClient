@@ -7,12 +7,16 @@
   </p-panel>
   <section class="flex">
     <div class="w-1/4">
-      <app-transport-items-filter-form></app-transport-items-filter-form>
+      <app-transport-items-filter-form
+        [totalCount]="totalCount"
+        (pageUpdated)="acceptNewPagination($event)"
+      />
     </div>
     <div class="w-3/4 ml-0.75">
       <app-transport-items-list
+        [isLoading]="fetchAdvertisements.isLoading()"
         [items]="fetchAdvertisements.value() ?? []"
-      ></app-transport-items-list>
+      />
     </div>
   </section>
 </section>

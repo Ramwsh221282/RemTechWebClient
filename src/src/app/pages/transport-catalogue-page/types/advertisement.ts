@@ -15,3 +15,8 @@ export type AdvertisementCharacteristic = {
   name: string;
   value: string;
 };
+
+export type AdvertisementResponse = {
+  items: Advertisement[];
+  count: number;
+};

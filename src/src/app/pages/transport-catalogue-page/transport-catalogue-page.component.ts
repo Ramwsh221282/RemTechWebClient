@@ -1,9 +1,6 @@
 import { Pagination } from './../../shared/types/Pagination';
 import { Envelope } from './../../shared/types/Envelope';
-import {
-  Advertisement,
-  AdvertisementCharacteristic,
-} from './types/advertisement';
+import { Advertisement, AdvertisementResponse } from './types/advertisement';
 import { Component, resource, signal, WritableSignal } from '@angular/core';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { PanelModule } from 'primeng/panel';
@@ -35,6 +32,8 @@ import { TransportItemsFilterFormComponent } from './components/transport-items-
   styleUrl: './transport-catalogue-page.component.scss',
 })
 export class TransportCataloguePageComponent {
+  private readonly _totals: WritableSignal<number> = signal(0);
+
   private readonly _pagination: WritableSignal<Pagination> = signal({
     page: 1,
     pageSize: 10,
@@ -51,23 +50,22 @@ export class TransportCataloguePageComponent {
         .addHeader('Content-Type', 'application/json')
         .createFetchFunction()
         .then((resp: Response) => resp.json())
-        .then((envelope: Envelope<Advertisement[]>) => envelope.data),
+        .then((envelope: Envelope<AdvertisementResponse>) => envelope.data)
+        .then((response: AdvertisementResponse) => {
+          this._totals.set(response.count);
+          return response.items;
+        }),
   });
 
-  public acceptSearchText(text: string): void {
-    console.log(text);
+  public get totalCount(): number {
+    return this._totals();
   }
 
-  public acceptNewPagination(pagination: Pagination): void {
+  public acceptSearchText(text: string): void {}
+
+  public acceptNewPagination(page: number): void {
     this._pagination.update((previous) => {
-      return { ...pagination };
+      return { pageSize: previous.pageSize, page: page };
     });
-  }
-
-  public identifyCharacteristic(
-    index: number,
-    characteristic: AdvertisementCharacteristic
-  ): string {
-    return characteristic.name;
   }
 }

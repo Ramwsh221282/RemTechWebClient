@@ -3,12 +3,6 @@
     <form class="flex flex-col gap-2">
       <input type="text" pInputText [fluid]="true" placeholder="Адрес" />
       <p-inputNumber [fluid]="true" placeholder="Цена" />
-      <p-button
-        [fluid]="true"
-        [icon]="'pi pi-filter'"
-        [label]="buttonLabel"
-        [size]="'small'"
-      />
       <div class="flex justify-start">
         <p-chip
           [style]="{ width: chipWidth }"
@@ -37,7 +31,18 @@
           </tr>
         </ng-template>
       </p-table>
+      <p-button
+        [fluid]="true"
+        [icon]="'pi pi-filter'"
+        [label]="buttonLabel"
+        [size]="'small'"
+      />
     </form>
-    <p-paginator [first]="1" [rows]="10" [totalRecords]="10" />
+    <p-paginator
+      (onPageChange)="emitPageChange($event)"
+      class="m-1"
+      [rows]="10"
+      [totalRecords]="totalCount"
+    />
   </ng-content>
 </p-panel>
