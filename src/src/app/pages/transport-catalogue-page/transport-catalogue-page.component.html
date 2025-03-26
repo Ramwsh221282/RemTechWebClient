@@ -10,6 +10,10 @@
       <app-transport-items-filter-form
         [totalCount]="totalCount"
         (pageUpdated)="acceptNewPagination($event)"
+        [characteristics]="fetchCharacteristics.value() ?? []"
+        (submittedFilters)="acceptFilters($event)"
+        (submittedPrice)="acceptPrice($event)"
+        (onSortModeChange)="acceptSortMode($event)"
       />
     </div>
     <div class="w-3/4 ml-0.75">

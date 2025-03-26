@@ -1,3 +1,6 @@
+import { AdvertisementDto } from './../../dto/advertisement-dto';
+import { PriceCriteria } from './../../../../shared/types/PriceCriteria';
+import { Sorting } from './../../../../shared/types/Sorting';
 import {
   Component,
   EventEmitter,
@@ -12,10 +15,16 @@ import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
 import { ChipModule } from 'primeng/chip';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { DialogModule } from 'primeng/dialog';
+import { TransportItemsFilterCharacteristicsDialogComponent } from './transport-items-filter-characteristics-dialog/transport-items-filter-characteristics-dialog.component';
+import {
+  AdvertisementCharacteristic,
+  CharacteristicResponse,
+} from '../../types/advertisement';
 
 @Component({
   selector: 'app-transport-items-filter-form',
@@ -29,33 +38,75 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
     TableModule,
     ChipModule,
     PaginatorModule,
+    DialogModule,
+    TransportItemsFilterCharacteristicsDialogComponent,
   ],
   templateUrl: './transport-items-filter-form.component.html',
   styleUrl: './transport-items-filter-form.component.scss',
 })
 export class TransportItemsFilterFormComponent {
   private readonly _currentPage: WritableSignal<number> = signal(1);
-  @Output() pageUpdated: EventEmitter<number> = new EventEmitter();
-  @Input({ required: true }) totalCount: number = 0;
-  public chipLabel: string = 'Указать характеристику';
-  public buttonLabel: string = 'Применить фильтры';
-  public chipWidth: string = 'auto';
-  public dummyCtxArray: DummyCtx[] = [{ name: 'Модель', value: 'PONSSE' }];
+  private readonly _dialogVisibility: WritableSignal<boolean> = signal(false);
+  private readonly _subbmittedCharacteristics: WritableSignal<
+    AdvertisementCharacteristic[]
+  > = signal([]);
+  private readonly _sortMode: WritableSignal<Sorting> = signal({
+    mode: 'NONE',
+  });
+  private readonly _priceValue: WritableSignal<PriceCriteria> = signal({
+    priceValueA: null,
+    priceValueB: null,
+  });
+  private readonly _addressValue: WritableSignal<string> = signal('');
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.updateChipLabel();
-    this.updateButtonLabel();
+  @Output() pageUpdated: EventEmitter<number> = new EventEmitter();
+  @Output() submittedFilters: EventEmitter<AdvertisementDto> =
+    new EventEmitter();
+  @Output() submittedPrice: EventEmitter<PriceCriteria> = new EventEmitter();
+  @Output() onSortModeChange: EventEmitter<Sorting> = new EventEmitter();
+  @Input({ required: true }) totalCount: number = 0;
+  @Input({ required: true }) characteristics: CharacteristicResponse[] = [];
+  public chipLabel: string = 'Указать характеристику';
+  public sortLabel: string = 'Сортировка по цене';
+  public chipWidth: string = 'auto';
+
+  public get dialogVisibility(): boolean {
+    return this._dialogVisibility();
   }
 
-  public updateButtonLabel(): void {
-    if (window.innerWidth < 600) {
-      this.buttonLabel = '';
-      return;
-    } else {
-      this.buttonLabel = 'Применить фильтры';
+  public get userCharacteristics(): AdvertisementCharacteristic[] {
+    return this._subbmittedCharacteristics();
+  }
+
+  public get address(): string {
+    return this._addressValue();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  public onResize() {
+    this.updateChipLabel();
+    this.updateSortLabel();
+  }
+
+  public acceptUserCharacteristics(
+    characteristics: AdvertisementCharacteristic[]
+  ) {
+    this._subbmittedCharacteristics.set(characteristics);
+  }
+
+  public turnDialogVisibility($event: MouseEvent): void {
+    $event.stopPropagation();
+    this._dialogVisibility.update((previous) => !previous);
+  }
+
+  public updateSortLabel(): void {
+    if (window.innerWidth < 900) {
+      this.sortLabel = '';
+      this.chipWidth = '40px';
       return;
     }
+    (this.sortLabel = 'Сортировка по цене'), (this.chipWidth = 'auto');
+    return;
   }
 
   public updateChipLabel() {
@@ -84,9 +135,50 @@ export class TransportItemsFilterFormComponent {
       return;
     }
   }
-}
 
-export type DummyCtx = {
-  name: string;
-  value: string;
-};
+  public setSortMode(mode: string): void {
+    const newSortMode: Sorting = { mode: mode! };
+    this._sortMode.set(newSortMode);
+    this.onSortModeChange.emit(newSortMode);
+  }
+
+  public isCurrentSortMode(mode: string): boolean {
+    return this._sortMode().mode === mode;
+  }
+
+  public onPriceValueAChange(input: InputNumberInputEvent) {
+    this._priceValue.update((prev) => {
+      prev.priceValueA = Number(input.value);
+      return prev;
+    });
+  }
+
+  public onPriceValueBChange(input: InputNumberInputEvent) {
+    this._priceValue.update((prev) => {
+      prev.priceValueB = Number(input.value);
+      return prev;
+    });
+  }
+
+  public onAddressValueChange($event: Event) {
+    this._addressValue.update((prev) => {
+      const input = $event.target as HTMLInputElement;
+      prev = input.value;
+      return prev;
+    });
+  }
+
+  public submit($event: MouseEvent): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+    const characteristics = this._subbmittedCharacteristics();
+    const address = this._addressValue();
+    const price = this._priceValue();
+    const advertisement: AdvertisementDto = {
+      address: address.trim().length > 0 ? address : null,
+      characteristics: characteristics,
+    };
+    this.submittedFilters.emit(advertisement);
+    this.submittedPrice.emit(price);
+  }
+}
