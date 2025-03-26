@@ -12,7 +12,7 @@ class CustomHttpRequestWrapper {
   private readonly _httpMethod: CustomHttpMethod;
   private _httpParameters: CustomHttpParam[] = [];
   private _httpHeaders: CustomHttpHeader[] = [];
-  private _httpBody: CustomHttpRequestBody[] = [];
+  private _httpBody: object | null = null;
   private _abortSignal: AbortSignal | null = null;
 
   public constructor(
@@ -37,7 +37,7 @@ class CustomHttpRequestWrapper {
 
   public addBody(body: object): CustomHttpRequestWrapper {
     const newRequest: CustomHttpRequestWrapper = this.clone();
-    newRequest._httpBody = [{ body: body }];
+    newRequest._httpBody = body;
     return newRequest;
   }
 
@@ -71,8 +71,7 @@ class CustomHttpRequestWrapper {
       headers: headers,
       signal: this._abortSignal ?? undefined,
     };
-    if (this._httpBody.length > 0)
-      options.body = JSON.stringify(this._httpBody[0]);
+    if (this._httpBody) options.body = JSON.stringify(this._httpBody);
     return options;
   }
 

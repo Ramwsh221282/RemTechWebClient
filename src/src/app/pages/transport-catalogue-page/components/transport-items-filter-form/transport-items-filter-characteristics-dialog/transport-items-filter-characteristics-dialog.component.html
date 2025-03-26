@@ -1,0 +1,55 @@
+<app-dialog-container [visible]="visibility">
+  <app-dialog-content>
+    <app-dialog-header [header]="'Характеристики'" />
+    <p-select
+      [(ngModel)]="selectedCharacteristic"
+      (onChange)="onSelect($event)"
+      [options]="characteristics"
+      [fluid]="true"
+      optionLabel="name"
+      placeholder="Выберите характеристику"
+      [size]="'small'"
+      class="!w-120 !text-primary-50 !border !border-white/30 hover:!bg-white/10 !bg-white/10"
+    ></p-select>
+    @for (characteristic of userCharacteristics; track characteristic.name) {
+    <div class="flex flex-row gap-1 justify-between text-sm items-center">
+      <p-button
+        [icon]="'pi pi-trash'"
+        size="small"
+        (onClick)="removeCharacteristic(characteristic)"
+      />
+      <label>{{ characteristic.name }}</label>
+      <app-dialog-input
+        [placeHolder]="'Введите значение'"
+        [(valueBind)]="characteristic.value"
+      />
+    </div>
+    }
+  </app-dialog-content>
+  <app-dialog-footer>
+    <p-button
+      label="Очистить"
+      [text]="true"
+      [fluid]="'true'"
+      styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+      class="w-full"
+      (onClick)="onClearClick($event)"
+    />
+    <p-button
+      label="Применить"
+      [text]="true"
+      [fluid]="'true'"
+      styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+      class="w-full"
+      (onClick)="onSubmitClick($event)"
+    />
+    <p-button
+      label="Закрыть окно"
+      [text]="true"
+      [fluid]="'true'"
+      styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+      class="w-full"
+      (onClick)="closeClick($event)"
+    />
+  </app-dialog-footer>
+</app-dialog-container>

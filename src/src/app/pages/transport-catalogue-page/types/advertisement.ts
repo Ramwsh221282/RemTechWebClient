@@ -20,3 +20,7 @@ export type AdvertisementResponse = {
   items: Advertisement[];
   count: number;
 };
+
+export type CharacteristicResponse = {
+  name: string;
+};
