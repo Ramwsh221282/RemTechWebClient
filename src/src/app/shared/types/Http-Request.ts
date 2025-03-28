@@ -25,6 +25,8 @@ class CustomHttpRequestWrapper {
 
   public addParameter(name: string, value: string): CustomHttpRequestWrapper {
     const newRequest: CustomHttpRequestWrapper = this.clone();
+    if (value === 'null') return newRequest;
+    if (value.trim().length === 0) return newRequest;
     newRequest._httpParameters.push({ name: name, value: value });
     return newRequest;
   }

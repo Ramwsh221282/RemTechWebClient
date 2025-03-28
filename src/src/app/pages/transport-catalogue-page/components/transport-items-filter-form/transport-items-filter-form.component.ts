@@ -22,6 +22,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { TransportItemsFilterCharacteristicsDialogComponent } from './transport-items-filter-characteristics-dialog/transport-items-filter-characteristics-dialog.component';
 import {
+  Advertisement,
   AdvertisementCharacteristic,
   CharacteristicResponse,
 } from '../../types/advertisement';

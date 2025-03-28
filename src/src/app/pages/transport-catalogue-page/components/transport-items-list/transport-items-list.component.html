@@ -1,24 +1,16 @@
-<p-scroll-panel styleClass="h-187 overflow-auto">
-  <p-panel>
-    <p-dataView #dv [value]="items" [emptyMessage]="' '">
+<p-scroll-panel @fadeIn styleClass="h-187 overflow-auto">
+  <p-panel @fadeIn>
+    <p-dataView @fadeIn #dv [value]="items" [emptyMessage]="' '">
       <ng-template #list let-items>
         @if (isLoading) {
         <div class="flex flex-col h-173 items-center justify-center">
           <p-progress-spinner [ariaLabel]="'Loading'" />
         </div>
         } @else {
-        <div class="grid grid-cols-12 gap-4 grid-nogutter">
-          <div
-            class="col-span-12"
-            *ngFor="let item of items; let first = first"
-            class="col-span-12"
-          >
-            <app-transport-item [item]="item" />
-            <div
-              [ngClass]="{
-                'border-t border-surface-200 dark:border-surface-700': true
-              }"
-            ></div>
+        <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
+          <div class="col-span-12" *ngFor="let item of items;">
+            <app-transport-item [item]="item" (showPhotoGallery)="showPhotoGallery.emit($event)" />
+            <div [ngClass]="{'border-t border-surface-200 dark:border-surface-700': true}"></div>
           </div>
         </div>
         }

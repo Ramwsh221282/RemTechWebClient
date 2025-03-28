@@ -1,11 +1,4 @@
-import {
-  trigger,
-  state,
-  transition,
-  animate,
-  style,
-  AnimationTriggerMetadata,
-} from '@angular/animations';
+import {animate, AnimationTriggerMetadata, state, style, transition, trigger,} from '@angular/animations';
 
 export class AnimationsFactory {
   public static expandCollapseAnimation(
@@ -33,5 +26,21 @@ export class AnimationsFactory {
       transition('fadeOut => fadeIn', [animate('1s ease-out')]),
     ]);
     return animation;
+  }
+
+  public static fadeInAnimation(timingsSeconds: string) {
+    const enterTransition = transition(':enter', [
+      style({opacity: '0'}),
+      animate(timingsSeconds, style({opacity: '1'})),
+    ])
+    return trigger('fadeIn', [enterTransition]);
+  }
+
+  public static fadeOutAnimation(timingsSeconds: string) {
+    const enterTransition = transition(':leave', [
+      style({opacity: '1'}),
+      animate(timingsSeconds, style({opacity: '0'})),
+    ])
+    return trigger('fadeOut', [enterTransition]);
   }
 }

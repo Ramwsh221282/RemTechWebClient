@@ -1,4 +1,5 @@
 import {
+  Advertisement,
   AdvertisementCharacteristic,
   CharacteristicResponse,
 } from './../../../types/advertisement';

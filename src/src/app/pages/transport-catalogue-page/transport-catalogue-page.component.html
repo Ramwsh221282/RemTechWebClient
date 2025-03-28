@@ -20,7 +20,14 @@
       <app-transport-items-list
         [isLoading]="fetchAdvertisements.isLoading()"
         [items]="fetchAdvertisements.value() ?? []"
+        (showPhotoGallery)="acceptAdvertisementForPhotoView($event)"
       />
     </div>
   </section>
 </section>
+<app-transport-item-photo-gallery-dialog *ngIf="selectedAdvertisementForPhotoView"
+                                         [advertisement]="selectedAdvertisementForPhotoView"
+                                         [visibility]="true"
+                                         [header]="selectedAdvertisementForPhotoView.title"
+                                         [photos]="selectedAdvertisementForPhotoView.photos"
+                                         (onClose)="hideAdvertisementPhotoView()"/>

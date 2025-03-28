@@ -1,16 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
-import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import { PanelModule } from 'primeng/panel';
-import { InputTextModule } from 'primeng/inputtext';
+import {Component, EventEmitter, Input, Output, signal, WritableSignal,} from '@angular/core';
+import {ToolbarModule} from 'primeng/toolbar';
+import {ButtonModule} from 'primeng/button';
+import {FormsModule} from '@angular/forms';
+import {PanelModule} from 'primeng/panel';
+import {InputTextModule} from 'primeng/inputtext';
 
 @Component({
   selector: 'app-search-bar',
@@ -25,20 +18,20 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrl: './search-bar.component.scss',
 })
 export class SearchBarComponent {
-  @Input() placeHolderText = 'Поиск в тексте';
+  @Input() placeHolderText = 'Поиск в тексте (в описании, заголовке или характеристиках)';
   @Output() subbmitedSearchTerm: EventEmitter<string> = new EventEmitter();
   public input: WritableSignal<string> = signal('');
 
-  public onSubmit(event: MouseEvent | KeyboardEvent): void {
+  public submitByButton(event: MouseEvent): void {
     event.stopPropagation();
     if (this.isInputEmpty()) return;
-    if (event instanceof MouseEvent) this.submitSearch();
-    if (event instanceof KeyboardEvent && event.key === 'Enter')
-      this.submitSearch();
+    this.submitSearch();
   }
 
-  public onInputChange(input: string) {
-    this.input.set(input);
+  public submitByEnterKey(event: KeyboardEvent): void {
+    event.stopPropagation();
+    if (this.isInputEmpty()) return;
+    if (event.key === 'Enter') this.submitSearch();
   }
 
   private isInputEmpty(): boolean {
@@ -52,7 +45,6 @@ export class SearchBarComponent {
   }
 
   private trimString(input: string): string {
-    const trimmed = input.trim();
-    return trimmed;
+    return input.trim();
   }
 }

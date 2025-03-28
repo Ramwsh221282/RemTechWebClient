@@ -23,6 +23,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TransportItemsFilterFormComponent } from './components/transport-items-filter-form/transport-items-filter-form.component';
 import { Sorting } from '../../shared/types/Sorting';
 import { PriceCriteria } from '../../shared/types/PriceCriteria';
+import {Title} from '@angular/platform-browser';
+import {
+  TransportItemPhotoGalleryDialogComponent
+} from './components/transport-item/transport-item-photo-gallery-dialog/transport-item-photo-gallery-dialog.component';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-transport-catalogue-page',
@@ -36,6 +41,8 @@ import { PriceCriteria } from '../../shared/types/PriceCriteria';
     TransportItemsListComponent,
     PaginatorModule,
     TransportItemsFilterFormComponent,
+    TransportItemPhotoGalleryDialogComponent,
+    NgIf,
   ],
   templateUrl: './transport-catalogue-page.component.html',
   styleUrl: './transport-catalogue-page.component.scss',
@@ -56,6 +63,20 @@ export class TransportCataloguePageComponent {
     priceValueA: null,
     priceValueB: null,
   });
+  private readonly _textSearchTerm: WritableSignal<string> = signal('');
+
+  private readonly _selectedAdvertisementForPhotoView: WritableSignal<Advertisement | null> = signal(null);
+
+  public constructor(titleService: Title) {
+    titleService.setTitle('Список спец. техники')
+  }
+
+  public get selectedAdvertisementForPhotoView(): Advertisement | null {
+    return this._selectedAdvertisementForPhotoView();
+  }
+  public hideAdvertisementPhotoView(): void {
+    this._selectedAdvertisementForPhotoView.set(null);
+  }
 
   public readonly fetchAdvertisements = resource<
     Advertisement[],
@@ -64,6 +85,7 @@ export class TransportCataloguePageComponent {
       filter: AdvertisementDto;
       sorting: Sorting;
       price: PriceCriteria;
+      textSearch: string
     }
   >({
     request: () => ({
@@ -71,6 +93,7 @@ export class TransportCataloguePageComponent {
       filter: this._filterBody(),
       sorting: this._sortMode(),
       price: this._priceMode(),
+      textSearch: this._textSearchTerm()
     }),
     loader: async ({ request, abortSignal }) =>
       await HttpRequestBuilder.create(`${apiUrl}/advertisements`, 'POST')
@@ -81,6 +104,7 @@ export class TransportCataloguePageComponent {
         .addParameter('pageSize', String(request.pagination.pageSize))
         .addParameter('priceStart', String(request.price.priceValueA))
         .addParameter('priceEnd', String(request.price.priceValueB))
+        .addParameter('textSearchTerm', String(request.textSearch))
         .addHeader('Content-Type', 'application/json')
         .createFetchFunction()
         .then((resp: Response) => resp.json())
@@ -109,7 +133,9 @@ export class TransportCataloguePageComponent {
     return this._totals();
   }
 
-  public acceptSearchText(text: string): void {}
+  public acceptSearchText(text: string): void {
+    this._textSearchTerm.set(text);
+  }
 
   public acceptFilters(newDto: AdvertisementDto): void {
     this._filterBody.set(newDto);
@@ -127,5 +153,9 @@ export class TransportCataloguePageComponent {
 
   public acceptSortMode(sort: Sorting): void {
     this._sortMode.set(sort);
+  }
+
+  public acceptAdvertisementForPhotoView(advertisement: Advertisement): void {
+    this._selectedAdvertisementForPhotoView.set(advertisement);
   }
 }
