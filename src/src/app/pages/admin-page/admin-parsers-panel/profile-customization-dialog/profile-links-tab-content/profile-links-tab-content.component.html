@@ -1,0 +1,32 @@
+<div class="flex flex-col gap-2 w-120">
+  <div class="flex flex-row gap-1 items-center">
+    <input
+      class="w-full"
+      type="text"
+      [placeholder]="'Ссылка'"
+      pInputText [(ngModel)]="linkInputValue"
+      (keydown)="submitByEnterKey($event)"
+    />
+    <p-button [icon]="'pi pi-plus'" (onClick)="addLink()" />
+  </div>
+  <p-table class="!bg-transparent" [value]="profile.links" [tableStyle]="{ 'min-width': '5rem' }" [size]="'small'">
+    <ng-template #header>
+      <tr class="!bg-transparent !text-[#FACC15]">
+        <th class="!bg-transparent !text-[#FACC15]">Ссылка</th>
+        <th class="!bg-transparent flex flex-row items-center justify-center !text-[#FACC15]">Действия</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-link>
+      <tr class="!bg-transparent">
+        <td class="overflow-ellipsis overflow-hidden whitespace-nowrap max-w-50 !text-[#FACC15]">
+          <label>
+            {{ link }}
+          </label>
+        </td>
+        <td class="flex flex-row items-center justify-center">
+          <p-button [icon]="'pi pi-trash'" (onClick)="removeLink(link)" />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

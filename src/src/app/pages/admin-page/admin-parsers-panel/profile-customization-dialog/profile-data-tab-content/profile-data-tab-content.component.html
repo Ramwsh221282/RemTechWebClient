@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-2 w-120">
+  <input
+    class="w-full"
+    type="text"
+    pInputText
+    [(ngModel)]="profileName"
+    (ngModelChange)="profileNameChanged($event)"
+  />
+  <div class="grid grid-cols-2 gap-x-1 fg-400">
+    <label>{{ 'Состояние: ' + displayProfileState }}</label>
+    <p-select
+      [placeholder]="'Изменить состояние'"
+      [options]="stateOptions"
+      [size]="'small'"
+      (onChange)="stateChanged($event)"
+      class="!w-60"
+    />
+  </div>
+  <div class="grid grid-cols-2 gap-x-1 fg-400">
+    <label>{{ 'Повторяется: ' + displayProfileHour + ' ч.' }}</label>
+    <p-select
+      [placeholder]="'Изменить повторение'"
+      [options]="repeatHourOptions"
+      [size]="'small'"
+      (onChange)="hoursChanged($event)"
+      class="!w-60"
+    />
+  </div>
+</div>

@@ -7,12 +7,19 @@
           <p-progress-spinner [ariaLabel]="'Loading'" />
         </div>
         } @else {
-        <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
-          <div class="col-span-12" *ngFor="let item of items;">
-            <app-transport-item [item]="item" (showPhotoGallery)="showPhotoGallery.emit($event)" />
-            <div [ngClass]="{'border-t border-surface-200 dark:border-surface-700': true}"></div>
-          </div>
-        </div>
+          @if(items.length === 0) {
+            <div class="flex flex-col h-173 items-center justify-center">
+              <label>Данных пока нет.</label>
+            </div>
+          }
+          @else {
+            <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
+              <div class="col-span-12" *ngFor="let item of items;">
+                <app-transport-item [item]="item" (showPhotoGallery)="showPhotoGallery.emit($event)" />
+                <div [ngClass]="{'border-t border-surface-200 dark:border-surface-700': true}"></div>
+              </div>
+            </div>
+          }
         }
       </ng-template>
     </p-dataView>

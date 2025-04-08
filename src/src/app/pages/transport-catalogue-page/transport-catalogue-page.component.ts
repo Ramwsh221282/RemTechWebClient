@@ -1,28 +1,30 @@
-import { Pagination } from './../../shared/types/Pagination';
-import { Envelope } from './../../shared/types/Envelope';
+import {Pagination} from '../../shared/types/Pagination';
+import {Envelope} from '../../shared/types/Envelope';
 import {
   Advertisement,
   AdvertisementResponse,
   CharacteristicResponse,
 } from './types/advertisement';
-import { Component, resource, signal, WritableSignal } from '@angular/core';
-import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
-import { PanelModule } from 'primeng/panel';
-import { ToolbarModule } from 'primeng/toolbar';
-import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
+import {Component, resource, signal, WritableSignal} from '@angular/core';
+import {PageHeaderComponent} from '../../shared/components/page-header/page-header.component';
+import {PanelModule} from 'primeng/panel';
+import {ToolbarModule} from 'primeng/toolbar';
+import {SearchBarComponent} from '../../shared/components/search-bar/search-bar.component';
 import {
   AdvertisementDto,
   createEmptyAdvertisementDto,
 } from './dto/advertisement-dto';
-import { apiUrl } from '../../shared/api/api-endpoint';
-import { HttpRequestBuilder } from '../../shared/types/Http-Request';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TransportItemsListComponent } from './components/transport-items-list/transport-items-list.component';
-import { PaginatorModule } from 'primeng/paginator';
-import { TransportItemsFilterFormComponent } from './components/transport-items-filter-form/transport-items-filter-form.component';
-import { Sorting } from '../../shared/types/Sorting';
-import { PriceCriteria } from '../../shared/types/PriceCriteria';
+import {apiUrl} from '../../shared/api/api-endpoint';
+import {HttpRequestBuilder} from '../../shared/types/Http-Request';
+import {CardModule} from 'primeng/card';
+import {ButtonModule} from 'primeng/button';
+import {TransportItemsListComponent} from './components/transport-items-list/transport-items-list.component';
+import {PaginatorModule} from 'primeng/paginator';
+import {
+  TransportItemsFilterFormComponent
+} from './components/transport-items-filter-form/transport-items-filter-form.component';
+import {Sorting} from '../../shared/types/Sorting';
+import {PriceCriteria} from '../../shared/types/PriceCriteria';
 import {Title} from '@angular/platform-browser';
 import {
   TransportItemPhotoGalleryDialogComponent
@@ -74,6 +76,7 @@ export class TransportCataloguePageComponent {
   public get selectedAdvertisementForPhotoView(): Advertisement | null {
     return this._selectedAdvertisementForPhotoView();
   }
+
   public hideAdvertisementPhotoView(): void {
     this._selectedAdvertisementForPhotoView.set(null);
   }
@@ -95,7 +98,7 @@ export class TransportCataloguePageComponent {
       price: this._priceMode(),
       textSearch: this._textSearchTerm()
     }),
-    loader: async ({ request, abortSignal }) =>
+    loader: async ({request, abortSignal}) =>
       await HttpRequestBuilder.create(`${apiUrl}/advertisements`, 'POST')
         .addAbortSignal(abortSignal)
         .addBody(request.filter)
@@ -119,7 +122,7 @@ export class TransportCataloguePageComponent {
     CharacteristicResponse[],
     unknown
   >({
-    loader: async ({ abortSignal }) =>
+    loader: async ({abortSignal}) =>
       await HttpRequestBuilder.create(`${apiUrl}/characteristics`, 'GET')
         .addHeader('Content-Type', 'application/json')
         .addAbortSignal(abortSignal)
@@ -147,7 +150,7 @@ export class TransportCataloguePageComponent {
 
   public acceptNewPagination(page: number): void {
     this._pagination.update((previous) => {
-      return { pageSize: previous.pageSize, page: page };
+      return {pageSize: previous.pageSize, page: page};
     });
   }
 
