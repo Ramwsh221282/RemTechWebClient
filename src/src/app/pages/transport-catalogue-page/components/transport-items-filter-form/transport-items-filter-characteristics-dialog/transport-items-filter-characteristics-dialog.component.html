@@ -2,14 +2,16 @@
   <app-dialog-content>
     <app-dialog-header [header]="'Характеристики'" />
     <p-select
+      [style]="{'color': '#FACC15'}"
       [(ngModel)]="selectedCharacteristic"
       (onChange)="onSelect($event)"
       [options]="characteristics"
       [fluid]="true"
       optionLabel="name"
       placeholder="Выберите характеристику"
+      [emptyMessage]="'Характеристик нет.'"
       [size]="'small'"
-      class="!w-120 !text-primary-50 !border !border-white/30 hover:!bg-white/10 !bg-white/10"
+      class="!w-120"
     ></p-select>
     @for (characteristic of userCharacteristics; track characteristic.name) {
     <div class="flex flex-row gap-1 justify-between text-sm items-center">

@@ -1,0 +1,33 @@
+<p-toast [position]="'bottom-right'" />
+@if (viewModel.selectedParser === null) {
+  <p-panel>
+    <ng-template #header>
+      <div class="flex flex-row w-full gap-3 justify-start items-start">
+        <label>Профили:</label>
+        <label>Необходимо выбрать парсер.</label>
+      </div>
+    </ng-template>
+  </p-panel>
+} @else {
+  <p-panel>
+    <ng-template #header>
+      <div class="flex flex-row gap-3 items-center w-full">
+        <label>Профили:</label>
+        <input [(ngModel)]="profileNameInputValue" pInputText class="w-full" (keydown)="profileAddEnterClick($event)" />
+        <p-button [icon]="'pi pi-plus'" [size]="'small'" (onClick)="profileAddButtonClick()" />
+      </div>
+    </ng-template>
+    @if (viewModel.selectedParser.profiles.length === 0) {
+      <div class="flex flex-row w-full gap-3 justify-start items-start">
+        <label>Профили отсутствуют.</label>
+      </div>
+    }
+    @else {
+      <p-list-box [options]="profiles" optionLabel="name"
+                  class="w-full md:w-56"
+                  (onChange)="handleProfileSelected($event)"/>
+    }
+
+  </p-panel>
+}
+

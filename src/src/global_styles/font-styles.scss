@@ -1,4 +1,19 @@
 $font-family-name: "JetBrains Mono";
+$font-family-variant-2: "Play";
+
+@font-face {
+  font-family: $font-family-variant-2;
+  src: url("/fonts/Play-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: $font-family-variant-2;
+  src: url("/fonts/Play-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
 
 @font-face {
   font-family: $font-family-name;
@@ -57,5 +72,6 @@ $font-family-name: "JetBrains Mono";
 }
 
 * {
-  font-family: $font-family-name, sans-serif;
+  //font-family: $font-family-name, sans-serif;
+  font-family: $font-family-variant-2, sans-serif;
 }
