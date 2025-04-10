@@ -2,9 +2,7 @@
   <app-dialog-content>
     <app-dialog-header [header]="'Характеристики'" />
     <p-select
-      [style]="{'color': '#FACC15'}"
-      [(ngModel)]="selectedCharacteristic"
-      (onChange)="onSelect($event)"
+      [style]="{ color: '#FACC15' }"
       [options]="characteristics"
       [fluid]="true"
       optionLabel="name"
@@ -12,8 +10,10 @@
       [emptyMessage]="'Характеристик нет.'"
       [size]="'small'"
       class="!w-120"
+      (onChange)="select($event)"
     ></p-select>
-    @for (characteristic of userCharacteristics; track characteristic.name) {
+    @for (characteristic of internalCharacteristics; track characteristic.name)
+    {
     <div class="flex flex-row gap-1 justify-between text-sm items-center">
       <p-button
         [icon]="'pi pi-trash'"
@@ -35,7 +35,7 @@
       [fluid]="'true'"
       styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
       class="w-full"
-      (onClick)="onClearClick($event)"
+      (onClick)="clear($event)"
     />
     <p-button
       label="Применить"
@@ -43,7 +43,7 @@
       [fluid]="'true'"
       styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
       class="w-full"
-      (onClick)="onSubmitClick($event)"
+      (onClick)="submit($event)"
     />
     <p-button
       label="Закрыть окно"
@@ -51,7 +51,7 @@
       [fluid]="'true'"
       styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
       class="w-full"
-      (onClick)="closeClick($event)"
+      (onClick)="close($event)"
     />
   </app-dialog-footer>
 </app-dialog-container>

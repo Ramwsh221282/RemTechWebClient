@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Advertisement } from '../../types/advertisement';
 import { PanelModule } from 'primeng/panel';
 import { TransportItemComponent } from '../transport-item/transport-item.component';
@@ -7,7 +7,8 @@ import { NgClass, NgFor } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import {AnimationsFactory} from '../../../../shared/animations/animations-factory';
+import { AnimationsFactory } from '../../../../shared/animations/animations-factory';
+import { TransportCataloguePageService } from '../../services/transport-catalogue-page-service';
 
 @Component({
   selector: 'app-transport-items-list',
@@ -23,10 +24,12 @@ import {AnimationsFactory} from '../../../../shared/animations/animations-factor
   ],
   templateUrl: './transport-items-list.component.html',
   styleUrl: './transport-items-list.component.scss',
-  animations: [AnimationsFactory.fadeInAnimation('0.5s ease-in')]
+  animations: [AnimationsFactory.fadeInAnimation('0.5s ease-in')],
 })
 export class TransportItemsListComponent {
-  @Input({ required: true }) items: Advertisement[] = [];
-  @Input({ required: true }) isLoading: boolean = true;
-  @Output() showPhotoGallery: EventEmitter<Advertisement> = new EventEmitter();
+  public readonly catalogueService: TransportCataloguePageService;
+
+  public constructor(catalogueService: TransportCataloguePageService) {
+    this.catalogueService = catalogueService;
+  }
 }

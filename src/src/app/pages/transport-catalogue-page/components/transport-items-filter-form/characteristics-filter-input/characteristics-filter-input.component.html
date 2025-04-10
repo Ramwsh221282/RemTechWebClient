@@ -1,0 +1,14 @@
+<p-table [value]="userCharacteristics" [size]="'small'" class="text-sm">
+  <ng-template #header>
+    <tr>
+      <th>Характеристика</th>
+      <th>Значение</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-ctx>
+    <tr>
+      <td>{{ ctx.name }}</td>
+      <td>{{ ctx.value }}</td>
+    </tr>
+  </ng-template>
+</p-table>

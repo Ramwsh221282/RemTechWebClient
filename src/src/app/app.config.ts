@@ -7,8 +7,9 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { AppMenuService } from './shared/components/app-menu/app-menu.service';
 import { provideHttpClient } from '@angular/common/http';
-import {ParserHttpService} from './pages/admin-page/admin-parsers-panel/services/parser-http.service';
-import {definePreset} from '@primeng/themes';
+import { ParserHttpService } from './pages/admin-page/admin-parsers-panel/services/parser-http.service';
+import { definePreset } from '@primeng/themes';
+import { AdvertisementsHttpService } from './pages/transport-catalogue-page/services/advertisements-http.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -23,10 +24,10 @@ const myPreset = definePreset(Aura, {
       700: '{yellow.700}',
       800: '{yellow.800}',
       900: '{yellow.900}',
-      950: '{yellow.950}'
-    }
-  }
-})
+      950: '{yellow.950}',
+    },
+  },
+});
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,5 +42,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     AppMenuService,
     ParserHttpService,
+    AdvertisementsHttpService,
   ],
 };

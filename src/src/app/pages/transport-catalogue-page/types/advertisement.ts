@@ -1,14 +1,15 @@
 export type Advertisement = {
   id: number;
-  title: string;
-  description: string;
-  address: string;
-  serviceName: string;
-  sourceUrl: string;
-  price: number;
   priceExtra: string;
-  photos: string[];
+  priceValue: number;
+  publishedBy: string;
+  scraperName: string;
+  sourceUrl: string;
+  description: string;
+  title: string;
+  address: string;
   characteristics: AdvertisementCharacteristic[];
+  photos: AdvertisementPhotos[];
 };
 
 export type AdvertisementCharacteristic = {
@@ -16,11 +17,6 @@ export type AdvertisementCharacteristic = {
   value: string;
 };
 
-export type AdvertisementResponse = {
-  items: Advertisement[];
-  count: number;
-};
-
-export type CharacteristicResponse = {
-  name: string;
+export type AdvertisementPhotos = {
+  sourceUrl: string;
 };

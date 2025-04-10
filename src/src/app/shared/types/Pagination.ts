@@ -5,6 +5,12 @@ export type Pagination = {
   pageSize: number;
 };
 
+export class PaginationService {
+  public static updatePage(original: Pagination, page: number): Pagination {
+    return { ...original, page: page };
+  }
+}
+
 export const mapToHttpParameters = (pagination: Pagination): HttpParams => {
   return new HttpParams()
     .append('page', String(pagination.page))
