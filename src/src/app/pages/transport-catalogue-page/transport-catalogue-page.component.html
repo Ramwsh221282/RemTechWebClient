@@ -1,33 +1,21 @@
 <section class="flex flex-col gap-1">
   <p-panel class="w-full h-full sticky-panel">
     <ng-template #header>
-      <app-page-header [text]="'Техника'"/>
+      <app-page-header [text]="'Техника'" />
     </ng-template>
-    <app-search-bar (subbmitedSearchTerm)="acceptSearchText($event)" />
+    <app-search-bar (subbmitedSearchTerm)="acceptTextSearch($event)" />
   </p-panel>
   <section class="flex">
     <div class="w-1/4">
-      <app-transport-items-filter-form
-        [totalCount]="totalCount"
-        (pageUpdated)="acceptNewPagination($event)"
-        [characteristics]="fetchCharacteristics.value() ?? []"
-        (submittedFilters)="acceptFilters($event)"
-        (submittedPrice)="acceptPrice($event)"
-        (onSortModeChange)="acceptSortMode($event)"
-      />
+      <app-transport-items-filter-form />
     </div>
     <div class="w-3/4 ml-0.75">
-      <app-transport-items-list
-        [isLoading]="fetchAdvertisements.isLoading()"
-        [items]="fetchAdvertisements.value() ?? []"
-        (showPhotoGallery)="acceptAdvertisementForPhotoView($event)"
-      />
+      <app-transport-items-list />
     </div>
   </section>
 </section>
-<app-transport-item-photo-gallery-dialog *ngIf="selectedAdvertisementForPhotoView"
-                                         [advertisement]="selectedAdvertisementForPhotoView"
-                                         [visibility]="true"
-                                         [header]="selectedAdvertisementForPhotoView.title"
-                                         [photos]="selectedAdvertisementForPhotoView.photos"
-                                         (onClose)="hideAdvertisementPhotoView()"/>
+<app-transport-item-photo-gallery-dialog
+  *ngIf="cataloguePageService.selectedAdvertisementForPhotoView"
+  [visibility]="cataloguePageService.selectedAdvertisementForPhotoView !== null"
+  (onClose)="cataloguePageService.hideAdvertisementForPhotoView()"
+/>

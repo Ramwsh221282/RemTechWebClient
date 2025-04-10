@@ -1,0 +1,32 @@
+<div class="flex justify-start">
+  <p-chip
+    [style]="{ width: chipWidth }"
+    class="!py-0 !pl-0 !pr-4 text-sm select-none cursor-pointer"
+    [label]="sortLabel"
+  >
+    <p-button
+      [disabled]="sortMode === 'NONE'"
+      (onClick)="setSortMode('NONE')"
+      [fluid]="true"
+      [icon]="'pi pi-times'"
+      rounded="'true'"
+      outlined="'true'"
+    />
+    <p-button
+      [disabled]="sortMode === 'ASC'"
+      (onClick)="setSortMode('ASC')"
+      [fluid]="true"
+      [icon]="'pi pi-arrow-up'"
+      rounded="'true'"
+      outlined="'true'"
+    />
+    <p-button
+      [disabled]="sortMode === 'DESC'"
+      (onClick)="setSortMode('DESC')"
+      [fluid]="true"
+      [icon]="'pi pi-arrow-down'"
+      rounded="'true'"
+      outlined="'true'"
+    />
+  </p-chip>
+</div>

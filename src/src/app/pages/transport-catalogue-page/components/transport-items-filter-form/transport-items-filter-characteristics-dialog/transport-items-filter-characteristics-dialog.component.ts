@@ -1,16 +1,4 @@
-import {
-  Advertisement,
-  AdvertisementCharacteristic,
-  CharacteristicResponse,
-} from './../../../types/advertisement';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogContainerComponent } from '../../../../../shared/components/dialog/dialog-container/dialog-container.component';
 import { DialogContentComponent } from '../../../../../shared/components/dialog/dialog-content/dialog-content.component';
@@ -19,6 +7,13 @@ import { DialogInputComponent } from '../../../../../shared/components/dialog/di
 import { DialogFooterComponent } from '../../../../../shared/components/dialog/dialog-footer/dialog-footer.component';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
+import { TransportCataloguePageService } from '../../../services/transport-catalogue-page-service';
+import { AdvertisementCharacteristic } from '../../../types/advertisement';
+import { ArrayUtils } from '../../../../../shared/utils/array-utils';
+import {
+  AdvertisementFilterService,
+  CharacteristicFilterOption,
+} from '../../../dto/advertisement-filter';
 
 @Component({
   selector: 'app-transport-items-filter-characteristics-dialog',
@@ -36,64 +31,89 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './transport-items-filter-characteristics-dialog.component.scss',
 })
 export class TransportItemsFilterCharacteristicsDialogComponent {
-  private readonly _userSetupCharacteristics: WritableSignal<
-    AdvertisementCharacteristic[]
-  > = signal([]);
-  @Input({ required: true }) characteristics: CharacteristicResponse[] = [];
   @Input({ required: true }) visibility: boolean = false;
   @Output() onClose: EventEmitter<MouseEvent> = new EventEmitter();
-  public selectedCharacteristic: CharacteristicResponse | null = null;
-  @Output() submittedUserCharacteristics: EventEmitter<
-    AdvertisementCharacteristic[]
-  > = new EventEmitter();
+  private readonly _pageService: TransportCataloguePageService;
+  public internalCharacteristics: AdvertisementCharacteristic[] = [];
 
-  public get userCharacteristics(): AdvertisementCharacteristic[] {
-    return this._userSetupCharacteristics();
+  public constructor(pageService: TransportCataloguePageService) {
+    this._pageService = pageService;
   }
 
-  public closeClick($event: MouseEvent): void {
-    $event.stopPropagation();
-    this.onClose.emit($event);
-  }
-
-  public onSelect($event: SelectChangeEvent): void {
-    const selectedCharacteristic: CharacteristicResponse =
-      $event.value as CharacteristicResponse;
-    const converted: AdvertisementCharacteristic = {
-      name: selectedCharacteristic.name,
-      value: '',
-    };
-    if (this.containsCharacteristicAlready(converted)) return;
-    this._userSetupCharacteristics.update((current) => {
-      const newArray = [converted, ...current];
-      newArray.sort((a, b) => a.name.localeCompare(b.name));
-      return newArray;
+  public get characteristics(): AdvertisementCharacteristic[] {
+    return this._pageService.characteristics.map((val) => {
+      const ctx: AdvertisementCharacteristic = { name: val.name, value: '' };
+      return ctx;
     });
   }
 
-  public containsCharacteristicAlready(
+  public removeCharacteristic(
     characteristic: AdvertisementCharacteristic
-  ) {
-    const current = this._userSetupCharacteristics();
-    const index = current.findIndex((ctx) => ctx.name === characteristic.name);
-    return index !== -1;
+  ): void {
+    const withoutCharacteristic = ArrayUtils.removeItem(
+      this.internalCharacteristics,
+      (c) => c.name === characteristic.name
+    );
+    this.internalCharacteristics = [...withoutCharacteristic];
   }
 
-  public removeCharacteristic(characteristic: AdvertisementCharacteristic) {
-    const current = this._userSetupCharacteristics();
-    const index = current.findIndex((ctx) => ctx.name === characteristic.name);
-    if (index !== -1) current.splice(index, 1);
-    this._userSetupCharacteristics.set(current);
+  public select(event: SelectChangeEvent): void {
+    const characteristic = this.resolveSelectCharacteristic(event);
+    if (this.alreadyContainsCharacteristic(characteristic)) return;
+    this.internalCharacteristics = [
+      characteristic,
+      ...this.internalCharacteristics,
+    ];
+    console.log(this.internalCharacteristics);
   }
 
-  public onClearClick($event: MouseEvent): void {
-    $event.stopPropagation();
-    this._userSetupCharacteristics.set([]);
-    this.submittedUserCharacteristics.emit(this._userSetupCharacteristics());
+  public clear(event: MouseEvent): void {
+    event.stopPropagation();
+    this.cleanInternalFilters();
   }
 
-  public onSubmitClick($event: MouseEvent): void {
-    $event.stopPropagation();
-    this.submittedUserCharacteristics.emit(this._userSetupCharacteristics());
+  public submit(event: MouseEvent): void {
+    event.stopPropagation();
+    const filter = this._pageService.filter;
+    const options = this.internalCharacteristics.map((c) => {
+      const option: CharacteristicFilterOption = {
+        name: c.name,
+        value: c.value,
+      };
+      return option;
+    });
+    const updated = AdvertisementFilterService.appplyCharacteristics(
+      filter,
+      options
+    );
+    this._pageService.updateFilter(updated);
+    this.cleanInternalFilters();
+    this.close(event);
+  }
+
+  public close(event: MouseEvent): void {
+    this.cleanInternalFilters();
+    this.onClose.emit(event);
+  }
+
+  private resolveSelectCharacteristic(
+    event: SelectChangeEvent
+  ): AdvertisementCharacteristic {
+    return event.value as AdvertisementCharacteristic;
+  }
+
+  private alreadyContainsCharacteristic(
+    characteristic: AdvertisementCharacteristic
+  ): boolean {
+    return (
+      ArrayUtils.getItem(
+        this.internalCharacteristics,
+        (c) => c.name === characteristic.name
+      ) !== null
+    );
+  }
+
+  private cleanInternalFilters() {
+    this.internalCharacteristics = [];
   }
 }

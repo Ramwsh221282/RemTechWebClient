@@ -1,15 +1,6 @@
-import { AdvertisementDto } from './../../dto/advertisement-dto';
 import { PriceCriteria } from './../../../../shared/types/PriceCriteria';
 import { Sorting } from './../../../../shared/types/Sorting';
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, HostListener, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
@@ -21,11 +12,21 @@ import { ChipModule } from 'primeng/chip';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { TransportItemsFilterCharacteristicsDialogComponent } from './transport-items-filter-characteristics-dialog/transport-items-filter-characteristics-dialog.component';
+import { TransportCataloguePageViewModel } from '../../services/transport-catalogue-page.viewmodel.service';
+import { TransportCatalogueFilterViewModel } from '../../services/transport-catalogue-filter.viewmodel';
+import { TransportCharacteristic } from '../../types/transport-characteristic';
+import { AdvertisementCharacteristic } from '../../types/advertisement';
+import { TransportCataloguePageService } from '../../services/transport-catalogue-page-service';
 import {
-  Advertisement,
-  AdvertisementCharacteristic,
-  CharacteristicResponse,
-} from '../../types/advertisement';
+  AdvertisementFilter,
+  AdvertisementFilterService,
+} from '../../dto/advertisement-filter';
+import { AddressFilterInputComponent } from './address-filter-input/address-filter-input.component';
+import { PriceCriteriaFilterInputComponent } from './price-criteria-filter-input/price-criteria-filter-input.component';
+import { SortCriteriaFilterInputComponent } from './sort-criteria-filter-input/sort-criteria-filter-input.component';
+import { PaginationFilterInputComponent } from './pagination-filter-input/pagination-filter-input.component';
+import { CharacteristicsFilterInputComponent } from './characteristics-filter-input/characteristics-filter-input.component';
+import { AdvertisementsHttpService } from '../../services/advertisements-http.service';
 
 @Component({
   selector: 'app-transport-items-filter-form',
@@ -41,73 +42,39 @@ import {
     PaginatorModule,
     DialogModule,
     TransportItemsFilterCharacteristicsDialogComponent,
+    AddressFilterInputComponent,
+    PriceCriteriaFilterInputComponent,
+    SortCriteriaFilterInputComponent,
+    PaginationFilterInputComponent,
+    CharacteristicsFilterInputComponent,
   ],
   templateUrl: './transport-items-filter-form.component.html',
   styleUrl: './transport-items-filter-form.component.scss',
+  providers: [TransportCatalogueFilterViewModel],
 })
 export class TransportItemsFilterFormComponent {
-  private readonly _currentPage: WritableSignal<number> = signal(1);
   private readonly _dialogVisibility: WritableSignal<boolean> = signal(false);
-  private readonly _subbmittedCharacteristics: WritableSignal<
-    AdvertisementCharacteristic[]
-  > = signal([]);
-  private readonly _sortMode: WritableSignal<Sorting> = signal({
-    mode: 'NONE',
-  });
-  private readonly _priceValue: WritableSignal<PriceCriteria> = signal({
-    priceValueA: null,
-    priceValueB: null,
-  });
-  private readonly _addressValue: WritableSignal<string> = signal('');
+  private readonly _pageService: TransportCataloguePageService;
 
-  @Output() pageUpdated: EventEmitter<number> = new EventEmitter();
-  @Output() submittedFilters: EventEmitter<AdvertisementDto> =
-    new EventEmitter();
-  @Output() submittedPrice: EventEmitter<PriceCriteria> = new EventEmitter();
-  @Output() onSortModeChange: EventEmitter<Sorting> = new EventEmitter();
-  @Input({ required: true }) totalCount: number = 0;
-  @Input({ required: true }) characteristics: CharacteristicResponse[] = [];
   public chipLabel: string = 'Указать характеристику';
-  public sortLabel: string = 'Сортировка по цене';
   public chipWidth: string = 'auto';
+
+  public constructor(pageService: TransportCataloguePageService) {
+    this._pageService = pageService;
+  }
 
   public get dialogVisibility(): boolean {
     return this._dialogVisibility();
   }
 
-  public get userCharacteristics(): AdvertisementCharacteristic[] {
-    return this._subbmittedCharacteristics();
-  }
-
-  public get address(): string {
-    return this._addressValue();
-  }
-
   @HostListener('window:resize', ['$event'])
   public onResize() {
     this.updateChipLabel();
-    this.updateSortLabel();
-  }
-
-  public acceptUserCharacteristics(
-    characteristics: AdvertisementCharacteristic[]
-  ) {
-    this._subbmittedCharacteristics.set(characteristics);
   }
 
   public turnDialogVisibility($event: MouseEvent): void {
     $event.stopPropagation();
     this._dialogVisibility.update((previous) => !previous);
-  }
-
-  public updateSortLabel(): void {
-    if (window.innerWidth < 900) {
-      this.sortLabel = '';
-      this.chipWidth = '40px';
-      return;
-    }
-    (this.sortLabel = 'Сортировка по цене'), (this.chipWidth = 'auto');
-    return;
   }
 
   public updateChipLabel() {
@@ -121,65 +88,13 @@ export class TransportItemsFilterFormComponent {
     return;
   }
 
-  public emitPageChange(state: PaginatorState) {
-    const pageNumber = state.page;
-    if (!pageNumber) {
-      if (this._currentPage() === 1) return;
-      this._currentPage.set(1);
-      this.pageUpdated.emit(1);
-      return;
-    } else {
-      const adjusted = pageNumber + 1;
-      if (adjusted === this._currentPage()) return;
-      this._currentPage.set(adjusted);
-      this.pageUpdated.emit(adjusted);
-      return;
-    }
-  }
-
-  public setSortMode(mode: string): void {
-    const newSortMode: Sorting = { mode: mode! };
-    this._sortMode.set(newSortMode);
-    this.onSortModeChange.emit(newSortMode);
-  }
-
-  public isCurrentSortMode(mode: string): boolean {
-    return this._sortMode().mode === mode;
-  }
-
-  public onPriceValueAChange(input: InputNumberInputEvent) {
-    this._priceValue.update((prev) => {
-      prev.priceValueA = Number(input.value);
-      return prev;
-    });
-  }
-
-  public onPriceValueBChange(input: InputNumberInputEvent) {
-    this._priceValue.update((prev) => {
-      prev.priceValueB = Number(input.value);
-      return prev;
-    });
-  }
-
-  public onAddressValueChange($event: Event) {
-    this._addressValue.update((prev) => {
-      const input = $event.target as HTMLInputElement;
-      prev = input.value;
-      return prev;
-    });
-  }
-
   public submit($event: MouseEvent): void {
-    $event.preventDefault();
-    $event.stopPropagation();
-    const characteristics = this._subbmittedCharacteristics();
-    const address = this._addressValue();
-    const price = this._priceValue();
-    const advertisement: AdvertisementDto = {
-      address: address.trim().length > 0 ? address : null,
-      characteristics: characteristics,
-    };
-    this.submittedFilters.emit(advertisement);
-    this.submittedPrice.emit(price);
+    this._pageService.fetchData();
+  }
+
+  public clean($event: MouseEvent): void {
+    const filter = AdvertisementFilterService.createEmpty();
+    this._pageService.updateFilter(filter);
+    this._pageService.fetchData();
   }
 }

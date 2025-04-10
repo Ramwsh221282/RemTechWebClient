@@ -1,0 +1,9 @@
+<input
+  type="text"
+  pInputText
+  [fluid]="true"
+  placeholder="Адрес"
+  [value]="currentAddress"
+  [(ngModel)]="addressInput"
+  (ngModelChange)="handleAddressChange($event)"
+/>

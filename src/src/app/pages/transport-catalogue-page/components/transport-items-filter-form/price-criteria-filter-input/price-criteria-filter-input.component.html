@@ -1,0 +1,13 @@
+<div class="flex flex-row justify-between gap-1">
+  <p-inputNumber
+    [fluid]="true"
+    placeholder="Цена от"
+    (onInput)="handlePriceFromChange($event)"
+  />
+  <p-inputNumber
+    [fluid]="true"
+    placeholder="Цена до"
+    (onInput)="handlePriceToChange($event)"
+  />
+</div>
+<label class="text-[12px]">* Можно не указывать полный диапазон цены</label>

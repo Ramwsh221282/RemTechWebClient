@@ -1,29 +1,8 @@
 <p-panel [header]="'Фильтрация'">
   <ng-content #content>
     <form class="flex flex-col gap-2">
-      <input
-        type="text"
-        pInputText
-        [fluid]="true"
-        placeholder="Адрес"
-        [value]="address"
-        (input)="onAddressValueChange($event)"
-      />
-      <div class="flex flex-row justify-between gap-1">
-        <p-inputNumber
-          [fluid]="true"
-          placeholder="Цена от"
-          (onInput)="onPriceValueAChange($event)"
-        />
-        <p-inputNumber
-          [fluid]="true"
-          placeholder="Цена до"
-          (onInput)="onPriceValueBChange($event)"
-        />
-      </div>
-      <label class="text-[12px]"
-        >* Можно не указывать полный диапазон цены</label
-      >
+      <app-address-filter-input />
+      <app-price-criteria-filter-input />
       <div class="flex justify-start">
         <p-chip
           [style]="{ width: chipWidth }"
@@ -39,70 +18,25 @@
           />
         </p-chip>
       </div>
-      <div class="flex justify-start">
-        <p-chip
-          [style]="{ width: chipWidth }"
-          class="!py-0 !pl-0 !pr-4 text-sm select-none cursor-pointer"
-          [label]="sortLabel"
-        >
-          <p-button
-            [disabled]="isCurrentSortMode('NONE')"
-            (onClick)="setSortMode('NONE')"
-            [fluid]="true"
-            [icon]="'pi pi-times'"
-            rounded="'true'"
-            outlined="'true'"
-          />
-          <p-button
-            [disabled]="isCurrentSortMode('ASC')"
-            (onClick)="setSortMode('ASC')"
-            [fluid]="true"
-            [icon]="'pi pi-arrow-up'"
-            rounded="'true'"
-            outlined="'true'"
-          />
-          <p-button
-            [disabled]="isCurrentSortMode('DESC')"
-            (onClick)="setSortMode('DESC')"
-            [fluid]="true"
-            [icon]="'pi pi-arrow-down'"
-            rounded="'true'"
-            outlined="'true'"
-          />
-        </p-chip>
-      </div>
-      <p-table [value]="userCharacteristics" [size]="'small'" class="text-sm">
-        <ng-template #header>
-          <tr>
-            <th>Характеристика</th>
-            <th>Значение</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-ctx>
-          <tr>
-            <td>{{ ctx.name }}</td>
-            <td>{{ ctx.value }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+      <app-sort-criteria-filter-input />
+      <app-characteristics-filter-input />
       <p-button
         [fluid]="true"
         [label]="'Применить'"
         [size]="'small'"
         (onClick)="submit($event)"
       />
+      <p-button
+        [fluid]="true"
+        [label]="'Очистить'"
+        [size]="'small'"
+        (onClick)="clean($event)"
+      />
     </form>
-    <p-paginator
-      (onPageChange)="emitPageChange($event)"
-      class="m-1"
-      [rows]="10"
-      [totalRecords]="totalCount"
-    />
+    <app-pagination-filter-input />
   </ng-content>
 </p-panel>
 <app-transport-items-filter-characteristics-dialog
-  [characteristics]="characteristics"
   [visibility]="dialogVisibility"
   (onClose)="turnDialogVisibility($event)"
-  (submittedUserCharacteristics)="acceptUserCharacteristics($event)"
 />
