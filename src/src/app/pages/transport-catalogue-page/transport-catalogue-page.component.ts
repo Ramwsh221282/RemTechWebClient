@@ -11,6 +11,7 @@ import { TransportItemsListComponent } from './components/transport-items-list/t
 import { TransportItemsFilterFormComponent } from './components/transport-items-filter-form/transport-items-filter-form.component';
 import { TransportItemPhotoGalleryDialogComponent } from './components/transport-item/transport-item-photo-gallery-dialog/transport-item-photo-gallery-dialog.component';
 import { NgIf } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-transport-catalogue-page',
@@ -34,8 +35,12 @@ import { NgIf } from '@angular/common';
 export class TransportCataloguePageComponent implements OnInit {
   public readonly cataloguePageService: TransportCataloguePageService;
 
-  public constructor(cataloguePageService: TransportCataloguePageService) {
+  public constructor(
+    cataloguePageService: TransportCataloguePageService,
+    titleService: Title
+  ) {
     this.cataloguePageService = cataloguePageService;
+    titleService.setTitle('Список спец.техники');
   }
 
   public ngOnInit(): void {

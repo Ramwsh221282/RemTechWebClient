@@ -62,11 +62,14 @@
       </div>
       <div class="flex flex-col md:items-end gap-8">
         <div class="flex flex-row-reverse md:flex-row gap-2">
-          <p-button
-            [outlined]="true"
-            class="flex-auto md:flex-initial whitespace-nowrap"
-            label="Подробнее"
-          />
+          <a [href]="itemHref" [target]="'_blank'">
+            <p-button
+              (onClick)="navigateTransportPage($event)"
+              [outlined]="true"
+              class="flex-auto md:flex-initial whitespace-nowrap"
+              label="Подробнее"
+            />
+          </a>
         </div>
       </div>
     </div>
