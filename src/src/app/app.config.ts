@@ -1,5 +1,9 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withViewTransitions,
+} from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
@@ -10,6 +14,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ParserHttpService } from './pages/admin-page/admin-parsers-panel/services/parser-http.service';
 import { definePreset } from '@primeng/themes';
 import { AdvertisementsHttpService } from './pages/transport-catalogue-page/services/advertisements-http.service';
+import { TransportItemHttpService } from './pages/transport-item-page/services/transport-item-http.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -38,10 +43,11 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideHttpClient(),
     AppMenuService,
     ParserHttpService,
     AdvertisementsHttpService,
+    TransportItemHttpService,
   ],
 };

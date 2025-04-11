@@ -1,0 +1,41 @@
+<p-panel [header]="'Характеристики:'">
+  <p-scroll-panel styleClass="h-195.5 overflow-auto">
+    <div class="flex flex-col gap-1">
+      <p-panel [header]="'Характеристики объявления:'">
+        <div class="flex flex-col gap-0.5">
+          <div>
+            <label>Цена: </label>
+            <label>{{
+              transport.priceValue + " Р." + " " + transport.priceExtra
+            }}</label>
+          </div>
+          <div>
+            <label>Адрес: </label>
+            <label>{{ transport.address }}</label>
+          </div>
+          <div>
+            <label>Сервис-источник: </label>
+            <label>{{ transport.scraperName }}</label>
+          </div>
+          <p-button
+            [size]="'small'"
+            [outlined]="true"
+            [label]="'Перейти на источник'"
+          >
+            <a [href]="transport.sourceUrl"> </a>
+          </p-button>
+        </div>
+      </p-panel>
+      <p-panel [header]="'Характеристики транспорта:'">
+        <div class="flex flex-col gap-0.5">
+          @for (ctx of characteristics; track ctx.name) {
+          <div>
+            <label>{{ ctx.name + ": " }}</label>
+            <label>{{ ctx.value }}</label>
+          </div>
+          }
+        </div>
+      </p-panel>
+    </div>
+  </p-scroll-panel>
+</p-panel>
