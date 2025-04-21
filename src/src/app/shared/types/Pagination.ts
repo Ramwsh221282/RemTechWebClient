@@ -6,6 +6,10 @@ export type Pagination = {
 };
 
 export class PaginationService {
+  public static initialized(page: number, size: number): Pagination {
+    return { page: page, pageSize: size };
+  }
+
   public static updatePage(original: Pagination, page: number): Pagination {
     return { ...original, page: page };
   }

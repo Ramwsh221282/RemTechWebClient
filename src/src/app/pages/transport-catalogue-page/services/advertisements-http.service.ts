@@ -1,29 +1,32 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { apiUrl } from '../../../shared/api/api-endpoint';
-import { AdvertisementFilter } from '../dto/advertisement-filter';
-import { Pagination } from '../../../shared/types/Pagination';
-import { Sorting } from '../../../shared/types/Sorting';
-import { Envelope } from '../../../shared/types/Envelope';
-import { AdvertisementsPageResponse } from '../responses/advertisements-page-response';
-import { TransportCharacteristic } from '../types/transport-characteristic';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {apiUrl} from '../../../shared/api/api-endpoint';
+import {AdvertisementFilter} from '../dto/advertisement-filter';
+import {Pagination} from '../../../shared/types/Pagination';
+import {Sorting} from '../../../shared/types/Sorting';
+import {Envelope} from '../../../shared/types/Envelope';
+import {AdvertisementsPageResponse} from '../responses/advertisements-page-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdvertisementsHttpService {
   private readonly _httpClient: HttpClient;
-  private readonly _apiUrl = `${apiUrl}/advertisements`;
 
   public constructor(httpClient: HttpClient) {
     this._httpClient = httpClient;
   }
 
   public fetchAdvertisements(
+    categoryId: string,
+    brandId: string,
     filter: AdvertisementFilter,
     pagination: Pagination,
     sort: Sorting
   ) {
+    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements`;
+
+
     const httpParams: HttpParams = new HttpParams()
       .append('page', pagination.page)
       .append('pageSize', pagination.pageSize)
@@ -42,13 +45,13 @@ export class AdvertisementsHttpService {
     const addressFilter =
       filter.addressFilter.address === ''
         ? null
-        : { address: filter.addressFilter.address };
+        : {address: filter.addressFilter.address};
     const textFilter =
-      filter.textFilter.text === '' ? null : { text: filter.textFilter.text };
+      filter.textFilter.text === '' ? null : {text: filter.textFilter.text};
     const characteristicsFilter =
       filter.characteristicsFilter.characteristics.length === 0
         ? null
-        : { characteristics: filter.characteristicsFilter.characteristics };
+        : {characteristics: filter.characteristicsFilter.characteristics};
     const payload = {
       filter: {
         priceFilter,
@@ -58,15 +61,9 @@ export class AdvertisementsHttpService {
       },
     };
     return this._httpClient.post<Envelope<AdvertisementsPageResponse>>(
-      this._apiUrl,
+      url,
       payload,
-      { params: httpParams }
-    );
-  }
-
-  public fetchCharacteristics() {
-    return this._httpClient.get<Envelope<TransportCharacteristic[]>>(
-      `${this._apiUrl}/characteristics`
+      {params: httpParams}
     );
   }
 }

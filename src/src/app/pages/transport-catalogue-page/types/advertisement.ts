@@ -1,13 +1,13 @@
 export type Advertisement = {
-  id: number;
-  priceExtra: string;
-  priceValue: number;
-  publishedBy: string;
-  scraperName: string;
-  sourceUrl: string;
-  description: string;
+  id: string;
+  brandId: string;
+  categoryId: string;
   title: string;
-  address: string;
+  description: string;
+  priceValue: number;
+  priceExtra: string;
+  sourceUrl: string;
+  geoName: string;
   characteristics: AdvertisementCharacteristic[];
   photos: AdvertisementPhotos[];
 };
@@ -20,3 +20,21 @@ export type AdvertisementCharacteristic = {
 export type AdvertisementPhotos = {
   sourceUrl: string;
 };
+
+export class AdvertisementsFactory {
+  public static empty(): Advertisement {
+    return {
+      id: '',
+      brandId: '',
+      categoryId: '',
+      title: '',
+      description: '',
+      priceValue: 0,
+      priceExtra: '',
+      sourceUrl: '',
+      geoName: '',
+      characteristics: [],
+      photos: [],
+    };
+  }
+}

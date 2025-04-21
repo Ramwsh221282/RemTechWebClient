@@ -1,40 +1,50 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiUrl } from '../../../shared/api/api-endpoint';
-import { Observable } from 'rxjs';
-import { Envelope } from '../../../shared/types/Envelope';
-import { Advertisement } from '../types/advertisement';
-import {
-  mapToHttpParameters,
-  Pagination,
-} from '../../../shared/types/Pagination';
-import {
-  AdvertisementDto,
-  createEmptyAdvertisementDto,
-} from '../dto/advertisement-dto';
+import { AdvertisementsHttpService } from './advertisements-http.service';
+import { TransportCharacteristicsHttpService } from './transport-characteristics-http.service';
+import { TransportCatalogueCategorybrandFetcherService } from './transport-catalogue-categorybrand-fetcher.service';
+import { AdvertisementFilter } from '../dto/advertisement-filter';
+import { Pagination } from '../../../shared/types/Pagination';
+import { Sorting } from '../../../shared/types/Sorting';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportCataloguePageHttpService {
-  private readonly _httpClient: HttpClient;
-  private readonly _apiUrl = apiUrl;
-  constructor(httpClient: HttpClient) {
-    this._httpClient = httpClient;
+  private readonly _advertisementsHttpService: AdvertisementsHttpService;
+  private readonly _characteristicsHttpService: TransportCharacteristicsHttpService;
+  private readonly _categoryBrandFetcher: TransportCatalogueCategorybrandFetcherService;
+
+  constructor(
+    advertisementsHttpService: AdvertisementsHttpService,
+    characteristicsHttpService: TransportCharacteristicsHttpService,
+    categoryBrandFetcher: TransportCatalogueCategorybrandFetcherService,
+  ) {
+    this._advertisementsHttpService = advertisementsHttpService;
+    this._characteristicsHttpService = characteristicsHttpService;
+    this._categoryBrandFetcher = categoryBrandFetcher;
+  }
+
+  public fetchCategoryBrands(categoryId: string, brandId: string) {
+    return this._categoryBrandFetcher.fetchCategoryBrands(categoryId, brandId);
+  }
+
+  public fetchCharacteristics() {
+    return this._characteristicsHttpService.fetchCharacteristics();
   }
 
   public fetchAdvertisements(
+    categoryId: string,
+    brandId: string,
+    filter: AdvertisementFilter,
     pagination: Pagination,
-    advertisementDto: AdvertisementDto | null
-  ): Observable<Envelope<Advertisement>> {
-    const dtoToSend: AdvertisementDto = advertisementDto
-      ? advertisementDto
-      : createEmptyAdvertisementDto();
-
-    return this._httpClient.post<Envelope<Advertisement>>(
-      `${this._apiUrl}/advertisements`,
-      dtoToSend,
-      { params: mapToHttpParameters(pagination) }
+    sort: Sorting,
+  ) {
+    return this._advertisementsHttpService.fetchAdvertisements(
+      categoryId,
+      brandId,
+      filter,
+      pagination,
+      sort,
     );
   }
 }

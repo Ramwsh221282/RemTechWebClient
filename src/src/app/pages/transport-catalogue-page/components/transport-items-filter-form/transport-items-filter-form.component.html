@@ -1,8 +1,8 @@
 <p-panel [header]="'Фильтрация'">
   <ng-content #content>
     <form class="flex flex-col gap-2">
-      <app-address-filter-input />
-      <app-price-criteria-filter-input />
+      <app-address-filter-input/>
+      <app-price-criteria-filter-input/>
       <div class="flex justify-start">
         <p-chip
           [style]="{ width: chipWidth }"
@@ -18,8 +18,8 @@
           />
         </p-chip>
       </div>
-      <app-sort-criteria-filter-input />
-      <app-characteristics-filter-input />
+      <app-sort-criteria-filter-input/>
+      <app-characteristics-filter-input/>
       <p-button
         [fluid]="true"
         [label]="'Применить'"
@@ -33,10 +33,5 @@
         (onClick)="clean($event)"
       />
     </form>
-    <app-pagination-filter-input />
   </ng-content>
 </p-panel>
-<app-transport-items-filter-characteristics-dialog
-  [visibility]="dialogVisibility"
-  (onClose)="turnDialogVisibility($event)"
-/>

@@ -1,19 +1,13 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { Advertisement } from '../../types/advertisement';
+import {
+  Advertisement,
+  AdvertisementsFactory,
+} from '../../types/advertisement';
 import { NgOptimizedImage } from '@angular/common';
 import { Chip } from 'primeng/chip';
 import { AnimationsFactory } from '../../../../shared/animations/animations-factory';
-import { TransportCataloguePageService } from '../../services/transport-catalogue-page-service';
-import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-transport-item',
@@ -26,21 +20,14 @@ import { Router, RouterLink } from '@angular/router';
   ],
 })
 export class TransportItemComponent {
-  @Input({ required: true }) item: Advertisement = null!;
-  private readonly _pageService: TransportCataloguePageService;
-  private readonly _router: Router;
+  @Input({ required: true }) item: Advertisement =
+    AdvertisementsFactory.empty();
 
-  public constructor(
-    pageService: TransportCataloguePageService,
-    router: Router
-  ) {
-    this._pageService = pageService;
-    this._router = router;
-  }
+  public constructor() {}
 
   public showPhotoGallery(event: MouseEvent): void {
-    event.stopPropagation();
-    this._pageService.selectAdvertisementForPhotoView(this.item);
+    // event.stopPropagation();
+    // this._pageService.selectAdvertisementForPhotoView(this.item);
   }
 
   public formatItemCharacteristics(): string {
