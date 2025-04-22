@@ -10,7 +10,6 @@ import { ChipModule } from 'primeng/chip';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { AdvertisementFilterService } from '../../dto/advertisement-filter';
-import { AddressFilterInputComponent } from './address-filter-input/address-filter-input.component';
 import { PriceCriteriaFilterInputComponent } from './price-criteria-filter-input/price-criteria-filter-input.component';
 import { SortCriteriaFilterInputComponent } from './sort-criteria-filter-input/sort-criteria-filter-input.component';
 import { CharacteristicsFilterInputComponent } from './characteristics-filter-input/characteristics-filter-input.component';
@@ -28,7 +27,6 @@ import { CharacteristicsFilterInputComponent } from './characteristics-filter-in
     ChipModule,
     PaginatorModule,
     DialogModule,
-    AddressFilterInputComponent,
     PriceCriteriaFilterInputComponent,
     SortCriteriaFilterInputComponent,
     CharacteristicsFilterInputComponent,

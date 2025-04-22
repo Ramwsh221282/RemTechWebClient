@@ -1,7 +1,6 @@
 <p-panel [header]="'Фильтрация'">
   <ng-content #content>
     <form class="flex flex-col gap-2">
-      <app-address-filter-input/>
       <app-price-criteria-filter-input/>
       <div class="flex justify-start">
         <p-chip
@@ -18,7 +17,6 @@
           />
         </p-chip>
       </div>
-      <app-sort-criteria-filter-input/>
       <app-characteristics-filter-input/>
       <p-button
         [fluid]="true"

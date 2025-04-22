@@ -1,27 +1,34 @@
 <section class="flex flex-col gap-1">
-  <p-panel class="w-full h-full sticky-panel">
+  <p-panel class="w-full h-full sticky-panel" styleClass="h-12">
     <ng-template #header>
       <div class="flex flex-row gap-5 font-bold">
-        <a class="-my-1">{{ 'Категория' }}</a>
+        <a class="-my-1 cursor-pointer underline">{{ 'Категория' }}</a>
+        <a class="-my-1 cursor-pointer underline">{{ categorySignal().name }}</a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
-        <a class="-my-1">{{ categorySignal().name }}</a>
+        <a class="-my-1 cursor-pointer underline">{{ 'Бренд' }}</a>
+        <a class="-my-1 cursor-pointer underline">{{ brandSignal().name }}</a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
-        <a class="-my-1">{{ 'Бренд' }}</a>
-        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
-        <a class="-my-1">{{ brandSignal().name }}</a>
-        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
-        <a class="-my-1">Каталог</a>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">Регион</a>
+        <a
+          class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">
+          {{ selectedGeoInformationSignal() === null ? 'Любой' : selectedGeoInformationSignal()?.details! }}
+        </a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
       </div>
     </ng-template>
-    <app-search-bar (subbmitedSearchTerm)="acceptTextSearch($event)"/>
   </p-panel>
   <section class="flex">
     <div class="w-1/4">
       <app-transport-items-filter-form/>
     </div>
     <div class="w-3/4 ml-0.75">
-      <app-transport-items-list [isLoading]="isLoading()" [items]="advertisementsSignal()"/>
+      <app-transport-items-list [isLoading]="isLoading()"
+                                [items]="advertisementsSignal()"
+                                (sortChange)="acceptSortChange($event)">
+        <app-transport-items-pagination [pagination]="paginationSignal()"
+                                        [total]="totalPagesCountSignal()"
+                                        (onPageChanged)="onPageChanged($event)"/>
+      </app-transport-items-list>
     </div>
   </section>
 </section>
@@ -30,3 +37,7 @@
   [visibility]="selectedAdvertisement() !== null"
   (onClose)="onAdvertisementPhotoViewClose()"
 />
+<app-geo-information-select-dialog [geoInformations]="geoInformationSignal()"
+                                   [visibility]="isSelectingGeoInformation()"
+                                   (onCitySelected)="acceptGeoInformationChange($event)"
+                                   (visibilityChanged)="handleGeoInformationClosed($event)"/>

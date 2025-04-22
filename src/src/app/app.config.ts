@@ -17,7 +17,6 @@ import { AdvertisementsHttpService } from './pages/transport-catalogue-page/serv
 import { TransportItemHttpService } from './pages/transport-item-page/services/transport-item-http.service';
 import { TransportCategoriesHttpService } from './pages/transport-catalogue-page/transport-categories-menu/services/transport-categories-http.service';
 import { CategoryBrandsHttpService } from './pages/transport-catalogue-page/category-brands-menu/services/category-brands-http.service';
-import { TransportCharacteristicsHttpService } from './pages/transport-catalogue-page/services/transport-characteristics-http.service';
 import { TransportCatalogueCategorybrandFetcherService } from './pages/transport-catalogue-page/services/transport-catalogue-categorybrand-fetcher.service';
 import { TransportCataloguePageHttpService } from './pages/transport-catalogue-page/services/transport-catalogue-page.http.service';
 
@@ -56,7 +55,6 @@ export const appConfig: ApplicationConfig = {
     TransportItemHttpService,
     TransportCategoriesHttpService,
     CategoryBrandsHttpService,
-    TransportCharacteristicsHttpService,
     TransportCatalogueCategorybrandFetcherService,
     TransportCataloguePageHttpService,
   ],

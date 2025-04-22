@@ -1,19 +1,29 @@
-<p-scroll-panel @fadeIn styleClass="h-187 overflow-auto">
-  <p-panel @fadeIn styleClass="min-h-187">
+<p-scroll-panel @fadeIn styleClass="h-210 overflow-auto">
+  <p-panel @fadeIn styleClass="min-h-210">
     <p-dataView
       @fadeIn
       #dv
       [value]="items"
       [emptyMessage]="' '"
     >
+      <ng-template #header>
+        <div class="-my-2 p-0 gap-1.5 flex flex-row w-full">
+          <div class="w-full">
+            <app-search-bar [placeHolderText]="'Поиск в описании или заголовках'"/>
+          </div>
+          <div>
+            <app-sort-criteria-filter-input [sort]="sortSignal()" (sortChange)="handleSortChanged($event)"/>
+          </div>
+        </div>
+      </ng-template>
       <ng-template #list let-items>
         @if (isLoading) {
-          <div class="flex flex-col h-173 items-center justify-center">
+          <div class="flex flex-col h-210 items-center justify-center">
             <p-progress-spinner [ariaLabel]="'Loading'"/>
           </div>
         } @else {
           @if (items.length === 0) {
-            <div class="flex flex-col h-173 items-center justify-center">
+            <div class="flex flex-col h-210 items-center justify-center">
               <label>Данных пока нет.</label>
             </div>
           } @else {
@@ -33,5 +43,8 @@
         }
       </ng-template>
     </p-dataView>
+    <ng-content>
+
+    </ng-content>
   </p-panel>
 </p-scroll-panel>

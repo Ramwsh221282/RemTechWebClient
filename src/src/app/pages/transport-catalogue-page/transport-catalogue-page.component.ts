@@ -1,8 +1,6 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
-import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
@@ -31,13 +29,15 @@ import { Advertisement } from './types/advertisement';
 import { TransportCharacteristic } from './types/transport-characteristic';
 import { finalize } from 'rxjs';
 import { Divider } from 'primeng/divider';
+import { TransportItemsPaginationComponent } from './components/transport-items-pagination/transport-items-pagination.component';
+import { GeoInformation } from './types/geoinformation';
+import { GeoInformationSelectDialogComponent } from './components/geo-information-select-dialog/geo-information-select-dialog.component';
 
 @Component({
   selector: 'app-transport-catalogue-page',
   imports: [
     PanelModule,
     ToolbarModule,
-    SearchBarComponent,
     CardModule,
     ButtonModule,
     PaginatorModule,
@@ -46,6 +46,8 @@ import { Divider } from 'primeng/divider';
     TransportItemPhotoGalleryDialogComponent,
     NgIf,
     Divider,
+    TransportItemsPaginationComponent,
+    GeoInformationSelectDialogComponent,
   ],
   templateUrl: './transport-catalogue-page.component.html',
   styleUrl: './transport-catalogue-page.component.scss',
@@ -61,11 +63,14 @@ export class TransportCataloguePageComponent implements OnInit {
   characteristicsSignal: WritableSignal<TransportCharacteristic[]>;
   selectedAdvertisement: WritableSignal<Advertisement | null>;
   isLoading: WritableSignal<boolean>;
+  geoInformationSignal: WritableSignal<GeoInformation[]>;
+  isSelectingGeoInformation: WritableSignal<boolean>;
+  selectedGeoInformationSignal: WritableSignal<GeoInformation | null>;
   activatedRoute: ActivatedRoute;
   titleService: Title;
   httpService: TransportCataloguePageHttpService;
 
-  public constructor(
+  constructor(
     titleService: Title,
     activatedRoute: ActivatedRoute,
     httpService: TransportCataloguePageHttpService,
@@ -84,6 +89,9 @@ export class TransportCataloguePageComponent implements OnInit {
     this.sortSignal = signal(SortingFactory.default());
     this.filterSignal = signal(AdvertisementFilterService.createEmpty());
     this.isLoading = signal(false);
+    this.geoInformationSignal = signal([]);
+    this.selectedGeoInformationSignal = signal(null);
+    this.isSelectingGeoInformation = signal(false);
   }
 
   public ngOnInit(): void {
@@ -98,32 +106,82 @@ export class TransportCataloguePageComponent implements OnInit {
           this.titleService.setTitle(
             `Список спец.техники ${result.category.name} ${result.categoryBrand.name}`,
           );
+          this.refetchAdvertisements();
         });
-      this.isLoading.set(true);
       this.httpService
-        .fetchAdvertisements(
-          categoryId,
-          brandId,
-          this.filterSignal(),
-          this.paginationSignal(),
-          this.sortSignal(),
-        )
-        .pipe(finalize(() => this.isLoading.set(false)))
+        .fetchCharacteristics(categoryId, brandId)
         .subscribe((result) => {
-          if (result.code === 200) {
-            this.advertisementsSignal.set(result.data.advertisements);
-            this.totalPagesCountSignal.set(result.data.totals);
-          }
+          if (result.code === 200) this.characteristicsSignal.set(result.data);
         });
-      this.httpService.fetchCharacteristics().subscribe((result) => {
-        if (result.code === 200) this.characteristicsSignal.set(result.data);
-      });
+      this.httpService
+        .fetchGeoInformation(categoryId, brandId)
+        .subscribe((result) => {
+          if (result.code === 200) this.geoInformationSignal.set(result.data);
+        });
     });
+  }
+
+  public openGeoInformationSelectDialog($event: MouseEvent): void {
+    $event.stopPropagation();
+    this.isSelectingGeoInformation.set(true);
+  }
+
+  public handleGeoInformationClosed($event: boolean): void {
+    this.isSelectingGeoInformation.set(false);
   }
 
   public onAdvertisementPhotoViewClose(): void {
     this.selectedAdvertisement.set(null);
   }
 
+  public onPageChanged(pagination: Pagination): void {
+    this.paginationSignal.set(pagination);
+    this.refetchAdvertisements();
+  }
+
+  private refetchAdvertisements(): void {
+    this.isLoading.set(true);
+    this.httpService
+      .fetchAdvertisements(
+        this.categorySignal().id,
+        this.brandSignal().brandId,
+        this.filterSignal(),
+        this.paginationSignal(),
+        this.sortSignal(),
+      )
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe((result) => {
+        if (result.code === 200) {
+          this.advertisementsSignal.set(result.data.advertisements);
+          this.totalPagesCountSignal.set(result.data.totals);
+        }
+      });
+  }
+
   public acceptTextSearch(searchTerm: string): void {}
+
+  public acceptGeoInformationChange(geoInformation: GeoInformation): void {
+    if (geoInformation.details === 'Любой') {
+      this.selectedGeoInformationSignal.set(null);
+      this.filterSignal.update((prev): AdvertisementFilter => {
+        return AdvertisementFilterService.applyAddress(prev, '');
+      });
+      this.refetchAdvertisements();
+      return;
+    }
+
+    this.selectedGeoInformationSignal.set(geoInformation);
+    this.filterSignal.update((prev): AdvertisementFilter => {
+      return AdvertisementFilterService.applyAddress(
+        prev,
+        this.selectedGeoInformationSignal()!.id,
+      );
+    });
+    this.refetchAdvertisements();
+  }
+
+  public acceptSortChange(sort: Sorting): void {
+    this.sortSignal.set(sort);
+    this.refetchAdvertisements();
+  }
 }

@@ -1,11 +1,14 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {apiUrl} from '../../../shared/api/api-endpoint';
-import {AdvertisementFilter} from '../dto/advertisement-filter';
-import {Pagination} from '../../../shared/types/Pagination';
-import {Sorting} from '../../../shared/types/Sorting';
-import {Envelope} from '../../../shared/types/Envelope';
-import {AdvertisementsPageResponse} from '../responses/advertisements-page-response';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { apiUrl } from '../../../shared/api/api-endpoint';
+import { AdvertisementFilter } from '../dto/advertisement-filter';
+import { Pagination } from '../../../shared/types/Pagination';
+import { Sorting } from '../../../shared/types/Sorting';
+import { Envelope } from '../../../shared/types/Envelope';
+import { AdvertisementsPageResponse } from '../responses/advertisements-page-response';
+import { Observable } from 'rxjs';
+import { GeoInformation } from '../types/geoinformation';
+import { TransportCharacteristic } from '../types/transport-characteristic';
 
 @Injectable({
   providedIn: 'root',
@@ -22,10 +25,9 @@ export class AdvertisementsHttpService {
     brandId: string,
     filter: AdvertisementFilter,
     pagination: Pagination,
-    sort: Sorting
+    sort: Sorting,
   ) {
     const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements`;
-
 
     const httpParams: HttpParams = new HttpParams()
       .append('page', pagination.page)
@@ -43,15 +45,15 @@ export class AdvertisementsHttpService {
           : Number(filter.priceFilter.priceTo),
     };
     const addressFilter =
-      filter.addressFilter.address === ''
+      filter.addressFilter.geoInformationId === ''
         ? null
-        : {address: filter.addressFilter.address};
+        : { geoInformationId: filter.addressFilter.geoInformationId };
     const textFilter =
-      filter.textFilter.text === '' ? null : {text: filter.textFilter.text};
+      filter.textFilter.text === '' ? null : { text: filter.textFilter.text };
     const characteristicsFilter =
       filter.characteristicsFilter.characteristics.length === 0
         ? null
-        : {characteristics: filter.characteristicsFilter.characteristics};
+        : { characteristics: filter.characteristicsFilter.characteristics };
     const payload = {
       filter: {
         priceFilter,
@@ -63,7 +65,23 @@ export class AdvertisementsHttpService {
     return this._httpClient.post<Envelope<AdvertisementsPageResponse>>(
       url,
       payload,
-      {params: httpParams}
+      { params: httpParams },
     );
+  }
+
+  public fetchAdvertisementsGeoInformation(
+    categoryId: string,
+    brandId: string,
+  ): Observable<Envelope<GeoInformation[]>> {
+    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/geo`;
+    return this._httpClient.get<Envelope<GeoInformation[]>>(url);
+  }
+
+  public fetchAdvertisementDetailedCharacteristics(
+    categoryId: string,
+    brandId: string,
+  ): Observable<Envelope<TransportCharacteristic[]>> {
+    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/characteristics`;
+    return this._httpClient.get<Envelope<TransportCharacteristic[]>>(url);
   }
 }

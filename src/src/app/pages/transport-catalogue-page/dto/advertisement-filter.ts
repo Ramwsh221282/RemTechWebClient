@@ -11,7 +11,7 @@ export type PriceFilter = {
 };
 
 export type AddressFilter = {
-  address: string;
+  geoInformationId: string;
 };
 
 export type TextFilter = {
@@ -30,7 +30,7 @@ export type CharacteristicFilterOption = {
 export class AdvertisementFilterService {
   public static createEmpty(): AdvertisementFilter {
     const priceFilter: PriceFilter = { priceFrom: '', priceTo: '' };
-    const addressFilter: AddressFilter = { address: '' };
+    const addressFilter: AddressFilter = { geoInformationId: '' };
     const textFilter: TextFilter = { text: '' };
     const characteristicsFilter: CharacteristicsFilter = {
       characteristics: [],
@@ -45,7 +45,7 @@ export class AdvertisementFilterService {
 
   public static applyPriceFrom(
     filter: AdvertisementFilter,
-    priceFrom: string
+    priceFrom: string,
   ): AdvertisementFilter {
     const priceCopy = { ...filter.priceFilter, priceFrom: priceFrom };
     return { ...filter, priceFilter: priceCopy };
@@ -53,7 +53,7 @@ export class AdvertisementFilterService {
 
   public static applyPriceTo(
     filter: AdvertisementFilter,
-    priceTo: string
+    priceTo: string,
   ): AdvertisementFilter {
     const priceCopy = { ...filter.priceFilter, priceTo: priceTo };
     return { ...filter, priceFilter: priceCopy };
@@ -61,16 +61,16 @@ export class AdvertisementFilterService {
 
   public static applyAddress(
     filter: AdvertisementFilter,
-    address: string
+    address: string,
   ): AdvertisementFilter {
     const addressCopy = { ...filter.addressFilter };
-    addressCopy.address = address;
+    addressCopy.geoInformationId = address;
     return { ...filter, addressFilter: addressCopy };
   }
 
   public static applyTextFilter(
     filter: AdvertisementFilter,
-    text: string
+    text: string,
   ): AdvertisementFilter {
     const textFilterCopy = { ...filter.textFilter };
     textFilterCopy.text = text;
@@ -79,7 +79,7 @@ export class AdvertisementFilterService {
 
   public static appplyCharacteristics(
     filter: AdvertisementFilter,
-    characteristics: CharacteristicFilterOption[]
+    characteristics: CharacteristicFilterOption[],
   ): AdvertisementFilter {
     const characteristicsFilter: CharacteristicsFilter = { characteristics };
     return { ...filter, characteristicsFilter: characteristicsFilter };
