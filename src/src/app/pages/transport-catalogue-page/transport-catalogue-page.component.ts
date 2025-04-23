@@ -9,7 +9,7 @@ import { TransportItemsFilterFormComponent } from './components/transport-items-
 import { TransportItemPhotoGalleryDialogComponent } from './components/transport-item/transport-item-photo-gallery-dialog/transport-item-photo-gallery-dialog.component';
 import { NgIf } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   TransportCategory,
   TransportCategoryFactory,
@@ -24,6 +24,7 @@ import {
 import {
   AdvertisementFilter,
   AdvertisementFilterService,
+  CharacteristicFilterOption,
 } from './dto/advertisement-filter';
 import { Advertisement } from './types/advertisement';
 import { TransportCharacteristic } from './types/transport-characteristic';
@@ -32,6 +33,13 @@ import { Divider } from 'primeng/divider';
 import { TransportItemsPaginationComponent } from './components/transport-items-pagination/transport-items-pagination.component';
 import { GeoInformation } from './types/geoinformation';
 import { GeoInformationSelectDialogComponent } from './components/geo-information-select-dialog/geo-information-select-dialog.component';
+import { PriceCriteriaFilterInputComponent } from './components/transport-items-filter-form/price-criteria-filter-input/price-criteria-filter-input.component';
+import { CharacteristicsFilterInputComponent } from './components/transport-items-filter-form/characteristics-filter-input/characteristics-filter-input.component';
+import {
+  AggregatedScalarData,
+  AggregatedScalarDataFactory,
+} from './types/aggregated-scalar-data';
+import { TransportCatalogueRouteBuilder } from './transport-catalogue-routes';
 
 @Component({
   selector: 'app-transport-catalogue-page',
@@ -48,6 +56,9 @@ import { GeoInformationSelectDialogComponent } from './components/geo-informatio
     Divider,
     TransportItemsPaginationComponent,
     GeoInformationSelectDialogComponent,
+    PriceCriteriaFilterInputComponent,
+    CharacteristicsFilterInputComponent,
+    RouterLink,
   ],
   templateUrl: './transport-catalogue-page.component.html',
   styleUrl: './transport-catalogue-page.component.scss',
@@ -66,14 +77,17 @@ export class TransportCataloguePageComponent implements OnInit {
   geoInformationSignal: WritableSignal<GeoInformation[]>;
   isSelectingGeoInformation: WritableSignal<boolean>;
   selectedGeoInformationSignal: WritableSignal<GeoInformation | null>;
+  scalarData: AggregatedScalarData;
   activatedRoute: ActivatedRoute;
   titleService: Title;
   httpService: TransportCataloguePageHttpService;
+  routeBuilder: TransportCatalogueRouteBuilder;
 
   constructor(
     titleService: Title,
     activatedRoute: ActivatedRoute,
     httpService: TransportCataloguePageHttpService,
+    routeBuilder: TransportCatalogueRouteBuilder,
   ) {
     titleService.setTitle('Список спец.техники');
     this.httpService = httpService;
@@ -92,10 +106,14 @@ export class TransportCataloguePageComponent implements OnInit {
     this.geoInformationSignal = signal([]);
     this.selectedGeoInformationSignal = signal(null);
     this.isSelectingGeoInformation = signal(false);
+    this.scalarData = AggregatedScalarDataFactory.default();
+    this.routeBuilder = routeBuilder;
   }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
+      this.paginationSignal = signal(PaginationService.initialized(1, 10));
+      this.filterSignal = signal(AdvertisementFilterService.createEmpty());
       const categoryId = params['id'];
       const brandId = params['brandid'];
       this.httpService
@@ -154,11 +172,23 @@ export class TransportCataloguePageComponent implements OnInit {
         if (result.code === 200) {
           this.advertisementsSignal.set(result.data.advertisements);
           this.totalPagesCountSignal.set(result.data.totals);
+          this.scalarData =
+            AggregatedScalarDataFactory.fromAdvertisementsPageResponse(
+              result.data,
+            );
         }
       });
   }
 
-  public acceptTextSearch(searchTerm: string): void {}
+  public acceptTextSearch(searchTerm: string): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    const updated = AdvertisementFilterService.applyTextFilter(
+      filter,
+      searchTerm,
+    );
+    this.filterSignal.set(updated);
+    this.refetchAdvertisements();
+  }
 
   public acceptGeoInformationChange(geoInformation: GeoInformation): void {
     if (geoInformation.details === 'Любой') {
@@ -180,8 +210,50 @@ export class TransportCataloguePageComponent implements OnInit {
     this.refetchAdvertisements();
   }
 
+  public acceptCharacteristicChange(
+    characteristic: CharacteristicFilterOption,
+  ): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    const updatedFilter: AdvertisementFilter =
+      AdvertisementFilterService.applyCharacteristic(filter, characteristic);
+    this.filterSignal.set(updatedFilter);
+    this.refetchAdvertisements();
+  }
+
+  public acceptCharacteristicsFlush(): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    if (filter.characteristicsFilter.characteristics.length === 0) return;
+    const updatedFilter: AdvertisementFilter =
+      AdvertisementFilterService.appplyCharacteristics(filter, []);
+    this.filterSignal.set(updatedFilter);
+    this.refetchAdvertisements();
+  }
+
   public acceptSortChange(sort: Sorting): void {
     this.sortSignal.set(sort);
+    this.refetchAdvertisements();
+  }
+
+  public acceptPriceFromChange(value: string): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    const updated = AdvertisementFilterService.applyPriceFrom(filter, value);
+    this.filterSignal.set(updated);
+  }
+
+  public acceptPriceToChange(value: string): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    const updated = AdvertisementFilterService.applyPriceTo(filter, value);
+    this.filterSignal.set(updated);
+  }
+
+  public acceptPriceFlush(): void {
+    const filter: AdvertisementFilter = this.filterSignal();
+    const updated = AdvertisementFilterService.resetPrice(filter);
+    this.filterSignal.set(updated);
+    this.refetchAdvertisements();
+  }
+
+  public acceptPriceFilterSubmit(): void {
     this.refetchAdvertisements();
   }
 }

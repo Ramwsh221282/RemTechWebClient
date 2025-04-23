@@ -4,4 +4,7 @@ export type AdvertisementsPageResponse = {
   advertisements: Advertisement[];
   totals: number;
   pages: number;
+  maxPrice: number;
+  minPrice: number;
+  avgPrice: number;
 };

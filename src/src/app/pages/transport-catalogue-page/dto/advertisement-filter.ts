@@ -59,6 +59,11 @@ export class AdvertisementFilterService {
     return { ...filter, priceFilter: priceCopy };
   }
 
+  public static resetPrice(filter: AdvertisementFilter): AdvertisementFilter {
+    const priceCopy = { ...filter.priceFilter, priceFrom: '', priceTo: '' };
+    return { ...filter, priceFilter: priceCopy };
+  }
+
   public static applyAddress(
     filter: AdvertisementFilter,
     address: string,
@@ -83,5 +88,24 @@ export class AdvertisementFilterService {
   ): AdvertisementFilter {
     const characteristicsFilter: CharacteristicsFilter = { characteristics };
     return { ...filter, characteristicsFilter: characteristicsFilter };
+  }
+
+  public static applyCharacteristic(
+    filter: AdvertisementFilter,
+    characteristic: CharacteristicFilterOption,
+  ): AdvertisementFilter {
+    const currentCharacteristicsFilter = filter.characteristicsFilter;
+    const currentCharacteristics: CharacteristicFilterOption[] =
+      currentCharacteristicsFilter.characteristics;
+    const index = currentCharacteristics.findIndex(
+      (c) => c.name === characteristic.name,
+    );
+    if (index >= 0) {
+      currentCharacteristics[index].value = characteristic.value;
+    } else {
+      currentCharacteristics.push(characteristic);
+    }
+    currentCharacteristicsFilter.characteristics = [...currentCharacteristics];
+    return { ...filter, characteristicsFilter: currentCharacteristicsFilter };
   }
 }

@@ -9,6 +9,8 @@ import { AdvertisementsPageResponse } from '../responses/advertisements-page-res
 import { Observable } from 'rxjs';
 import { GeoInformation } from '../types/geoinformation';
 import { TransportCharacteristic } from '../types/transport-characteristic';
+import { TransportCategory } from '../transport-categories-menu/types/TransportCategory';
+import { CategoryOfConcreteBrand } from '../category-brands-menu/types/category-of-concrete-brand';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,7 @@ export class AdvertisementsHttpService {
     filter: AdvertisementFilter,
     pagination: Pagination,
     sort: Sorting,
-  ) {
+  ): Observable<Envelope<AdvertisementsPageResponse>> {
     const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements`;
 
     const httpParams: HttpParams = new HttpParams()
@@ -83,5 +85,13 @@ export class AdvertisementsHttpService {
   ): Observable<Envelope<TransportCharacteristic[]>> {
     const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/characteristics`;
     return this._httpClient.get<Envelope<TransportCharacteristic[]>>(url);
+  }
+
+  public fetchCategoriesOfBrand(
+    brandId: string,
+    brandName: string,
+  ): Observable<Envelope<CategoryOfConcreteBrand[]>> {
+    const url = `${apiUrl}/transport-categories/brands/${brandId}/${brandName}/categories`;
+    return this._httpClient.get<Envelope<CategoryOfConcreteBrand[]>>(url);
   }
 }

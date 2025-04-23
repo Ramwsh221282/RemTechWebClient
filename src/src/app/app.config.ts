@@ -19,6 +19,7 @@ import { TransportCategoriesHttpService } from './pages/transport-catalogue-page
 import { CategoryBrandsHttpService } from './pages/transport-catalogue-page/category-brands-menu/services/category-brands-http.service';
 import { TransportCatalogueCategorybrandFetcherService } from './pages/transport-catalogue-page/services/transport-catalogue-categorybrand-fetcher.service';
 import { TransportCataloguePageHttpService } from './pages/transport-catalogue-page/services/transport-catalogue-page.http.service';
+import { TransportCatalogueRouteBuilder } from './pages/transport-catalogue-page/transport-catalogue-routes';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -57,5 +58,6 @@ export const appConfig: ApplicationConfig = {
     CategoryBrandsHttpService,
     TransportCatalogueCategorybrandFetcherService,
     TransportCataloguePageHttpService,
+    TransportCatalogueRouteBuilder,
   ],
 };

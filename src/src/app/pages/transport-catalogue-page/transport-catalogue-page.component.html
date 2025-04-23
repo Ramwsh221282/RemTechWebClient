@@ -1,12 +1,20 @@
 <section class="flex flex-col gap-1">
   <p-panel class="w-full h-full sticky-panel" styleClass="h-12">
     <ng-template #header>
-      <div class="flex flex-row gap-5 font-bold">
-        <a class="-my-1 cursor-pointer underline">{{ 'Категория' }}</a>
-        <a class="-my-1 cursor-pointer underline">{{ categorySignal().name }}</a>
+      <div class="inline-flex gap-2 font-bold text-sm -m-0 p-0">
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+           [routerLink]="routeBuilder.buildCategoriesRoute()">
+          {{ 'Категория' }}</a>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+           [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
+          {{ categorySignal().name }}</a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
-        <a class="-my-1 cursor-pointer underline">{{ 'Бренд' }}</a>
-        <a class="-my-1 cursor-pointer underline">{{ brandSignal().name }}</a>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+           [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
+          {{ 'Бренд' }}</a>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+           [routerLink]="routeBuilder.buildCategoriesOfBrandNameRoute(brandSignal().brandId, brandSignal().name)">
+          {{ brandSignal().name }}</a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
         <a class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">Регион</a>
         <a
@@ -14,17 +22,37 @@
           {{ selectedGeoInformationSignal() === null ? 'Любой' : selectedGeoInformationSignal()?.details! }}
         </a>
         <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
+        <a class="-my-1 cursor-pointer">{{ 'Количество' }}</a>
+        <a class="-my-1 cursor-pointer">{{ scalarData.total }}</a>
+        <a class="-my-1 cursor-pointer">{{ 'Ср. цена' }}</a>
+        <a class="-my-1 cursor-pointer">{{ scalarData.average + ' Р.' }}</a>
+        <a class="-my-1 cursor-pointer">{{ 'Мин. цена' }}</a>
+        <a class="-my-1 cursor-pointer">{{ scalarData.minimal + ' Р.' }}</a>
+        <a class="-my-1 cursor-pointer">{{ 'Макс. цена' }}</a>
+        <a class="-my-1 cursor-pointer">{{ scalarData.maximum + ' Р.' }}</a>
       </div>
     </ng-template>
   </p-panel>
   <section class="flex">
     <div class="w-1/4">
-      <app-transport-items-filter-form/>
+      <app-transport-items-filter-form>
+        <app-price-criteria-filter-input [priceToValue]="filterSignal().priceFilter.priceTo"
+                                         [priceFromValue]="filterSignal().priceFilter.priceFrom"
+                                         (priceToChange)="acceptPriceToChange($event)"
+                                         (priceFromChange)="acceptPriceFromChange($event)"
+                                         (priceFilterFlushed)="acceptPriceFlush()"
+                                         (priceFilterApplied)="acceptPriceFilterSubmit()"/>
+        <app-characteristics-filter-input
+          [characteristics]="characteristicsSignal()"
+          (characteristicSelected)="acceptCharacteristicChange($event)"
+          (characteristicsFlushed)="acceptCharacteristicsFlush()"/>
+      </app-transport-items-filter-form>
     </div>
     <div class="w-3/4 ml-0.75">
       <app-transport-items-list [isLoading]="isLoading()"
                                 [items]="advertisementsSignal()"
-                                (sortChange)="acceptSortChange($event)">
+                                (sortChange)="acceptSortChange($event)"
+                                (textSearchSumit)="acceptTextSearch($event)">
         <app-transport-items-pagination [pagination]="paginationSignal()"
                                         [total]="totalPagesCountSignal()"
                                         (onPageChanged)="onPageChanged($event)"/>

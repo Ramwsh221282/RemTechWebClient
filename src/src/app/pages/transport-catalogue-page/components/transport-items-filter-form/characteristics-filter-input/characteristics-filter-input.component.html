@@ -1,14 +1,37 @@
-<!--<p-table [value]="userCharacteristics" [size]="'small'" class="text-sm">-->
-<!--  <ng-template #header>-->
-<!--    <tr>-->
-<!--      <th>Характеристика</th>-->
-<!--      <th>Значение</th>-->
-<!--    </tr>-->
-<!--  </ng-template>-->
-<!--  <ng-template #body let-ctx>-->
-<!--    <tr>-->
-<!--      <td>{{ ctx.name }}</td>-->
-<!--      <td>{{ ctx.value }}</td>-->
-<!--    </tr>-->
-<!--  </ng-template>-->
-<!--</p-table>-->
+<div class="flex flex-col justify-start gap-1">
+  <div>
+    <p-chip
+      [style]="{ width: chipWidth }"
+      class="!py-0 !pl-0 !pr-4 text-sm select-none"
+      [label]="chipLabel"
+    >
+      <p-button
+        [fluid]="true"
+        [icon]="'pi pi-wrench'"
+        rounded="'true'"
+        outlined="'true'"
+      />
+    </p-chip>
+  </div>
+  <div class="flex flex-col gap-1">
+    @for (characteristic of selectionCharacteristics(); track characteristic.selectionName) {
+      <div class="flex flex-row justify-between gap-1">
+        <p-select
+          [fluid]="true"
+          [placeholder]="'выбрать ' + characteristic.selectionName"
+          [options]="characteristic.selectionValues"
+          [(ngModel)]="characteristic.selectedValue"
+          (onChange)="handleCharacteristicSelected($event, characteristic)"
+          styleClass="w-full"/>
+      </div>
+    }
+  </div>
+  <div class="w-full">
+    <p-button
+      [fluid]="true"
+      [label]="'Очистить'"
+      [size]="'small'"
+      (onClick)="handleCharacteristicsFlush($event)"
+    />
+  </div>
+</div>

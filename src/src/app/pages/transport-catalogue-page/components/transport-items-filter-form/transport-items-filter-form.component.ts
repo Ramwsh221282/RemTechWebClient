@@ -9,10 +9,6 @@ import { TableModule } from 'primeng/table';
 import { ChipModule } from 'primeng/chip';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
-import { AdvertisementFilterService } from '../../dto/advertisement-filter';
-import { PriceCriteriaFilterInputComponent } from './price-criteria-filter-input/price-criteria-filter-input.component';
-import { SortCriteriaFilterInputComponent } from './sort-criteria-filter-input/sort-criteria-filter-input.component';
-import { CharacteristicsFilterInputComponent } from './characteristics-filter-input/characteristics-filter-input.component';
 
 @Component({
   selector: 'app-transport-items-filter-form',
@@ -27,33 +23,17 @@ import { CharacteristicsFilterInputComponent } from './characteristics-filter-in
     ChipModule,
     PaginatorModule,
     DialogModule,
-    PriceCriteriaFilterInputComponent,
-    SortCriteriaFilterInputComponent,
-    CharacteristicsFilterInputComponent,
   ],
   templateUrl: './transport-items-filter-form.component.html',
   styleUrl: './transport-items-filter-form.component.scss',
 })
 export class TransportItemsFilterFormComponent {
-  private readonly _dialogVisibility: WritableSignal<boolean> = signal(false);
-
   public chipLabel: string = 'Указать характеристику';
   public chipWidth: string = 'auto';
-
-  public constructor() {}
-
-  public get dialogVisibility(): boolean {
-    return this._dialogVisibility();
-  }
 
   @HostListener('window:resize', ['$event'])
   public onResize() {
     this.updateChipLabel();
-  }
-
-  public turnDialogVisibility($event: MouseEvent): void {
-    $event.stopPropagation();
-    this._dialogVisibility.update((previous) => !previous);
   }
 
   public updateChipLabel() {
@@ -65,11 +45,5 @@ export class TransportItemsFilterFormComponent {
     this.chipLabel = 'Указать характеристику';
     this.chipWidth = 'auto';
     return;
-  }
-
-  public submit($event: MouseEvent): void {}
-
-  public clean($event: MouseEvent): void {
-    const filter = AdvertisementFilterService.createEmpty();
   }
 }

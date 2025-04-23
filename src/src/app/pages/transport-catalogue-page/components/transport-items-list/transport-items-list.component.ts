@@ -41,6 +41,7 @@ export class TransportItemsListComponent {
   @Input({ required: true }) items: Advertisement[];
   @Input({ required: true }) isLoading: boolean;
   @Output() sortChange: EventEmitter<Sorting>;
+  @Output() textSearchSumit: EventEmitter<string>;
   sortSignal: WritableSignal<Sorting>;
 
   constructor() {
@@ -48,10 +49,15 @@ export class TransportItemsListComponent {
     this.isLoading = false;
     this.sortSignal = signal(SortingFactory.default());
     this.sortChange = new EventEmitter<Sorting>();
+    this.textSearchSumit = new EventEmitter<string>();
   }
 
   public handleSortChanged(sort: Sorting): void {
     this.sortSignal.set(sort);
     this.sortChange.emit(this.sortSignal());
+  }
+
+  public handleTextSearchTermSubmit(searchTerm: string): void {
+    this.textSearchSumit.emit(searchTerm);
   }
 }
