@@ -9,8 +9,8 @@ import { AdvertisementsPageResponse } from '../responses/advertisements-page-res
 import { Observable } from 'rxjs';
 import { GeoInformation } from '../types/geoinformation';
 import { TransportCharacteristic } from '../types/transport-characteristic';
-import { TransportCategory } from '../transport-categories-menu/types/TransportCategory';
 import { CategoryOfConcreteBrand } from '../category-brands-menu/types/category-of-concrete-brand';
+import { Advertisement } from '../types/advertisement';
 
 @Injectable({
   providedIn: 'root',
@@ -93,5 +93,14 @@ export class AdvertisementsHttpService {
   ): Observable<Envelope<CategoryOfConcreteBrand[]>> {
     const url = `${apiUrl}/transport-categories/brands/${brandId}/${brandName}/categories`;
     return this._httpClient.get<Envelope<CategoryOfConcreteBrand[]>>(url);
+  }
+
+  public fetchAdvertisementByCategoryBrandId(
+    categoryId: string,
+    brandId: string,
+    advertisementId: string,
+  ): Observable<Envelope<Advertisement>> {
+    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements/${advertisementId}`;
+    return this._httpClient.get<Envelope<Advertisement>>(url);
   }
 }

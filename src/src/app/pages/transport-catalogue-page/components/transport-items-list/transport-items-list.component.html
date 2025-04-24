@@ -31,7 +31,9 @@
             <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
               @for (item of items; track item.id) {
                 <div class="col-span-12">
-                  <app-transport-item [item]="item"/>
+                  <app-transport-item [item]="item"
+                                      (selectAdvertisementPhoto)="handleAdvertisementPhotoInvoked($event)"
+                  />
                   <div
                     [ngClass]="{
                                   'border-t border-surface-200 dark:border-surface-700': true

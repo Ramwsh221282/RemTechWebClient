@@ -10,7 +10,7 @@ import { Advertisement } from '../../types/advertisement';
 import { PanelModule } from 'primeng/panel';
 import { TransportItemComponent } from '../transport-item/transport-item.component';
 import { DataViewModule } from 'primeng/dataview';
-import { NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -26,7 +26,6 @@ import { Sorting, SortingFactory } from '../../../../shared/types/Sorting';
     TransportItemComponent,
     ButtonModule,
     DataViewModule,
-    NgFor,
     NgClass,
     ScrollPanelModule,
     ProgressSpinnerModule,
@@ -42,6 +41,7 @@ export class TransportItemsListComponent {
   @Input({ required: true }) isLoading: boolean;
   @Output() sortChange: EventEmitter<Sorting>;
   @Output() textSearchSumit: EventEmitter<string>;
+  @Output() advertisementPhotoInvoked: EventEmitter<Advertisement>;
   sortSignal: WritableSignal<Sorting>;
 
   constructor() {
@@ -50,6 +50,7 @@ export class TransportItemsListComponent {
     this.sortSignal = signal(SortingFactory.default());
     this.sortChange = new EventEmitter<Sorting>();
     this.textSearchSumit = new EventEmitter<string>();
+    this.advertisementPhotoInvoked = new EventEmitter<Advertisement>();
   }
 
   public handleSortChanged(sort: Sorting): void {
@@ -59,5 +60,9 @@ export class TransportItemsListComponent {
 
   public handleTextSearchTermSubmit(searchTerm: string): void {
     this.textSearchSumit.emit(searchTerm);
+  }
+
+  public handleAdvertisementPhotoInvoked(advertisement: Advertisement): void {
+    this.advertisementPhotoInvoked.emit(advertisement);
   }
 }

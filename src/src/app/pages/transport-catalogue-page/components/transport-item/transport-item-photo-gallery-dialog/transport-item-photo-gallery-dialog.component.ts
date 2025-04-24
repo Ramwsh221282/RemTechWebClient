@@ -24,13 +24,8 @@ import { Advertisement } from '../../../types/advertisement';
 })
 export class TransportItemPhotoGalleryDialogComponent {
   @Input({ required: true }) visibility: boolean = false;
-  @Output() onClose: EventEmitter<void> = new EventEmitter<void>();
-
-  public constructor() {}
-
-  public get advertisement(): Advertisement | null {
-    return null;
-  }
+  @Input({ required: true }) advertisement: Advertisement | null = null;
+  @Output() onClose: EventEmitter<void> = new EventEmitter();
 
   public mapPhotos(advertisement: Advertisement): string[] {
     return advertisement.photos.map((p) => {

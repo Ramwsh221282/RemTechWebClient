@@ -52,7 +52,8 @@
       <app-transport-items-list [isLoading]="isLoading()"
                                 [items]="advertisementsSignal()"
                                 (sortChange)="acceptSortChange($event)"
-                                (textSearchSumit)="acceptTextSearch($event)">
+                                (textSearchSumit)="acceptTextSearch($event)"
+                                (advertisementPhotoInvoked)="onAdvertisementPhotoViewOpen($event)">
         <app-transport-items-pagination [pagination]="paginationSignal()"
                                         [total]="totalPagesCountSignal()"
                                         (onPageChanged)="onPageChanged($event)"/>
@@ -61,8 +62,9 @@
   </section>
 </section>
 <app-transport-item-photo-gallery-dialog
-  *ngIf="selectedAdvertisement()"
+  *ngIf="selectedAdvertisement() !== null"
   [visibility]="selectedAdvertisement() !== null"
+  [advertisement]="selectedAdvertisement()"
   (onClose)="onAdvertisementPhotoViewClose()"
 />
 <app-geo-information-select-dialog [geoInformations]="geoInformationSignal()"

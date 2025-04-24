@@ -1,12 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { TransportItemFacadeService } from '../../services/transport-item-facade.service';
-import {
-  TransportItem,
-  TransportItemCharacteristic,
-} from '../../types/transport-item';
 import { ButtonModule } from 'primeng/button';
+import { Advertisement } from '../../../transport-catalogue-page/types/advertisement';
 
 @Component({
   selector: 'app-transport-item-characteristics-block',
@@ -16,17 +12,10 @@ import { ButtonModule } from 'primeng/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransportItemCharacteristicsBlockComponent {
-  private readonly _service: TransportItemFacadeService;
+  advertisement = input.required<Advertisement>();
 
-  public constructor(service: TransportItemFacadeService) {
-    this._service = service;
-  }
-
-  public get characteristics(): TransportItemCharacteristic[] {
-    return this._service.transport.characteristics;
-  }
-
-  public get transport(): TransportItem {
-    return this._service.transport;
+  public navigateOnSourceClick($event: MouseEvent): void {
+    $event.stopPropagation();
+    window.open(this.advertisement().sourceUrl);
   }
 }

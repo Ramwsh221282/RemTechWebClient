@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import {
@@ -20,14 +20,19 @@ import { AnimationsFactory } from '../../../../shared/animations/animations-fact
   ],
 })
 export class TransportItemComponent {
-  @Input({ required: true }) item: Advertisement =
-    AdvertisementsFactory.empty();
+  @Output() selectAdvertisementPhoto: EventEmitter<Advertisement>;
+  @Output() advertisementDetailsNavigationInvoked: EventEmitter<Advertisement>;
+  @Input({ required: true }) item: Advertisement;
 
-  public constructor() {}
+  public constructor() {
+    this.selectAdvertisementPhoto = new EventEmitter();
+    this.item = AdvertisementsFactory.empty();
+    this.advertisementDetailsNavigationInvoked = new EventEmitter();
+  }
 
   public showPhotoGallery(event: MouseEvent): void {
-    // event.stopPropagation();
-    // this._pageService.selectAdvertisementForPhotoView(this.item);
+    event.stopPropagation();
+    this.selectAdvertisementPhoto.emit(this.item);
   }
 
   public formatItemCharacteristics(): string {
@@ -39,11 +44,7 @@ export class TransportItemComponent {
     );
   }
 
-  public navigateTransportPage($event: MouseEvent): void {
-    $event.stopPropagation();
-  }
-
   public get itemHref(): string {
-    return `transport-catalogue/transport/${this.item.id}`;
+    return `transport-catalogue/categories/${this.item.categoryId}/brands/${this.item.brandId}/transports/${this.item.id}`;
   }
 }

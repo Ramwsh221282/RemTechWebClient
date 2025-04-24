@@ -148,6 +148,10 @@ export class TransportCataloguePageComponent implements OnInit {
     this.isSelectingGeoInformation.set(false);
   }
 
+  public onAdvertisementPhotoViewOpen(advertisement: Advertisement): void {
+    this.selectedAdvertisement.set(advertisement);
+  }
+
   public onAdvertisementPhotoViewClose(): void {
     this.selectedAdvertisement.set(null);
   }

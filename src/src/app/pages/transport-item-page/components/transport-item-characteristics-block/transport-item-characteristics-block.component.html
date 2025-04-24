@@ -6,33 +6,30 @@
           <div>
             <label>Цена: </label>
             <label>{{
-              transport.priceValue + " Р." + " " + transport.priceExtra
-            }}</label>
+                advertisement().priceValue + " Р." + " " + advertisement().priceExtra
+              }}</label>
           </div>
           <div>
             <label>Адрес: </label>
-            <label>{{ transport.address }}</label>
-          </div>
-          <div>
-            <label>Сервис-источник: </label>
-            <label>{{ transport.scraperName }}</label>
+            <label>{{ advertisement().geoName }}</label>
           </div>
           <p-button
             [size]="'small'"
             [outlined]="true"
             [label]="'Перейти на источник'"
+            (onClick)="navigateOnSourceClick($event)"
           >
-            <a [href]="transport.sourceUrl"> </a>
+            <a [href]="advertisement().sourceUrl"> </a>
           </p-button>
         </div>
       </p-panel>
       <p-panel [header]="'Характеристики транспорта:'">
         <div class="flex flex-col gap-0.5">
-          @for (ctx of characteristics; track ctx.name) {
-          <div>
-            <label>{{ ctx.name + ": " }}</label>
-            <label>{{ ctx.value }}</label>
-          </div>
+          @for (ctx of advertisement().characteristics; track ctx.name) {
+            <div>
+              <label>{{ ctx.name + ": " }}</label>
+              <label>{{ ctx.value }}</label>
+            </div>
           }
         </div>
       </p-panel>
