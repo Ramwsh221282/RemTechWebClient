@@ -1,33 +1,53 @@
-<p-scroll-panel @fadeIn styleClass="h-187 overflow-auto">
-  <p-panel @fadeIn>
+<p-scroll-panel @fadeIn styleClass="h-210 overflow-auto">
+  <p-panel @fadeIn styleClass="min-h-210">
     <p-dataView
       @fadeIn
       #dv
-      [value]="catalogueService.advertisements"
+      [value]="items"
       [emptyMessage]="' '"
     >
-      <ng-template #list let-items>
-        @if (catalogueService.isLoading) {
-        <div class="flex flex-col h-173 items-center justify-center">
-          <p-progress-spinner [ariaLabel]="'Loading'" />
-        </div>
-        } @else { @if(items.length === 0) {
-        <div class="flex flex-col h-173 items-center justify-center">
-          <label>Данных пока нет.</label>
-        </div>
-        } @else {
-        <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
-          <div class="col-span-12" *ngFor="let item of items">
-            <app-transport-item [item]="item" />
-            <div
-              [ngClass]="{
-                'border-t border-surface-200 dark:border-surface-700': true
-              }"
-            ></div>
+      <ng-template #header>
+        <div class="-my-2 p-0 gap-1.5 flex flex-row w-full">
+          <div class="w-full">
+            <app-search-bar [placeHolderText]="'Поиск в описании или заголовках'"
+                            (subbmitedSearchTerm)="handleTextSearchTermSubmit($event)"/>
+          </div>
+          <div>
+            <app-sort-criteria-filter-input [sort]="sortSignal()" (sortChange)="handleSortChanged($event)"/>
           </div>
         </div>
-        } }
+      </ng-template>
+      <ng-template #list let-items>
+        @if (isLoading) {
+          <div class="flex flex-col h-210 items-center justify-center">
+            <p-progress-spinner [ariaLabel]="'Loading'"/>
+          </div>
+        } @else {
+          @if (items.length === 0) {
+            <div class="flex flex-col h-210 items-center justify-center">
+              <label>Данных пока нет.</label>
+            </div>
+          } @else {
+            <div @fadeIn class="grid grid-cols-12 gap-4 grid-nogutter">
+              @for (item of items; track item.id) {
+                <div class="col-span-12">
+                  <app-transport-item [item]="item"
+                                      (selectAdvertisementPhoto)="handleAdvertisementPhotoInvoked($event)"
+                  />
+                  <div
+                    [ngClass]="{
+                                  'border-t border-surface-200 dark:border-surface-700': true
+                                }"
+                  ></div>
+                </div>
+              }
+            </div>
+          }
+        }
       </ng-template>
     </p-dataView>
+    <ng-content>
+
+    </ng-content>
   </p-panel>
 </p-scroll-panel>

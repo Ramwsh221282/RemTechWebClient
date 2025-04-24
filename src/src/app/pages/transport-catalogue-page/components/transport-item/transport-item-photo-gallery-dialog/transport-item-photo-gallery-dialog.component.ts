@@ -7,7 +7,6 @@ import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
 import { NgOptimizedImage } from '@angular/common';
 import { Advertisement } from '../../../types/advertisement';
-import { TransportCataloguePageService } from '../../../services/transport-catalogue-page-service';
 
 @Component({
   selector: 'app-transport-item-photo-gallery-dialog',
@@ -25,22 +24,12 @@ import { TransportCataloguePageService } from '../../../services/transport-catal
 })
 export class TransportItemPhotoGalleryDialogComponent {
   @Input({ required: true }) visibility: boolean = false;
-  @Output() onClose: EventEmitter<void> = new EventEmitter<void>();
-
-  private readonly _cataloguePageService: TransportCataloguePageService;
-
-  public constructor(cataloguePageService: TransportCataloguePageService) {
-    this._cataloguePageService = cataloguePageService;
-  }
-
-  public get advertisement(): Advertisement | null {
-    return this._cataloguePageService.selectedAdvertisementForPhotoView;
-  }
+  @Input({ required: true }) advertisement: Advertisement | null = null;
+  @Output() onClose: EventEmitter<void> = new EventEmitter();
 
   public mapPhotos(advertisement: Advertisement): string[] {
     return advertisement.photos.map((p) => {
-      const source = p.sourceUrl;
-      return source;
+      return p.sourceUrl;
     });
   }
 

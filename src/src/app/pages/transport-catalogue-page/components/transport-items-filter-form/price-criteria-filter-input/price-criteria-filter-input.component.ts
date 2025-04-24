@@ -1,54 +1,77 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TransportCataloguePageService } from '../../../services/transport-catalogue-page-service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
-import { AdvertisementFilterService } from '../../../dto/advertisement-filter';
+import { Button } from 'primeng/button';
+import { Chip } from 'primeng/chip';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-price-criteria-filter-input',
-  imports: [InputNumberModule],
+  imports: [InputNumberModule, Button, Chip, FormsModule],
   templateUrl: './price-criteria-filter-input.component.html',
   styleUrl: './price-criteria-filter-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PriceCriteriaFilterInputComponent {
-  private readonly _pageService: TransportCataloguePageService;
+  @Input({ required: true }) priceToValue: string = '';
+  @Input({ required: true }) priceFromValue: string = '';
+  @Output() priceFromChange: EventEmitter<string>;
+  @Output() priceToChange: EventEmitter<string>;
+  @Output() priceFilterApplied: EventEmitter<void>;
+  @Output() priceFilterFlushed: EventEmitter<void>;
 
-  public constructor(pageService: TransportCataloguePageService) {
-    this._pageService = pageService;
+  public constructor() {
+    this.priceFromChange = new EventEmitter<string>();
+    this.priceToChange = new EventEmitter<string>();
+    this.priceFilterApplied = new EventEmitter<void>();
+    this.priceFilterFlushed = new EventEmitter<void>();
   }
 
-  public get priceFrom(): string {
-    return this._pageService.filter.priceFilter.priceFrom;
-  }
-
-  public get priceTo(): string {
-    return this._pageService.filter.priceFilter.priceTo;
-  }
+  public chipLabel: string = 'Цена от и до:';
+  public chipWidth: string = 'auto';
 
   public handlePriceFromChange(event: InputNumberInputEvent): void {
-    const value = this.getPriceValue(event);
-    const currentFilter = this._pageService.filter;
-    const updatedFilter = AdvertisementFilterService.applyPriceFrom(
-      currentFilter,
-      value as string
-    );
-
-    this._pageService.updateFilter(updatedFilter);
+    this.priceFromChange.emit(this.getPriceValue(event));
   }
 
   public handlePriceToChange(event: InputNumberInputEvent): void {
-    const value = this.getPriceValue(event);
-    const currentFilter = this._pageService.filter;
-    const updatedFilter = AdvertisementFilterService.applyPriceTo(
-      currentFilter,
-      value as string
-    );
+    this.priceToChange.emit(this.getPriceValue(event));
+  }
 
-    this._pageService.updateFilter(updatedFilter);
+  @HostListener('window:resize', ['$event'])
+  public onResize() {
+    this.updateChipLabel();
+  }
+
+  public updateChipLabel() {
+    if (window.innerWidth < 900) {
+      this.chipLabel = '';
+      this.chipWidth = '40px';
+      return;
+    }
+    this.chipLabel = 'Указать характеристику';
+    this.chipWidth = 'auto';
+    return;
   }
 
   private getPriceValue(event: InputNumberInputEvent): string {
     const value = event.value ? event.value : '';
     return value as string;
+  }
+
+  public applyPriceFilter(): void {
+    this.priceFilterApplied.emit();
+  }
+
+  public flushPriceFilter(): void {
+    this.priceFromChange.emit('');
+    this.priceToChange.emit('');
+    this.priceFilterFlushed.emit();
   }
 }

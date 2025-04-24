@@ -1,14 +1,14 @@
 <p-panel>
   <p-galleria
     class="flex flex-col items-center justify-center"
-    [value]="photos"
+    [value]="advertisement().photos"
     [showIndicators]="true"
     [showThumbnails]="false"
     [showIndicatorsOnItem]="true"
     indicatorsPosition="left"
   >
     <ng-template pTemplate="item" let-item>
-      <img [src]="item" style="max-width: 100%; max-height: 400px" />
+      <img [src]="item.sourceUrl" style="max-width: 100%; max-height: 400px" [alt]="item.sourceUrl"/>
     </ng-template>
     <ng-template pTemplate="indicator" let-index>
       <span style="color: #ffffff; cursor: pointer">

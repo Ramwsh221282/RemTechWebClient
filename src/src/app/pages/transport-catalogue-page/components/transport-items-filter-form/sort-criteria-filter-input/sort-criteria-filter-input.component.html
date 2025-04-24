@@ -5,7 +5,7 @@
     [label]="sortLabel"
   >
     <p-button
-      [disabled]="sortMode === 'NONE'"
+      [disabled]="sortSignal().mode === 'NONE'"
       (onClick)="setSortMode('NONE')"
       [fluid]="true"
       [icon]="'pi pi-times'"
@@ -13,7 +13,7 @@
       outlined="'true'"
     />
     <p-button
-      [disabled]="sortMode === 'ASC'"
+      [disabled]="sortSignal().mode === 'ASC'"
       (onClick)="setSortMode('ASC')"
       [fluid]="true"
       [icon]="'pi pi-arrow-up'"
@@ -21,7 +21,7 @@
       outlined="'true'"
     />
     <p-button
-      [disabled]="sortMode === 'DESC'"
+      [disabled]="sortSignal().mode === 'DESC'"
       (onClick)="setSortMode('DESC')"
       [fluid]="true"
       [icon]="'pi pi-arrow-down'"

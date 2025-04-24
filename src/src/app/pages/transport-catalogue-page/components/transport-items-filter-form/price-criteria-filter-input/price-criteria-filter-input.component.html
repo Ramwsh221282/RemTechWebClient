@@ -1,13 +1,49 @@
-<div class="flex flex-row justify-between gap-1">
-  <p-inputNumber
-    [fluid]="true"
-    placeholder="Цена от"
-    (onInput)="handlePriceFromChange($event)"
-  />
-  <p-inputNumber
-    [fluid]="true"
-    placeholder="Цена до"
-    (onInput)="handlePriceToChange($event)"
-  />
-</div>
-<label class="text-[12px]">* Можно не указывать полный диапазон цены</label>
+<section class="flex flex-col gap-1.5">
+  <div class="flex justify-start">
+    <p-chip
+      [style]="{ width: chipWidth }"
+      class="!py-0 !pl-0 !pr-4 text-sm select-none"
+      [label]="chipLabel"
+    >
+      <p-button
+        [fluid]="true"
+        [icon]="'pi pi-money-bill'"
+        rounded="'true'"
+        outlined="'true'"
+      />
+    </p-chip>
+  </div>
+  <div class="flex flex-row justify-between gap-1">
+    <p-inputNumber
+      [(ngModel)]="priceFromValue"
+      [fluid]="true"
+      placeholder="Цена от"
+      (onInput)="handlePriceFromChange($event)"
+    />
+    <p-inputNumber
+      [(ngModel)]="priceToValue"
+      [fluid]="true"
+      placeholder="Цена до"
+      (onInput)="handlePriceToChange($event)"
+    />
+  </div>
+  <label class="text-[12px]">* Можно не указывать полный диапазон цены</label>
+  <div class="flex flex-row gap-1 w-full">
+    <div class="w-full">
+      <p-button
+        [fluid]="true"
+        [label]="'Применить'"
+        [size]="'small'"
+        (onClick)="applyPriceFilter()"
+      />
+    </div>
+    <div class="w-full">
+      <p-button
+        [fluid]="true"
+        [label]="'Очистить'"
+        [size]="'small'"
+        (onClick)="flushPriceFilter()"
+      />
+    </div>
+  </div>
+</section>

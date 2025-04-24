@@ -1,19 +1,13 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { Advertisement } from '../../types/advertisement';
+import {
+  Advertisement,
+  AdvertisementsFactory,
+} from '../../types/advertisement';
 import { NgOptimizedImage } from '@angular/common';
 import { Chip } from 'primeng/chip';
 import { AnimationsFactory } from '../../../../shared/animations/animations-factory';
-import { TransportCataloguePageService } from '../../services/transport-catalogue-page-service';
-import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-transport-item',
@@ -26,21 +20,19 @@ import { Router, RouterLink } from '@angular/router';
   ],
 })
 export class TransportItemComponent {
-  @Input({ required: true }) item: Advertisement = null!;
-  private readonly _pageService: TransportCataloguePageService;
-  private readonly _router: Router;
+  @Output() selectAdvertisementPhoto: EventEmitter<Advertisement>;
+  @Output() advertisementDetailsNavigationInvoked: EventEmitter<Advertisement>;
+  @Input({ required: true }) item: Advertisement;
 
-  public constructor(
-    pageService: TransportCataloguePageService,
-    router: Router
-  ) {
-    this._pageService = pageService;
-    this._router = router;
+  public constructor() {
+    this.selectAdvertisementPhoto = new EventEmitter();
+    this.item = AdvertisementsFactory.empty();
+    this.advertisementDetailsNavigationInvoked = new EventEmitter();
   }
 
   public showPhotoGallery(event: MouseEvent): void {
     event.stopPropagation();
-    this._pageService.selectAdvertisementForPhotoView(this.item);
+    this.selectAdvertisementPhoto.emit(this.item);
   }
 
   public formatItemCharacteristics(): string {
@@ -52,11 +44,7 @@ export class TransportItemComponent {
     );
   }
 
-  public navigateTransportPage($event: MouseEvent): void {
-    $event.stopPropagation();
-  }
-
   public get itemHref(): string {
-    return `transport-catalogue/transport/${this.item.id}`;
+    return `transport-catalogue/categories/${this.item.categoryId}/brands/${this.item.brandId}/transports/${this.item.id}`;
   }
 }

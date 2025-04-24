@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TransportItemFacadeService } from '../../services/transport-item-facade.service';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
+import { Advertisement } from '../../../transport-catalogue-page/types/advertisement';
 
 @Component({
   selector: 'app-transport-item-header-panel',
@@ -10,13 +10,5 @@ import { PanelModule } from 'primeng/panel';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransportItemHeaderPanelComponent {
-  private readonly _service: TransportItemFacadeService;
-
-  public constructor(service: TransportItemFacadeService) {
-    this._service = service;
-  }
-
-  public get title(): string {
-    return this._service.transport.title;
-  }
+  advertisement = input.required<Advertisement>();
 }

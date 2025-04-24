@@ -1,42 +1,9 @@
 <p-panel [header]="'Фильтрация'">
   <ng-content #content>
-    <form class="flex flex-col gap-2">
-      <app-address-filter-input />
-      <app-price-criteria-filter-input />
-      <div class="flex justify-start">
-        <p-chip
-          [style]="{ width: chipWidth }"
-          class="!py-0 !pl-0 !pr-4 text-sm select-none cursor-pointer"
-          [label]="chipLabel"
-        >
-          <p-button
-            (onClick)="turnDialogVisibility($event)"
-            [fluid]="true"
-            [icon]="'pi pi-wrench'"
-            rounded="'true'"
-            outlined="'true'"
-          />
-        </p-chip>
-      </div>
-      <app-sort-criteria-filter-input />
-      <app-characteristics-filter-input />
-      <p-button
-        [fluid]="true"
-        [label]="'Применить'"
-        [size]="'small'"
-        (onClick)="submit($event)"
-      />
-      <p-button
-        [fluid]="true"
-        [label]="'Очистить'"
-        [size]="'small'"
-        (onClick)="clean($event)"
-      />
-    </form>
-    <app-pagination-filter-input />
+    <section class="flex flex-col gap-2">
+      <ng-content>
+
+      </ng-content>
+    </section>
   </ng-content>
 </p-panel>
-<app-transport-items-filter-characteristics-dialog
-  [visibility]="dialogVisibility"
-  (onClose)="turnDialogVisibility($event)"
-/>

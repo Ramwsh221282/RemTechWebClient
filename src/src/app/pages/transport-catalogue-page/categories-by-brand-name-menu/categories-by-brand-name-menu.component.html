@@ -1,0 +1,39 @@
+<section class="flex flex-col gap-1">
+  <p-panel styleClass="h-12 select-none">
+    <ng-template #header>
+      <div class="inline-flex gap-2 font-bold text-sm -m-0 p-0">
+        <a class="-my-1 cursor-default underline">Бренд</a>
+        <a class="-my-1">{{ brand.name }}</a>
+        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+           [routerLink]="routeBuilder.buildCategoriesRoute()">{{ 'Категории' }}</a>
+      </div>
+    </ng-template>
+  </p-panel>
+  <app-search-bar [placeHolderText]="'Найти бренд'"/>
+  @if (isLoadingSignal()) {
+    <p-panel styleClass="h-200 flex flex-col items-center justify-center">
+      <p-progressSpinner/>
+    </p-panel>
+  } @else {
+    @if (categoriesSignal().length === 0) {
+      <p-panel styleClass="h-200 flex flex-col items-center justify-center">
+        <label class="text-2xl">{{ `Категории бренда: ${brand.name} не найдены.` }}</label>
+      </p-panel>
+    } @else {
+      <p-scroll-panel styleClass="h-200">
+        <p-panel styleClass="min-h-200">
+          <div class="grid grid-cols-4 gap-4">
+            @for (category of categoriesSignal(); track category.categoryBrandId) {
+              <p-button [label]="category.categoryName"
+                        [icon]="'pi pi-truck'"
+                        styleClass="underline" [fluid]="true"
+                        [routerLink]="routeBuilder.buildCategoryBrandTransportRoute(category.categoryId, category.categoryBrandId)"
+              />
+            }
+          </div>
+        </p-panel>
+      </p-scroll-panel>
+    }
+  }
+</section>

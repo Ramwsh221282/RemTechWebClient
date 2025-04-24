@@ -1,12 +1,12 @@
 <section class="grid grid-cols-1">
-  <app-transport-item-header-panel class="col-span-1" />
+  <app-transport-item-header-panel [advertisement]="advertisementSignal()" class="col-span-1"/>
 </section>
 <section class="grid grid-cols-2 gap-1">
   <div class="flex flex-col">
-    <app-transport-item-photo-block />
-    <app-transport-item-description-block />
+    <app-transport-item-photo-block [advertisement]="advertisementSignal()"/>
+    <app-transport-item-description-block [advertisement]="advertisementSignal()"/>
   </div>
   <div>
-    <app-transport-item-characteristics-block />
+    <app-transport-item-characteristics-block [advertisement]="advertisementSignal()"/>
   </div>
 </section>

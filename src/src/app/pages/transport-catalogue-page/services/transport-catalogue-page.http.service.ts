@@ -1,40 +1,73 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiUrl } from '../../../shared/api/api-endpoint';
-import { Observable } from 'rxjs';
+import { AdvertisementsHttpService } from './advertisements-http.service';
+import {
+  CategoryBrandFetcherResponse,
+  TransportCatalogueCategorybrandFetcherService,
+} from './transport-catalogue-categorybrand-fetcher.service';
+import { AdvertisementFilter } from '../dto/advertisement-filter';
+import { Pagination } from '../../../shared/types/Pagination';
+import { Sorting } from '../../../shared/types/Sorting';
+import { GeoInformation } from '../types/geoinformation';
 import { Envelope } from '../../../shared/types/Envelope';
-import { Advertisement } from '../types/advertisement';
-import {
-  mapToHttpParameters,
-  Pagination,
-} from '../../../shared/types/Pagination';
-import {
-  AdvertisementDto,
-  createEmptyAdvertisementDto,
-} from '../dto/advertisement-dto';
+import { Observable } from 'rxjs';
+import { AdvertisementsPageResponse } from '../responses/advertisements-page-response';
+import { TransportCharacteristic } from '../types/transport-characteristic';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransportCataloguePageHttpService {
-  private readonly _httpClient: HttpClient;
-  private readonly _apiUrl = apiUrl;
-  constructor(httpClient: HttpClient) {
-    this._httpClient = httpClient;
+  private readonly _advertisementsHttpService: AdvertisementsHttpService;
+  private readonly _categoryBrandFetcher: TransportCatalogueCategorybrandFetcherService;
+
+  constructor(
+    advertisementsHttpService: AdvertisementsHttpService,
+    categoryBrandFetcher: TransportCatalogueCategorybrandFetcherService,
+  ) {
+    this._advertisementsHttpService = advertisementsHttpService;
+    this._categoryBrandFetcher = categoryBrandFetcher;
+  }
+
+  public fetchCategoryBrands(
+    categoryId: string,
+    brandId: string,
+  ): Observable<CategoryBrandFetcherResponse> {
+    return this._categoryBrandFetcher.fetchCategoryBrands(categoryId, brandId);
+  }
+
+  public fetchCharacteristics(
+    categoryId: string,
+    brandId: string,
+  ): Observable<Envelope<TransportCharacteristic[]>> {
+    return this._advertisementsHttpService.fetchAdvertisementDetailedCharacteristics(
+      categoryId,
+      brandId,
+    );
+  }
+
+  public fetchGeoInformation(
+    categoryId: string,
+    brandId: string,
+  ): Observable<Envelope<GeoInformation[]>> {
+    return this._advertisementsHttpService.fetchAdvertisementsGeoInformation(
+      categoryId,
+      brandId,
+    );
   }
 
   public fetchAdvertisements(
+    categoryId: string,
+    brandId: string,
+    filter: AdvertisementFilter,
     pagination: Pagination,
-    advertisementDto: AdvertisementDto | null
-  ): Observable<Envelope<Advertisement>> {
-    const dtoToSend: AdvertisementDto = advertisementDto
-      ? advertisementDto
-      : createEmptyAdvertisementDto();
-
-    return this._httpClient.post<Envelope<Advertisement>>(
-      `${this._apiUrl}/advertisements`,
-      dtoToSend,
-      { params: mapToHttpParameters(pagination) }
+    sort: Sorting,
+  ): Observable<Envelope<AdvertisementsPageResponse>> {
+    return this._advertisementsHttpService.fetchAdvertisements(
+      categoryId,
+      brandId,
+      filter,
+      pagination,
+      sort,
     );
   }
 }

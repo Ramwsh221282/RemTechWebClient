@@ -15,6 +15,11 @@ import { ParserHttpService } from './pages/admin-page/admin-parsers-panel/servic
 import { definePreset } from '@primeng/themes';
 import { AdvertisementsHttpService } from './pages/transport-catalogue-page/services/advertisements-http.service';
 import { TransportItemHttpService } from './pages/transport-item-page/services/transport-item-http.service';
+import { TransportCategoriesHttpService } from './pages/transport-catalogue-page/transport-categories-menu/services/transport-categories-http.service';
+import { CategoryBrandsHttpService } from './pages/transport-catalogue-page/category-brands-menu/services/category-brands-http.service';
+import { TransportCatalogueCategorybrandFetcherService } from './pages/transport-catalogue-page/services/transport-catalogue-categorybrand-fetcher.service';
+import { TransportCataloguePageHttpService } from './pages/transport-catalogue-page/services/transport-catalogue-page.http.service';
+import { TransportCatalogueRouteBuilder } from './pages/transport-catalogue-page/transport-catalogue-routes';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -49,5 +54,10 @@ export const appConfig: ApplicationConfig = {
     ParserHttpService,
     AdvertisementsHttpService,
     TransportItemHttpService,
+    TransportCategoriesHttpService,
+    CategoryBrandsHttpService,
+    TransportCatalogueCategorybrandFetcherService,
+    TransportCataloguePageHttpService,
+    TransportCatalogueRouteBuilder,
   ],
 };
