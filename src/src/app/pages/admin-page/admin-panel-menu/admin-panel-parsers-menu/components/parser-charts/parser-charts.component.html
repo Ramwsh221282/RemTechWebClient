@@ -1,0 +1,7 @@
+<p-panel [header]="'Графики'">
+  <div class="grid grid-cols-3">
+    <app-last-advertisements-count-parser-chart [parser]="parserSignal()"/>
+    <app-elapsed-seconds-parser-chart [parser]="parserSignal()"/>
+    <app-advertisements-count-by-parsers-chart/>
+  </div>
+</p-panel>

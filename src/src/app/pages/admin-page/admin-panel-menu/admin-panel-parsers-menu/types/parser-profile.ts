@@ -7,6 +7,7 @@
   elapsedHours: number;
   elapsedMinutes: number;
   elapsedSeconds: number;
+  totalElapsedSeconds: number;
 };
 
 export class ParserProfileFactory {
@@ -20,6 +21,7 @@ export class ParserProfileFactory {
       elapsedHours: 0,
       elapsedMinutes: 0,
       elapsedSeconds: 0,
+      totalElapsedSeconds: 0,
     };
   }
 }

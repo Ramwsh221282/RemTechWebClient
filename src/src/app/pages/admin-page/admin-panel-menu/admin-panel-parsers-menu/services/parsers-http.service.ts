@@ -5,6 +5,7 @@ import { Envelope } from '../../../../../shared/types/Envelope';
 import { ParserProfile } from '../types/parser-profile';
 import { Observable } from 'rxjs';
 import { Parser, ParserUpdateData } from '../types/parser';
+import { AdvertisementsCountByParsers } from '../types/advertisements-count-by-parsers';
 
 @Injectable({
   providedIn: 'root',
@@ -57,5 +58,13 @@ export class ParsersHttpService {
   public instantlyStart(id: string): Observable<Envelope<string>> {
     const url = `${this._apiUrl}/${id}`;
     return this._httpClient.put<Envelope<string>>(url, null);
+  }
+
+  public getAdvertisementsCountByParsers(): Observable<
+    Envelope<AdvertisementsCountByParsers[]>
+  > {
+    return this._httpClient.get<Envelope<AdvertisementsCountByParsers[]>>(
+      `${this._apiUrl}/advertisements/count`,
+    );
   }
 }

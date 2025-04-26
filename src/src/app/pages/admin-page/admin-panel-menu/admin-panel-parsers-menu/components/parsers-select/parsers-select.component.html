@@ -1,6 +1,7 @@
 <p-panel [header]="'Парсеры'" styleClass="items-center justify-center">
   <p-select [options]="parsers()"
             [optionLabel]="'name'"
+            [ngModel]="parsers()[0]"
             [placeholder]="'Выбрать парсер'"
             (onChange)="handleParserSelect($event)"
   />

@@ -99,6 +99,7 @@ export class ParserLinksFormComponent {
       elapsedMinutes: 0,
       elapsedHours: 0,
       lastNewAdvertisementsCount: 0,
+      totalElapsedSeconds: 0,
     };
     this._httpService.addParserProfile(profile).subscribe((result) => {
       if (result.code === 200) {
