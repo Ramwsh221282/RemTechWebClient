@@ -7,6 +7,7 @@ import { ParserInfoFormComponent } from './components/parser-info-form/parser-in
 import { NgIf } from '@angular/common';
 import { ParserLinksFormComponent } from './components/parser-links-form/parser-links-form.component';
 import { ParserProfile } from './types/parser-profile';
+import { ParserChartsComponent } from './components/parser-charts/parser-charts.component';
 
 @Component({
   selector: 'app-admin-panel-parsers-menu',
@@ -15,6 +16,7 @@ import { ParserProfile } from './types/parser-profile';
     ParserInfoFormComponent,
     NgIf,
     ParserLinksFormComponent,
+    ParserChartsComponent,
   ],
   templateUrl: './admin-panel-parsers-menu.component.html',
   styleUrl: './admin-panel-parsers-menu.component.scss',
@@ -44,6 +46,7 @@ export class AdminPanelParsersMenuComponent implements OnInit {
       .subscribe((result) => {
         if (result.code === 200) {
           this.parsersSignal.set(result.data);
+          this.selectedParserSignal.set(result.data[0]);
         }
       });
   }
