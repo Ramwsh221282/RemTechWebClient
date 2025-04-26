@@ -1,0 +1,9 @@
+<app-admin-panel-menu-navigation (menuSelected)="handleMenuSelected($event)"/>
+@switch (currentMenuSection()) {
+  @case ('parsersManagement') {
+    <app-admin-panel-parsers-menu/>
+  }
+  @default {
+    <div>Not found</div>
+  }
+}
