@@ -11,7 +11,6 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { AppMenuService } from './shared/components/app-menu/app-menu.service';
 import { provideHttpClient } from '@angular/common/http';
-import { ParserHttpService } from './pages/admin-page/admin-parsers-panel/services/parser-http.service';
 import { definePreset } from '@primeng/themes';
 import { AdvertisementsHttpService } from './pages/transport-catalogue-page/services/advertisements-http.service';
 import { TransportItemHttpService } from './pages/transport-item-page/services/transport-item-http.service';
@@ -20,6 +19,7 @@ import { CategoryBrandsHttpService } from './pages/transport-catalogue-page/cate
 import { TransportCatalogueCategorybrandFetcherService } from './pages/transport-catalogue-page/services/transport-catalogue-categorybrand-fetcher.service';
 import { TransportCataloguePageHttpService } from './pages/transport-catalogue-page/services/transport-catalogue-page.http.service';
 import { TransportCatalogueRouteBuilder } from './pages/transport-catalogue-page/transport-catalogue-routes';
+import { ParsersHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/services/parsers-http.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -51,7 +51,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideHttpClient(),
     AppMenuService,
-    ParserHttpService,
     AdvertisementsHttpService,
     TransportItemHttpService,
     TransportCategoriesHttpService,
@@ -59,5 +58,6 @@ export const appConfig: ApplicationConfig = {
     TransportCatalogueCategorybrandFetcherService,
     TransportCataloguePageHttpService,
     TransportCatalogueRouteBuilder,
+    ParsersHttpService,
   ],
 };
