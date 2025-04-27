@@ -1,0 +1,6 @@
+<p-chart type="bar" [data]="geoCountsChartData()" [options]="chartOptions()"/>
+<div class="grid grid-cols-3">
+  <p-chart type="bar" [data]="geoPricesMaxChartData()" [options]="chartOptions()"/>
+  <p-chart type="bar" [data]="geoPricesMinChartData()" [options]="chartOptions()"/>
+  <p-chart type="bar" [data]="geoPricesAvgChartData()" [options]="chartOptions()"/>
+</div>

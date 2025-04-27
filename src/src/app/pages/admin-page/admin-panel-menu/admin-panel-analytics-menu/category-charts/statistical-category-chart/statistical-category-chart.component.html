@@ -1,0 +1,9 @@
+<p-chart type="bar" [data]="countsChartData()" [options]="chartOptions()" (onDataSelect)="dataItemSelected($event)"/>
+<div class="grid grid-cols-3">
+  <p-chart type="bar" [data]="pricesMaxChartData()" [options]="chartOptions()"
+           (onDataSelect)="dataItemSelected($event)"/>
+  <p-chart type="bar" [data]="pricesMinChartData()" [options]="chartOptions()"
+           (onDataSelect)="dataItemSelected($event)"/>
+  <p-chart type="bar" [data]="pricesAvgChartData()" [options]="chartOptions()"
+           (onDataSelect)="dataItemSelected($event)"/>
+</div>

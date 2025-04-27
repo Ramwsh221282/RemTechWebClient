@@ -5,6 +5,11 @@
       <app-admin-panel-parsers-menu/>
     </p-scroll-panel>
   }
+  @case ('analytics') {
+    <p-scroll-panel styleClass="h-196">
+      <app-admin-panel-analytics-menu/>
+    </p-scroll-panel>
+  }
   @default {
     <div>Not found</div>
   }

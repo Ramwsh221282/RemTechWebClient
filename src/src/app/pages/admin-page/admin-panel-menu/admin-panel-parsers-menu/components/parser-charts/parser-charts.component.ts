@@ -5,6 +5,7 @@ import { LastAdvertisementsCountParserChartComponent } from './last-advertisemen
 import { ElapsedSecondsParserChartComponent } from './elapsed-seconds-parser-chart/elapsed-seconds-parser-chart.component';
 import { Panel } from 'primeng/panel';
 import { AdvertisementsCountByParsersChartComponent } from './advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component';
+import { ChartStyleInformationFactory } from './services/chart-style.information';
 
 @Component({
   selector: 'app-parser-charts',
@@ -22,11 +23,16 @@ export class ParserChartsComponent {
   @Input({ required: true, alias: 'parser' })
   set _parser(value: Parser) {
     this.parserSignal.set(value);
+    this.colorsSignal.set(
+      value.profiles.map(() => ChartStyleInformationFactory.getRandomColor()),
+    );
   }
 
   readonly parserSignal: WritableSignal<Parser>;
+  readonly colorsSignal: WritableSignal<string[]>;
 
   constructor() {
     this.parserSignal = signal(ParserFactory.empty());
+    this.colorsSignal = signal([]);
   }
 }

@@ -11,6 +11,7 @@ import { GeoInformation } from '../types/geoinformation';
 import { TransportCharacteristic } from '../types/transport-characteristic';
 import { CategoryOfConcreteBrand } from '../category-brands-menu/types/category-of-concrete-brand';
 import { Advertisement } from '../types/advertisement';
+import { StatisticalCategory } from '../../admin-page/admin-panel-menu/admin-panel-analytics-menu/types/statistical-category';
 
 @Injectable({
   providedIn: 'root',
@@ -102,5 +103,10 @@ export class AdvertisementsHttpService {
   ): Observable<Envelope<Advertisement>> {
     const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements/${advertisementId}`;
     return this._httpClient.get<Envelope<Advertisement>>(url);
+  }
+
+  public getStatisticalData(): Observable<Envelope<StatisticalCategory[]>> {
+    const url = `${apiUrl}/transport-categories/statistics`;
+    return this._httpClient.get<Envelope<StatisticalCategory[]>>(url);
   }
 }

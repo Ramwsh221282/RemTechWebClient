@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   computed,
+  Input,
   OnInit,
   Signal,
   signal,
@@ -59,6 +60,9 @@ export class AdvertisementsCountByParsersChartComponent implements OnInit {
       return { labels: labels, counts: counts };
     },
   );
+
+  readonly colorsSignal: WritableSignal<string[]>;
+
   readonly chartStyleInformationSignal: Signal<ChartStyleInformation> =
     computed((): ChartStyleInformation => {
       return ChartStyleInformationFactory.createChartStyleInformation();
@@ -71,6 +75,7 @@ export class AdvertisementsCountByParsersChartComponent implements OnInit {
           label: 'Количество объявлений по парсерам',
           data: this.parserChartDataSignal().counts,
           borderWidth: 1,
+          backgroundColor: this.colorsSignal(),
         },
       ],
     };
@@ -118,12 +123,16 @@ export class AdvertisementsCountByParsersChartComponent implements OnInit {
     this.advertisementsCountByParsersSignal = signal([]);
     this._cd = cd;
     this._httpService = httpService;
+    this.colorsSignal = signal([]);
   }
 
   public ngOnInit() {
     this._httpService.getAdvertisementsCountByParsers().subscribe((result) => {
       if (result.code === 200) {
         this.advertisementsCountByParsersSignal.set(result.data);
+        this.colorsSignal.set(
+          result.data.map(() => ChartStyleInformationFactory.getRandomColor()),
+        );
       }
     });
   }

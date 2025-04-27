@@ -25,6 +25,7 @@ export class AdminPanelMenuNavigationComponent implements OnInit {
 
   public ngOnInit(): void {
     this.addMenuButton('Управление парсерами', 'parsersManagement', false);
+    this.addMenuButton('Визуализация', 'analytics', false);
     this.addMenuButton(
       'Управление почтой сервиса (WIP)',
       'mailSenderManagement',

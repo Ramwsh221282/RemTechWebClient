@@ -37,7 +37,13 @@ export class ElapsedSecondsParserChartComponent {
     this.parserSignal.set(value);
   }
 
+  @Input({ required: true, alias: 'colors' })
+  set _colorsSignal(colors: string[]) {
+    this.colorsSignal.set(colors);
+  }
+
   readonly parserSignal: WritableSignal<Parser>;
+  readonly colorsSignal: WritableSignal<string[]>;
   readonly parserChartDataItemsSignal: Signal<ParserLinkChartItem[]> = computed(
     (): ParserLinkChartItem[] => {
       const profiles: ParserProfile[] = this.parserSignal().profiles;
@@ -73,6 +79,7 @@ export class ElapsedSecondsParserChartComponent {
           label: 'Время парсинга (секунды)',
           data: this.parserChartDataSignal().seconds,
           borderWidth: 1,
+          backgroundColor: this.colorsSignal(),
         },
       ],
     };
@@ -120,5 +127,6 @@ export class ElapsedSecondsParserChartComponent {
   constructor(cd: ChangeDetectorRef) {
     this.parserSignal = signal(ParserFactory.empty());
     this._cd = cd;
+    this.colorsSignal = signal([]);
   }
 }

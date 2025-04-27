@@ -37,7 +37,13 @@ export class LastAdvertisementsCountParserChartComponent {
     this.parserSignal.set(value);
   }
 
+  @Input({ required: true, alias: 'colors' })
+  set _colorsSignal(colors: string[]) {
+    this.colorsSignal.set(colors);
+  }
+
   readonly parserSignal: WritableSignal<Parser>;
+  readonly colorsSignal: WritableSignal<string[]>;
   readonly parserChartDataItemsSignal: Signal<ParserLinkChartItem[]> = computed(
     (): ParserLinkChartItem[] => {
       const profiles: ParserProfile[] = this.parserSignal().profiles;
@@ -71,6 +77,7 @@ export class LastAdvertisementsCountParserChartComponent {
           label: 'Последние новые объявления',
           data: this.parserChartDataSignal().counts,
           borderWidth: 1,
+          backgroundColor: this.colorsSignal(),
         },
       ],
     };
@@ -117,5 +124,6 @@ export class LastAdvertisementsCountParserChartComponent {
   constructor(cd: ChangeDetectorRef) {
     this.parserSignal = signal(ParserFactory.empty());
     this._cd = cd;
+    this.colorsSignal = signal([]);
   }
 }

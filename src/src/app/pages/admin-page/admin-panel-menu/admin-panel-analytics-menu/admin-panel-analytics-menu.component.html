@@ -1,0 +1,36 @@
+<p-panel styleClass="my-1 sticky top-1 z-10 self-start">
+  <div class="flex flex-row gap-1">
+    <label *ngIf="selectedCategorySignal() === null && selectedCategoryBrandSignal() === null">Ничего не выбрано</label>
+    <app-analytics-navigation-button *ngIf="selectedCategorySignal() !== null"
+                                     [label]="selectedCategorySignal()!.name"
+                                     (removeClicked)="detachSelectedCategory()"/>
+    <p-divider *ngIf="selectedCategoryBrandSignal() !== null" [layout]="'vertical'"/>
+    <app-analytics-navigation-button *ngIf="selectedCategoryBrandSignal() !== null"
+                                     [label]="selectedCategoryBrandSignal()!.brandName"
+                                     (removeClicked)="detachSelectedBrand()"/>
+  </div>
+</p-panel>
+@if (selectedCategorySignal() === null) {
+  <p-panel [header]="'Категории'">
+    <app-statistical-category-chart [categories]="categoriesSignal()"
+                                    (categoryNameSelected)="handleCategoryNameSelected($event)"/>
+  </p-panel>
+}
+@if (selectedCategorySignal() !== null && selectedCategoryBrandSignal() === null) {
+  <p-panel [header]="'Бренды категории'" *ngIf="brandsOfSelectedCategorySignal().length !== 0">
+    <app-brand-charts [brandsOfSelectedCategory]="brandsOfSelectedCategorySignal()"
+                      (brandSelected)="handleSelectedCategoryBrandName($event)"/>
+  </p-panel>
+}
+@if (selectedCategoryBrandSignal() !== null) {
+  <div class="flex flex-col gap-1">
+    <p-panel [header]="'Регионы'"
+             *ngIf="selectedCategoryBrandSignal() !== null && geoOfSelectedCategoryBrandSignal().length !== 0">
+      <app-brand-geo-charts [brandGeos]="geoOfSelectedCategoryBrandSignal()"/>
+    </p-panel>
+    <p-panel [header]="'Модели'"
+             *ngIf="selectedCategoryBrandSignal() !== null && transportModelsOfSelectedCategoryBrandSignal().length !== 0">
+      <app-brand-transport-models-charts [models]="transportModelsOfSelectedCategoryBrandSignal()"/>
+    </p-panel>
+  </div>
+}

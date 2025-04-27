@@ -1,0 +1,6 @@
+<p-chart type="bar" [data]="modelsCountChartData()" [options]="chartOptions()"/>
+<div class="grid grid-cols-3">
+  <p-chart type="bar" [data]="modelsPricesMaxChartData()" [options]="chartOptions()"/>
+  <p-chart type="bar" [data]="modelsPricesMinChartData()" [options]="chartOptions()"/>
+  <p-chart type="bar" [data]="modelsPricesAvgChartData()" [options]="chartOptions()"/>
+</div>
