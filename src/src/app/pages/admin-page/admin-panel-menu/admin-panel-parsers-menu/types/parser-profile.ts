@@ -3,6 +3,7 @@
   parserId: string;
   name: string;
   link: string;
+  isEnabled: boolean;
   lastNewAdvertisementsCount: number;
   elapsedHours: number;
   elapsedMinutes: number;
@@ -17,6 +18,7 @@ export class ParserProfileFactory {
       parserId: '',
       name: '',
       link: '',
+      isEnabled: false,
       lastNewAdvertisementsCount: 0,
       elapsedHours: 0,
       elapsedMinutes: 0,

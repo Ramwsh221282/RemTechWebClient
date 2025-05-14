@@ -203,7 +203,7 @@ export class BrandChartsComponent {
     const options = {
       indexAxis: 'x',
       maintainAspectRatio: false,
-      aspectRatio: 0.8,
+      aspectRatio: 0.5,
       plugins: {
         legend: {
           labels: {

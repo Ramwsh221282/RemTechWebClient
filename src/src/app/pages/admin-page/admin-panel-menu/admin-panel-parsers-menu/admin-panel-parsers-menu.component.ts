@@ -88,6 +88,45 @@ export class AdminPanelParsersMenuComponent implements OnInit {
     this.updateParsersArray(updatedParser);
   }
 
+  public handleLinksEnabled(): void {
+    const currentParser: Parser | null = this.selectedParserSignal();
+    if (!currentParser) return;
+    const profiles: ParserProfile[] = currentParser.profiles;
+    for (const profile of profiles) {
+      profile.isEnabled = true;
+    }
+    const updatedParser = { ...currentParser, profiles: profiles };
+    this.selectedParserSignal.set(updatedParser);
+    this.updateParsersArray(updatedParser);
+  }
+
+  public handleLinksDisabled(): void {
+    const currentParser: Parser | null = this.selectedParserSignal();
+    if (!currentParser) return;
+    const profiles: ParserProfile[] = currentParser.profiles;
+    for (const profile of profiles) {
+      profile.isEnabled = false;
+    }
+    const updatedParser = { ...currentParser, profiles: profiles };
+    this.selectedParserSignal.set(updatedParser);
+    this.updateParsersArray(updatedParser);
+  }
+
+  public handleLinkUpdated(link: ParserProfile): void {
+    const currentParser: Parser | null = this.selectedParserSignal();
+    if (!currentParser) return;
+    const profiles: ParserProfile[] = currentParser.profiles;
+    for (let i = 0; i < profiles.length; i++) {
+      const profile = profiles[i];
+      if (profile.id === link.id) {
+        profiles[i] = { ...link };
+      }
+    }
+    const updatedParser = { ...currentParser, profiles: profiles };
+    this.selectedParserSignal.set(updatedParser);
+    this.updateParsersArray(updatedParser);
+  }
+
   public handleLinkAdded(link: ParserProfile): void {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;

@@ -12,6 +12,7 @@ import { Envelope } from '../../../shared/types/Envelope';
 import { Observable } from 'rxjs';
 import { AdvertisementsPageResponse } from '../responses/advertisements-page-response';
 import { TransportCharacteristic } from '../types/transport-characteristic';
+import { AdvertisementPricesResponse } from '../types/advertisement-prices-response';
 
 @Injectable({
   providedIn: 'root',
@@ -68,6 +69,18 @@ export class TransportCataloguePageHttpService {
       filter,
       pagination,
       sort,
+    );
+  }
+
+  public fetchPrices(
+    categoryId: string,
+    brandId: string,
+    filter: AdvertisementFilter,
+  ): Observable<Envelope<AdvertisementPricesResponse>> {
+    return this._advertisementsHttpService.getAdvertisementsPrices(
+      categoryId,
+      brandId,
+      filter,
     );
   }
 }

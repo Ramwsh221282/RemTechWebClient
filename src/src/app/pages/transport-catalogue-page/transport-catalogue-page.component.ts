@@ -40,6 +40,8 @@ import {
   AggregatedScalarDataFactory,
 } from './types/aggregated-scalar-data';
 import { TransportCatalogueRouteBuilder } from './transport-catalogue-routes';
+import { AdvertisementPricesResponse } from './types/advertisement-prices-response';
+import { PricesChartComponent } from './components/transport-items-filter-form/prices-chart/prices-chart.component';
 
 @Component({
   selector: 'app-transport-catalogue-page',
@@ -59,6 +61,7 @@ import { TransportCatalogueRouteBuilder } from './transport-catalogue-routes';
     PriceCriteriaFilterInputComponent,
     CharacteristicsFilterInputComponent,
     RouterLink,
+    PricesChartComponent,
   ],
   templateUrl: './transport-catalogue-page.component.html',
   styleUrl: './transport-catalogue-page.component.scss',
@@ -77,6 +80,7 @@ export class TransportCataloguePageComponent implements OnInit {
   geoInformationSignal: WritableSignal<GeoInformation[]>;
   isSelectingGeoInformation: WritableSignal<boolean>;
   selectedGeoInformationSignal: WritableSignal<GeoInformation | null>;
+  advertisementsPricesSignal: WritableSignal<AdvertisementPricesResponse>;
   scalarData: AggregatedScalarData;
   activatedRoute: ActivatedRoute;
   titleService: Title;
@@ -106,6 +110,7 @@ export class TransportCataloguePageComponent implements OnInit {
     this.geoInformationSignal = signal([]);
     this.selectedGeoInformationSignal = signal(null);
     this.isSelectingGeoInformation = signal(false);
+    this.advertisementsPricesSignal = signal({ prices: [] });
     this.scalarData = AggregatedScalarDataFactory.default();
     this.routeBuilder = routeBuilder;
   }
@@ -125,6 +130,7 @@ export class TransportCataloguePageComponent implements OnInit {
             `Список спец.техники ${result.category.name} ${result.categoryBrand.name}`,
           );
           this.refetchAdvertisements();
+          this.refetchPrices();
         });
       this.httpService
         .fetchCharacteristics(categoryId, brandId)
@@ -184,6 +190,20 @@ export class TransportCataloguePageComponent implements OnInit {
       });
   }
 
+  private refetchPrices(): void {
+    this.httpService
+      .fetchPrices(
+        this.categorySignal().id,
+        this.brandSignal().brandId,
+        this.filterSignal(),
+      )
+      .subscribe((result) => {
+        if (result.code === 200) {
+          this.advertisementsPricesSignal.set(result.data);
+        }
+      });
+  }
+
   public acceptTextSearch(searchTerm: string): void {
     const filter: AdvertisementFilter = this.filterSignal();
     const updated = AdvertisementFilterService.applyTextFilter(
@@ -192,6 +212,7 @@ export class TransportCataloguePageComponent implements OnInit {
     );
     this.filterSignal.set(updated);
     this.refetchAdvertisements();
+    this.refetchPrices();
   }
 
   public acceptGeoInformationChange(geoInformation: GeoInformation): void {
@@ -212,6 +233,7 @@ export class TransportCataloguePageComponent implements OnInit {
       );
     });
     this.refetchAdvertisements();
+    this.refetchPrices();
   }
 
   public acceptCharacteristicChange(
@@ -221,6 +243,7 @@ export class TransportCataloguePageComponent implements OnInit {
     const updatedFilter: AdvertisementFilter =
       AdvertisementFilterService.applyCharacteristic(filter, characteristic);
     this.filterSignal.set(updatedFilter);
+    this.refetchPrices();
     this.refetchAdvertisements();
   }
 
@@ -230,6 +253,7 @@ export class TransportCataloguePageComponent implements OnInit {
     const updatedFilter: AdvertisementFilter =
       AdvertisementFilterService.appplyCharacteristics(filter, []);
     this.filterSignal.set(updatedFilter);
+    this.refetchPrices();
     this.refetchAdvertisements();
   }
 

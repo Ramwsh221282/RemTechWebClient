@@ -24,10 +24,11 @@ import { DialogModule } from 'primeng/dialog';
     PaginatorModule,
     DialogModule,
   ],
-  templateUrl: './transport-items-filter-form.component.html',
-  styleUrl: './transport-items-filter-form.component.scss',
+  templateUrl: './transport-items-filter-form.component.html', // шаблон
+  styleUrl: './transport-items-filter-form.component.scss', // ситили
 })
 export class TransportItemsFilterFormComponent {
+  // состояние и логика
   public chipLabel: string = 'Указать характеристику';
   public chipWidth: string = 'auto';
 

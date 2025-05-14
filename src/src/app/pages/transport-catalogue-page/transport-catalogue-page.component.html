@@ -46,6 +46,7 @@
           [characteristics]="characteristicsSignal()"
           (characteristicSelected)="acceptCharacteristicChange($event)"
           (characteristicsFlushed)="acceptCharacteristicsFlush()"/>
+        <app-prices-chart [prices]="advertisementsPricesSignal()"/>
       </app-transport-items-filter-form>
     </div>
     <div class="w-3/4 ml-0.75">

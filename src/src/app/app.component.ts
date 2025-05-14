@@ -15,7 +15,7 @@ import { AnimationsFactory } from './shared/animations/animations-factory';
     AnimationsFactory.expandCollapseAnimation(
       'grid-template-columns',
       '300px 1fr',
-      '85px 1fr'
+      '85px 1fr',
     ),
   ],
 })
