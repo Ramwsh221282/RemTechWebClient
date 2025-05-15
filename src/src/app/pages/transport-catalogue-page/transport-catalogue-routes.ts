@@ -24,6 +24,27 @@ export const TransportCatalogueRoutes: Routes = [
       ),
   },
   {
+    path: 'transport-catalogue/categories/:id/brands/:brandid/transports/geo/:geoId',
+    loadComponent: () =>
+      import('./transport-catalogue-page.component').then(
+        (c) => c.TransportCataloguePageComponent,
+      ),
+  },
+  {
+    path: 'transport-catalogue/categories/:id/brands/:brandid/transports/models/:modelName',
+    loadComponent: () =>
+      import('./transport-catalogue-page.component').then(
+        (c) => c.TransportCataloguePageComponent,
+      ),
+  },
+  {
+    path: 'transport-catalogue/categories/:id/brands/:brandid/transports/geo/:geoId/models/:modelName',
+    loadComponent: () =>
+      import('./transport-catalogue-page.component').then(
+        (c) => c.TransportCataloguePageComponent,
+      ),
+  },
+  {
     path: 'transport-catalogue/categories/:id/brands/:brandid/transports/:transportId',
     loadComponent: () =>
       import('../transport-item-page/transport-item-page.component').then(

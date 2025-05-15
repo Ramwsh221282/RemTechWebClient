@@ -10,6 +10,11 @@ export type AdvertisementCharacteristicDto = {
   value: string;
 };
 
+export type TransportModelDto = {
+  name: string;
+  value: string;
+};
+
 export const createEmptyAdvertisementDto = (): AdvertisementDto => {
   return {};
 };

@@ -1,0 +1,15 @@
+<div class="flex flex-col gap-1 items-center justify-center w-full -my-25">
+  <label class="text-2xl font-bold select-none">Наша статистика техники:</label>
+  <section class="grid grid-cols-3 gap-0.5 w-full">
+    <p-panel [header]="'Типы техник'">
+      <app-main-page-category-analytics [categories]="categories()"
+                                        (categoryNameSelected)="acceptSelectedCategory($event)"/>
+    </p-panel>
+    <p-panel [header]="currentCategoryHeader()">
+      <app-main-page-brands-analytics [brands]="brands()" (brandNameSelected)="acceptSelectedBrand($event)"/>
+    </p-panel>
+    <p-panel [header]="currentBrandHeader()">
+      <app-main-page-transport-models-analytics [models]="models()"/>
+    </p-panel>
+  </section>
+</div>

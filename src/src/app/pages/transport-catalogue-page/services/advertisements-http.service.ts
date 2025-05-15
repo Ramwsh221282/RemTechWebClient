@@ -13,6 +13,7 @@ import { CategoryOfConcreteBrand } from '../category-brands-menu/types/category-
 import { Advertisement } from '../types/advertisement';
 import { StatisticalCategory } from '../../admin-page/admin-panel-menu/admin-panel-analytics-menu/types/statistical-category';
 import { AdvertisementPricesResponse } from '../types/advertisement-prices-response';
+import { TransportModelDto } from '../dto/advertisement-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -150,5 +151,20 @@ export class AdvertisementsHttpService {
       url,
       payload,
     );
+  }
+
+  public fetchTransportModels(
+    categoryId: string,
+    brandId: string,
+    geoId?: string | null,
+  ): Observable<Envelope<TransportModelDto[]>> {
+    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/models`;
+    let params: HttpParams = new HttpParams();
+
+    if (geoId) params = params.append('geoId', geoId);
+
+    return this._httpClient.get<Envelope<TransportModelDto[]>>(url, {
+      params: params,
+    });
   }
 }

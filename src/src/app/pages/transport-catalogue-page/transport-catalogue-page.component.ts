@@ -117,10 +117,77 @@ export class TransportCataloguePageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
+      const geoId: string | undefined = params['geoId'];
+      const modelName: string | undefined = params['modelName'];
+
       this.paginationSignal = signal(PaginationService.initialized(1, 10));
       this.filterSignal = signal(AdvertisementFilterService.createEmpty());
-      const categoryId = params['id'];
-      const brandId = params['brandid'];
+
+      const categoryId: string = params['id'];
+      const brandId: string = params['brandid'];
+
+      this.httpService
+        .fetchCharacteristics(categoryId, brandId)
+        .subscribe((result) => {
+          if (result.code === 200) {
+            const data = result.data;
+            this.characteristicsSignal.set(data);
+
+            if (modelName) {
+              const modelCharacteristicIndex: number = data.findIndex(
+                (ctx) => ctx.name === 'модель',
+              );
+              if (modelCharacteristicIndex >= 0) {
+                const modelCharacteristics: TransportCharacteristic =
+                  data[modelCharacteristicIndex];
+                const selectedModelIndex =
+                  modelCharacteristics.values.findIndex((m) => m === modelName);
+
+                if (selectedModelIndex >= 0) {
+                  const characteristic: CharacteristicFilterOption = {
+                    name: 'модель',
+                    value: modelCharacteristics.values[selectedModelIndex],
+                  };
+
+                  this.filterSignal.update((prev) => {
+                    return AdvertisementFilterService.applyCharacteristic(
+                      prev,
+                      characteristic,
+                    );
+                  });
+                }
+              }
+            }
+          }
+        });
+
+      this.httpService
+        .fetchGeoInformation(categoryId, brandId)
+        .subscribe((result) => {
+          if (result.code === 200) {
+            const data: GeoInformation[] = result.data;
+            this.geoInformationSignal.set(data);
+
+            if (geoId && geoId !== 'любой') {
+              const selectedGeoIndex: number = data.findIndex(
+                (geo): boolean => geo.id === geoId,
+              );
+              if (selectedGeoIndex >= 0) {
+                const selectedGeo = data[selectedGeoIndex];
+                this.selectedGeoInformationSignal.set(selectedGeo);
+                this.filterSignal.update(
+                  (prev: AdvertisementFilter): AdvertisementFilter => {
+                    return AdvertisementFilterService.applyAddress(
+                      prev,
+                      selectedGeo.id,
+                    );
+                  },
+                );
+              }
+            }
+          }
+        });
+
       this.httpService
         .fetchCategoryBrands(categoryId, brandId)
         .subscribe((result) => {
@@ -131,16 +198,6 @@ export class TransportCataloguePageComponent implements OnInit {
           );
           this.refetchAdvertisements();
           this.refetchPrices();
-        });
-      this.httpService
-        .fetchCharacteristics(categoryId, brandId)
-        .subscribe((result) => {
-          if (result.code === 200) this.characteristicsSignal.set(result.data);
-        });
-      this.httpService
-        .fetchGeoInformation(categoryId, brandId)
-        .subscribe((result) => {
-          if (result.code === 200) this.geoInformationSignal.set(result.data);
         });
     });
   }
