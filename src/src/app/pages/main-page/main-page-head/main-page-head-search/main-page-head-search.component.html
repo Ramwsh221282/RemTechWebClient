@@ -1,0 +1,43 @@
+<p-panel styleClass="min-w-350 my-5!">
+  <ng-template #header>
+    <div class="flex flex-col gap-1">
+      <label class="text-lg select-none font-bold">Поиск моделей по типу техники, бренду и региону</label>
+      <label class="select-none">Начните с типа техники</label>
+    </div>
+  </ng-template>
+  <div class="w-full flex flex-row gap-1 items-center justify-center">
+
+    <p-select [options]="categories()"
+              [optionLabel]="'name'"
+              [placeholder]="'Выбрать тип техники'"
+              styleClass="min-w-80"
+              (onChange)="onCategorySelect($event)"
+    />
+
+    <p-select [options]="brands()"
+              [optionLabel]="'name'"
+              [disabled]="selectedCategory() === null"
+              [placeholder]="'Выбрать бренд техники'"
+              styleClass="min-w-50"
+              (onChange)="onBrandSelect($event)"
+    />
+
+    <p-select [disabled]="selectedCategory() === null || selectedBrand() === null"
+              [options]="geoLocations()"
+              [optionLabel]="'details'"
+              [placeholder]="'Выбрать регион'"
+              (onChange)="onGeoLocationSelect($event)"
+              styleClass="min-w-80"/>
+
+    <p-select [disabled]="selectedCategory() === null || selectedBrand() === null"
+              [options]="transportModels()"
+              [optionLabel]="'value'"
+              [placeholder]="'Выбрать модель техники'"
+              (onChange)="onTransportModelSelect($event)"
+              styleClass="min-w-50"/>
+
+    <p-button [disabled]="selectedCategory() === null || selectedBrand() === null"
+              [icon]="'pi pi-search'" (onClick)="navigateCatalogue()"/>
+
+  </div>
+</p-panel>

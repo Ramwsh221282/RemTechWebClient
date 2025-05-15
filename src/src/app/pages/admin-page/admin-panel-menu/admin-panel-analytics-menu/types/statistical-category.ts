@@ -1,4 +1,11 @@
-﻿export type StatisticalCategory = {
+﻿export type StatisticalAggregatedData = {
+  count: number;
+  average: number;
+  minimal: number;
+  maximum: number;
+};
+
+export type StatisticalCategory = {
   id: string;
   name: string;
   data: StatisticalAggregatedData;
@@ -30,13 +37,6 @@ export type StatisticalTransportModel = {
   categoryId: string;
   model: string;
   data: StatisticalAggregatedData;
-};
-
-export type StatisticalAggregatedData = {
-  count: number;
-  average: number;
-  minimal: number;
-  maximum: number;
 };
 
 export class StatisticalCategoryFactory {

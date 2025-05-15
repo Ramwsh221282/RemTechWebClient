@@ -16,6 +16,7 @@ import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ParsersHttpService } from '../../services/parsers-http.service';
 import { ScrollPanel } from 'primeng/scrollpanel';
+import { NgIf } from '@angular/common';
 
 interface NewLinkInputProperties {
   name: string;
@@ -24,7 +25,15 @@ interface NewLinkInputProperties {
 
 @Component({
   selector: 'app-parser-links-form',
-  imports: [Panel, TableModule, Button, InputText, FormsModule, ScrollPanel],
+  imports: [
+    Panel,
+    TableModule,
+    Button,
+    InputText,
+    FormsModule,
+    ScrollPanel,
+    NgIf,
+  ],
   templateUrl: './parser-links-form.component.html',
   styleUrl: './parser-links-form.component.scss',
 })
@@ -33,6 +42,9 @@ export class ParserLinksFormComponent {
   @Output() linkAdded: EventEmitter<ParserProfile>;
   @Output() startEditingLinks: EventEmitter<boolean>;
   @Output() saveEditingLinks: EventEmitter<boolean>;
+  @Output() allLinksEnabled: EventEmitter<void>;
+  @Output() allLinksDisabled: EventEmitter<void>;
+  @Output() updateParserLink: EventEmitter<ParserProfile>;
 
   @Input({ alias: 'selectedParser', required: true }) set _selectedParser(
     value: Parser,
@@ -69,6 +81,9 @@ export class ParserLinksFormComponent {
     this._httpService = httpService;
     this.startEditingLinks = new EventEmitter<boolean>();
     this.saveEditingLinks = new EventEmitter<boolean>();
+    this.allLinksEnabled = new EventEmitter<void>();
+    this.allLinksDisabled = new EventEmitter<void>();
+    this.updateParserLink = new EventEmitter<ParserProfile>();
   }
 
   public navigateOnLinkSource(
@@ -95,6 +110,7 @@ export class ParserLinksFormComponent {
       parserId: this.selectedParserSignal().id,
       name: name,
       link: value,
+      isEnabled: false,
       elapsedSeconds: 0,
       elapsedMinutes: 0,
       elapsedHours: 0,
@@ -107,6 +123,40 @@ export class ParserLinksFormComponent {
       }
       this.refreshInputProperties();
     });
+  }
+
+  public disableAllParserLinks(): void {
+    const parser: Parser = this.selectedParserSignal();
+    const parserId: string = parser.id;
+    this._httpService.disableAllParserLinks(parserId).subscribe((result) => {
+      if (result.code === 200) {
+        this.allLinksDisabled.emit();
+      }
+    });
+  }
+
+  public enableAllParserLinks(): void {
+    const parser: Parser = this.selectedParserSignal();
+    const parserId: string = parser.id;
+    this._httpService.enableAllParserLinks(parserId).subscribe((result) => {
+      if (result.code === 200) {
+        this.allLinksEnabled.emit();
+      }
+    });
+  }
+
+  public turnLink(profile: ParserProfile): void {
+    const parser: Parser = this.selectedParserSignal();
+    const parserId: string = parser.id;
+    const profileId: string = profile.id;
+    const turnTerm: boolean = !profile.isEnabled;
+    this._httpService
+      .updateParserLink(parserId, profileId, turnTerm)
+      .subscribe((result) => {
+        if (result.code === 200) {
+          this.updateParserLink.emit(result.data);
+        }
+      });
   }
 
   public handleSearchByNameInputChange($event: Event): void {

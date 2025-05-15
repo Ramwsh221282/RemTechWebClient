@@ -67,4 +67,34 @@ export class ParsersHttpService {
       `${this._apiUrl}/advertisements/count`,
     );
   }
+
+  public disableAllParserLinks(parserId: string): Observable<Envelope<string>> {
+    return this._httpClient.put<Envelope<string>>(
+      `${this._apiUrl}/${parserId}/profiles/disabled`,
+      null,
+    );
+  }
+
+  public enableAllParserLinks(parserId: string): Observable<Envelope<string>> {
+    return this._httpClient.put<Envelope<string>>(
+      `${this._apiUrl}/${parserId}/profiles/enabled`,
+      null,
+    );
+  }
+
+  public updateParserLink(
+    parserId: string,
+    profileId: string,
+    isEnabled: boolean,
+  ): Observable<Envelope<ParserProfile>> {
+    const body = {
+      parserId: parserId,
+      profileId: profileId,
+      isEnabled: isEnabled,
+    };
+    return this._httpClient.patch<Envelope<ParserProfile>>(
+      `${this._apiUrl}/${parserId}/${profileId}`,
+      body,
+    );
+  }
 }
