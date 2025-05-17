@@ -10,6 +10,9 @@
       <app-admin-panel-analytics-menu/>
     </p-scroll-panel>
   }
+  @case ('mailSenderManagement') {
+    <app-admin-panel-mailing-service-menu/>
+  }
   @default {
     <div>Not found</div>
   }

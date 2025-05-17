@@ -27,9 +27,9 @@ export class AdminPanelMenuNavigationComponent implements OnInit {
     this.addMenuButton('Управление парсерами', 'parsersManagement', false);
     this.addMenuButton('Визуализация', 'analytics', false);
     this.addMenuButton(
-      'Управление почтой сервиса (WIP)',
+      'Управление почтой сервиса',
       'mailSenderManagement',
-      true,
+      false,
     );
     this.addMenuButton(
       'Регистрация администраторов (WIP)',

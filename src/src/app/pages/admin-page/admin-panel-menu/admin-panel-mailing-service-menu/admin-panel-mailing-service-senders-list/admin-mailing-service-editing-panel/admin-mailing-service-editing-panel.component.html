@@ -1,0 +1,29 @@
+<p-scroll-panel>
+  <p-panel [header]="'Панель управления'" styleClass="my-1.5!">
+    <form [formGroup]="addSenderForm" class="flex flex-col gap-1 w-full" (ngSubmit)="submitAdding()">
+      <label class="text-sm font-bold select-none">Форма добавления нового почтового отправителя</label>
+      <div class="flex flex-col gap-3 p-1">
+
+        <input [formControlName]="'email'"
+               [pSize]="'small'"
+               [placeholder]="'Почта отправителя'"
+               (input)="onEmailInputChange()"
+               pInputText>
+
+        <input [formControlName]="'smtpKey'"
+               [pSize]="'small'"
+               [placeholder]="'SMTP ключ'"
+               [type]="'password'"
+               pInputText>
+
+        <input [formControlName]="'serviceName'"
+               [pSize]="'small'"
+               [placeholder]="'Сервис (сформируется автоматически)'"
+               [readOnly]="true"
+               pInputText>
+
+      </div>
+      <p-button [type]="'submit'" [outlined]="'true'" [label]="'Добавить'" [size]="'small'"/>
+    </form>
+  </p-panel>
+</p-scroll-panel>
