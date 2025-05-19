@@ -8,6 +8,7 @@ import { NgIf } from '@angular/common';
 import { ParserLinksFormComponent } from './components/parser-links-form/parser-links-form.component';
 import { ParserProfile } from './types/parser-profile';
 import { ParserChartsComponent } from './components/parser-charts/parser-charts.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-panel-parsers-menu',
@@ -29,7 +30,8 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   readonly isEditingParser: WritableSignal<boolean>;
   readonly isEditingLinks: WritableSignal<boolean>;
 
-  constructor(httpService: ParsersHttpService) {
+  constructor(httpService: ParsersHttpService, title: Title) {
+    title.setTitle('Администрирование. Парсеры')
     this._httpService = httpService;
     this.isLoadingSignal = signal(false);
     this.parsersSignal = signal([]);

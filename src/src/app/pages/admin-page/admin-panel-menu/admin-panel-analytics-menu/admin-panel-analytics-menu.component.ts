@@ -14,6 +14,7 @@ import { BrandGeoChartsComponent } from './brand-geo-charts/brand-geo-charts.com
 import { BrandTransportModelsChartsComponent } from './brand-transport-models-charts/brand-transport-models-charts.component';
 import { AnalyticsNavigationButtonComponent } from './analytics-navigation-button/analytics-navigation-button.component';
 import { Divider } from 'primeng/divider';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-panel-analytics-menu',
@@ -45,7 +46,8 @@ export class AdminPanelAnalyticsMenuComponent implements OnInit {
     StatisticalTransportModel[]
   >;
 
-  constructor(httpService: AdvertisementsHttpService) {
+  constructor(httpService: AdvertisementsHttpService, title: Title) {
+    title.setTitle('Администрирование. Аналитика')
     this._httpService = httpService;
     this.categoriesSignal = signal([]);
     this.brandsOfSelectedCategorySignal = signal([]);

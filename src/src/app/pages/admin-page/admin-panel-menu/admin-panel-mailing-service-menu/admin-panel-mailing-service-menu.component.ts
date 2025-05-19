@@ -18,6 +18,7 @@ import { ConfirmationDialogUtils } from '../../../../shared/utils/confirmation-d
 import { AdminMailingServiceGoogleInstructionsComponent } from './admin-mailing-service-google-instructions/admin-mailing-service-google-instructions.component';
 import { AdminMailingServiceYandexInstructionsComponent } from './admin-mailing-service-yandex-instructions/admin-mailing-service-yandex-instructions.component';
 import { AdminMailingServiceMailruInstructionsComponent } from './admin-mailing-service-mailru-instructions/admin-mailing-service-mailru-instructions.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-panel-mailing-service-menu',
@@ -51,7 +52,9 @@ export class AdminPanelMailingServiceMenuComponent implements OnInit {
     httpService: MailingServiceHttpService,
     messageService: MessageService,
     confirmationService: ConfirmationService,
+    title: Title,
   ) {
+    title.setTitle('Администрирование. Почта')
     this._httpService = httpService;
     this._messageService = messageService;
     this._confirmationService = confirmationService;
