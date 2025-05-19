@@ -1,0 +1,20 @@
+﻿FROM node:22.14.0-alpine AS build
+
+WORKDIR /app
+
+COPY frontend/package*.json ./
+
+RUN ls
+
+RUN npm install
+
+RUN ls
+
+COPY frontend/. . 
+
+RUN npm run build
+
+FROM nginx:stable
+COPY --from=build /app/dist/src/browser/. /usr/share/nginx/html
+
+RUN ls

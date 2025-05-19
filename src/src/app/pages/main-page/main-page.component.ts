@@ -15,6 +15,7 @@ import { MessageServiceUtils } from '../../shared/utils/message-service-utils';
 import { catchError, finalize, Observable } from 'rxjs';
 import { CustomHttpErrorFactory } from '../../shared/types/CustomHttpError';
 import { Toast } from 'primeng/toast';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main-page',
@@ -42,7 +43,9 @@ export class MainPageComponent implements OnInit {
     advertisementsHttpService: AdvertisementsHttpService,
     messageService: MessageService,
     usersService: UsersService,
+    title: Title,
   ) {
+    title.setTitle('Агрегатор лесозаготовительной спец. техники')
     this._messageService = messageService;
     this._usersService = usersService;
     this._advertisementsHttpService = advertisementsHttpService;

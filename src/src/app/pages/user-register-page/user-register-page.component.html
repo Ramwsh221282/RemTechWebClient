@@ -1,0 +1,21 @@
+<section class="flex flex-col my-1 items-center justify-center">
+  <p-panel>
+    <ng-template #header>
+      <label class="text-2xl select-none text-center">Регистрация</label>
+    </ng-template>
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center min-h-50 min-w-100">
+        <p-progressSpinner/>
+      </div>
+    }
+    @else {
+      <form (ngSubmit)="submitRegistration()" [formGroup]="userRegisterFormGroup" class="flex flex-col gap-2 min-w-100">
+        <input [formControlName]="'email'" [pSize]="'small'" [placeholder]="'Электронная почта'" [fluid]="'true'" pInputText />
+        <input [formControlName]="'password'" [pSize]="'small'" [placeholder]="'Пароль'" [fluid]="'true'" [type]="'password'" pInputText />
+        <input [formControlName]="'userName'" [pSize]="'small'" [placeholder]="'Название учетной записи'" [fluid]="'true'" pInputText />
+        <p-button [label]="'Зарегистрироваться'" [fluid]="'true'" [type]="'submit'" />
+      </form>
+    }
+  </p-panel>
+</section>
+<p-toast [position]="'bottom-right'" />

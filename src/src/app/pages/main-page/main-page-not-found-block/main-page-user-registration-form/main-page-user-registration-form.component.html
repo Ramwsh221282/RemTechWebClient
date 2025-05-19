@@ -1,7 +1,7 @@
 <form [formGroup]="userRegisterFormGroup" class="flex flex-col gap-5.5" (ngSubmit)="submitRegistration()" >
   <input [formControlName]="'email'" [placeholder]="'Электронная почта'" pInputText/>
-  <input [formControlName]="'userName'" [placeholder]="'Название пользователя'" pInputText/>
   <input [formControlName]="'password'" [placeholder]="'Пароль'" [type]="'password'" pInputText/>
+  <input [formControlName]="'userName'" [placeholder]="'Название учетной записи'" pInputText/>
 
   <div class="flex flex-row gap-1">
     <p-button [type]="'submit'" [label]="'Зарегистрироваться'" [size]="'small'"/>
