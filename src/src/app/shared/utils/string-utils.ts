@@ -2,4 +2,17 @@
   public static isEmptyOrWhiteSpace(value: string): boolean {
     return value.trim().length === 0;
   }
+
+  public static isEmailValid(value: string): boolean {
+    const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    return emailRegex.test(value);
+  }
+
+  public static isLessThan(value: string, length: number): boolean {
+    return value.length < length;
+  }
+
+  public static isGreaterThan(value: string, length: number): boolean {
+    return value.length > length;
+  }
 }

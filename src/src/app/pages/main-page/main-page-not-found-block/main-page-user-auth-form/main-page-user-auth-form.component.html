@@ -1,0 +1,10 @@
+<form class="flex flex-col gap-3 my-2">
+  <label class="select-none">Для существующих пользователей</label>
+  <input [placeholder]="'Электронная почта'" pInputText/>
+  <input [placeholder]="'Пароль'" [type]="'password'" pInputText/>
+
+  <div class="flex flex-row gap-1">
+    <p-button [label]="'Авторизоваться'" [size]="'small'"/>
+    <p-button [label]="'Восстановить пароль'" [size]="'small'" [outlined]="true"/>
+  </div>
+</form>

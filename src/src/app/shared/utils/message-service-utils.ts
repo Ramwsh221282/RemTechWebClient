@@ -9,11 +9,29 @@ export class MessageServiceUtils {
     });
   }
 
+  public static showStickySuccess(messageService: MessageService, text: string) {
+    messageService.add({
+      severity: 'success',
+      summary: 'Успешно',
+      detail: text,
+      sticky: true,
+    });
+  }
+
   public static showInfo(messageService: MessageService, text: string) {
     messageService.add({
       severity: 'info',
       summary: 'Информация',
       detail: text,
+    });
+  }
+
+  public static showStickyInfo(messageService: MessageService, text: string) {
+    messageService.add({
+      severity: 'info',
+      summary: 'Информация',
+      detail: text,
+      sticky: true,
     });
   }
 

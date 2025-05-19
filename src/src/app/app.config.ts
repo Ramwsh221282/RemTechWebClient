@@ -21,6 +21,7 @@ import { TransportCataloguePageHttpService } from './pages/transport-catalogue-p
 import { TransportCatalogueRouteBuilder } from './pages/transport-catalogue-page/transport-catalogue-routes';
 import { ParsersHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/services/parsers-http.service';
 import { MailingServiceHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-mailing-service-menu/services/mailing-service-http.service';
+import { UsersService } from './shared/services/users.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -61,5 +62,6 @@ export const appConfig: ApplicationConfig = {
     TransportCatalogueRouteBuilder,
     ParsersHttpService,
     MailingServiceHttpService,
+    UsersService,
   ],
 };
