@@ -7,8 +7,6 @@ import { MessageServiceUtils } from '../../shared/utils/message-service-utils';
 import { AuthDto } from '../../shared/services/auth-dto';
 import { catchError, finalize, Observable } from 'rxjs';
 import { CustomHttpErrorFactory } from '../../shared/types/CustomHttpError';
-import { Envelope } from '../../shared/types/Envelope';
-import { AuthResponse } from '../../shared/services/auth-response';
 import { Button } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Panel } from 'primeng/panel';
