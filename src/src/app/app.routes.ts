@@ -4,6 +4,7 @@ import { AdminPageRoutes } from './pages/admin-page/admin-page.routes';
 import { MainPageRoutes } from './pages/main-page/main-page-routes';
 import { RegistrationConfirmationRoute } from './pages/registration-confirmation-page/registration-confirmation-route';
 import { UserRegisterRoutes } from './pages/user-register-page/user-register-route';
+import { UserAuthRoutes } from './pages/user-auth-page/user-auth-routes';
 
 export const routes: Routes = [
   ...MainPageRoutes,
@@ -11,4 +12,5 @@ export const routes: Routes = [
   ...TransportCatalogueRoutes,
   ...RegistrationConfirmationRoute,
   ...UserRegisterRoutes,
+  ...UserAuthRoutes,
 ];
