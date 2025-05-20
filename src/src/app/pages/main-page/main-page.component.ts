@@ -16,6 +16,7 @@ import { catchError, finalize, Observable } from 'rxjs';
 import { CustomHttpErrorFactory } from '../../shared/types/CustomHttpError';
 import { Toast } from 'primeng/toast';
 import { Title } from '@angular/platform-browser';
+import { AuthDto } from '../../shared/services/auth-dto';
 
 @Component({
   selector: 'app-main-page',
@@ -38,6 +39,7 @@ export class MainPageComponent implements OnInit {
   private readonly _usersService: UsersService;
   readonly statisticalCategories: WritableSignal<StatisticalCategory[]>;
   readonly isAuthLoadingSignal: WritableSignal<boolean>;
+  readonly isAuthorizedSignal: WritableSignal<boolean>;
 
   constructor(
     advertisementsHttpService: AdvertisementsHttpService,
@@ -51,6 +53,7 @@ export class MainPageComponent implements OnInit {
     this._advertisementsHttpService = advertisementsHttpService;
     this.statisticalCategories = signal([]);
     this.isAuthLoadingSignal = signal(false);
+    this.isAuthorizedSignal = signal(false);
   }
 
   public ngOnInit(): void {
@@ -93,6 +96,25 @@ export class MainPageComponent implements OnInit {
           MessageServiceUtils.showStickyInfo(this._messageService, message);
         }
       });
+  }
+
+  public acceptUserAuthorization($event: AuthDto): void {
+    this.isAuthLoadingSignal.set(true);
+
+    this._usersService.auth($event)
+      .pipe(finalize(() => {
+        this.isAuthLoadingSignal.set(false);
+      }), catchError((err) => {
+        const error = CustomHttpErrorFactory.AsHttpError(err);
+        MessageServiceUtils.showError(this._messageService, error.message);
+        return new Observable<never>();
+      })).subscribe((response) => {
+        if (response.code === 200) {
+          const message = 'Авторизация прошла успешно.';
+          MessageServiceUtils.showStickySuccess(this._messageService, message);
+          this.isAuthorizedSignal.set(true);
+        }
+    })
   }
 
   private isEmailValid(dto: UserRegisterDto): boolean {
