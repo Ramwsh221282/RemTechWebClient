@@ -10,10 +10,12 @@ import { AuthStatusService } from '../services/auth-status.service';
 import { Envelope } from '../types/Envelope';
 import { AuthResponse } from '../services/auth-response';
 
-export function cookieAuthInterceptor(
+export function authInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
+  if (!isAuthRequest(req)) return next(req);
+
   const authService: AuthStatusService = inject(AuthStatusService);
 
   return next(req).pipe(
@@ -53,4 +55,8 @@ function isAuthEnvelope(envelope: Envelope<any>): boolean {
   const accessToken = data.accessToken;
   const refreshToken = data.refreshToken;
   return accessToken && refreshToken;
+}
+
+function isAuthRequest(req: HttpRequest<any>) {
+  return req.url.includes('api/users/authorization');
 }

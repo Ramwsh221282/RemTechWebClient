@@ -9,7 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { StringUtils } from '../utils/string-utils';
 import { jwtDecode } from 'jwt-decode';
 
-type AuthData = {
+export type AuthData = {
   bearer: string;
   refresh: string;
   atr: string; // user roles
@@ -34,15 +34,8 @@ export class AuthStatusService {
 
   constructor(cookieService: CookieService) {
     this._cookieService = cookieService;
-    this.authData = signal({
-      bearer: '',
-      refresh: '',
-      atr: '',
-      jti: '',
-      sub: '',
-      email_verified: '',
-      nickname: '',
-    });
+    this.authData = signal(this.createEmptyUserSessionData());
+    this.initializeFromCookies(this._cookieService);
   }
 
   public authorize(bearer: string, refresh: string): void {
@@ -81,6 +74,17 @@ export class AuthStatusService {
     this.authData.set(authData);
   }
 
+  public logOut(): void {
+    this._cookieService.delete('bearer');
+    this._cookieService.delete('refresh');
+    this._cookieService.delete('atr');
+    this._cookieService.delete('email_verified');
+    this._cookieService.delete('jti');
+    this._cookieService.delete('nickname');
+    this._cookieService.delete('sub');
+    this.authData.set(this.createEmptyUserSessionData());
+  }
+
   private isAuthorized(data: AuthData): boolean {
     const bearer = data.bearer;
     const refresh = data.refresh;
@@ -88,5 +92,40 @@ export class AuthStatusService {
       StringUtils.isEmptyOrWhiteSpace(bearer) ||
       StringUtils.isEmptyOrWhiteSpace(refresh)
     );
+  }
+
+  private initializeFromCookies(cookieService: CookieService): void {
+    const cookies = cookieService.getAll();
+    const bearer = cookies['bearer'];
+    const refresh = cookies['refresh'];
+    const atr = cookies['atr'];
+    const email_verified = cookies['email_verified'];
+    const jti = cookies['jti'];
+    const nickname = cookies['nickname'];
+    const sub = cookies['sub'];
+
+    const authData: AuthData = {
+      bearer: bearer ? bearer : '',
+      refresh: refresh ? refresh : '',
+      atr: atr ? atr : '',
+      email_verified: email_verified ? email_verified : '',
+      jti: jti ? jti : '',
+      nickname: nickname ? nickname : '',
+      sub: sub ? sub : '',
+    };
+
+    this.authData.set(authData);
+  }
+
+  private createEmptyUserSessionData(): AuthData {
+    return {
+      bearer: '',
+      refresh: '',
+      atr: '',
+      jti: '',
+      sub: '',
+      email_verified: '',
+      nickname: '',
+    };
   }
 }

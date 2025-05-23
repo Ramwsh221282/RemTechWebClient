@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { usersServiceApiUrl } from '../api/api-endpoint';
 import { UserRegisterDto } from './user-register-dto';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Envelope } from '../types/Envelope';
 import { UserConfirmEmailDto } from './user-confirm-email-dto';
 import { AuthDto } from './auth-dto';
@@ -21,12 +21,12 @@ export class UsersService {
   }
 
   public registerUser(dto: UserRegisterDto): Observable<Envelope<string>> {
-    const url = `${this._apiUrl}/users/registration`
+    const url = `${this._apiUrl}/users/registration`;
     return this._httpClient.post<Envelope<string>>(url, dto);
   }
 
   public confirmEmail(dto: UserConfirmEmailDto): Observable<Envelope<string>> {
-    const url = `${this._apiUrl}/users/email-confirmation`
+    const url = `${this._apiUrl}/users/email-confirmation`;
     return this._httpClient.put<Envelope<string>>(url, dto);
   }
 
@@ -40,10 +40,12 @@ export class UsersService {
     const refreshToken = dto.refreshToken;
 
     const headers = new HttpHeaders()
-      .set("Bearer", accessToken)
-      .set("Refresh", refreshToken);
+      .set('bearer', accessToken)
+      .set('refresh', refreshToken);
 
     const url = `${this._apiUrl}/users/refresh`;
-    return this._httpClient.post<Envelope<AuthResponse>>(url, null, { headers: headers });
+    return this._httpClient.post<Envelope<AuthResponse>>(url, null, {
+      headers,
+    });
   }
 }

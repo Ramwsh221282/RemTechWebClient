@@ -10,7 +10,12 @@ import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
 import { AppMenuService } from './shared/components/app-menu/app-menu.service';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { definePreset } from '@primeng/themes';
 import { AdvertisementsHttpService } from './pages/transport-catalogue-page/services/advertisements-http.service';
 import { TransportItemHttpService } from './pages/transport-item-page/services/transport-item-http.service';
@@ -24,7 +29,9 @@ import { MailingServiceHttpService } from './pages/admin-page/admin-panel-menu/a
 import { UsersService } from './shared/services/users.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthStatusService } from './shared/services/auth-status.service';
-import { cookieAuthInterceptor } from './shared/middleware/cookie-auth.interceptor';
+import { authInterceptor } from './shared/middleware/auth.interceptor';
+import { expiredTokenInterceptor } from './shared/middleware/expired-token.interceptor';
+import { tokenApplyInterceptor } from './shared/middleware/token-apply.interceptor';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -54,7 +61,15 @@ export const appConfig: ApplicationConfig = {
     }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
-    provideHttpClient(withInterceptors([cookieAuthInterceptor])),
+
+    provideHttpClient(
+      withInterceptors([
+        tokenApplyInterceptor,
+        expiredTokenInterceptor,
+        authInterceptor,
+      ]),
+    ),
+
     AppMenuService,
     AdvertisementsHttpService,
     TransportItemHttpService,
@@ -69,5 +84,4 @@ export const appConfig: ApplicationConfig = {
     CookieService,
     AuthStatusService,
   ],
-
 };

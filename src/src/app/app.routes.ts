@@ -5,6 +5,7 @@ import { MainPageRoutes } from './pages/main-page/main-page-routes';
 import { RegistrationConfirmationRoute } from './pages/registration-confirmation-page/registration-confirmation-route';
 import { UserRegisterRoutes } from './pages/user-register-page/user-register-route';
 import { UserAuthRoutes } from './pages/user-auth-page/user-auth-routes';
+import { ForbiddenPageRoutes } from './pages/forbidden-page/forbidden-page-routes';
 
 export const routes: Routes = [
   ...MainPageRoutes,
@@ -13,4 +14,5 @@ export const routes: Routes = [
   ...RegistrationConfirmationRoute,
   ...UserRegisterRoutes,
   ...UserAuthRoutes,
+  ...ForbiddenPageRoutes,
 ];
