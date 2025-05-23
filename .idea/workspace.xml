@@ -4,63 +4,53 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f5bba32-d21c-40c1-b537-af650b2f22a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/src/app/shared/services/auth-dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/src/app/shared/services/auth-response.ts" afterDir="false" />
+    <list default="true" id="04907a8e-5e0b-4775-ab01-388b3461c4a6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-not-found-block.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-not-found-block.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-not-found-block.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-not-found-block.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-user-auth-form/main-page-user-auth-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-user-auth-form/main-page-user-auth-form.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-user-auth-form/main-page-user-auth-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page-not-found-block/main-page-user-auth-form/main-page-user-auth-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/main-page/main-page.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/shared/services/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/shared/services/users.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="TypeScript File" />
-      </list>
-    </option>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="2xJiRFzDctulAlpSJfr6S0ixTyZ" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2xMkFvfAyQmvC66GFi7NEcBVm6a" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "issue-34",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "D:\\Dev\\RemTechWebClientDevelopment\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "settings.editor.selected.configurable": "actions.on.save",
     "ts.external.directory.path": "D:\\Dev\\RemTechWebClientDevelopment\\src\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Dev\RemTechWebClientDevelopment\src\src\app\shared\middleware" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -70,12 +60,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2f5bba32-d21c-40c1-b537-af650b2f22a7" name="Changes" comment="" />
-      <created>1747662567493</created>
+      <changelist id="04907a8e-5e0b-4775-ab01-388b3461c4a6" name="Changes" comment="" />
+      <created>1747755230193</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1747662567493</updated>
-      <workItem from="1747662569215" duration="8882000" />
+      <updated>1747755230193</updated>
+      <workItem from="1747755232021" duration="5517000" />
     </task>
     <servers />
   </component>
