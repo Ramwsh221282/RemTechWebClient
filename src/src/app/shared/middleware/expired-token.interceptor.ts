@@ -5,7 +5,7 @@
   HttpHeaders,
   HttpRequest,
 } from '@angular/common/http';
-import { catchError, Observable, switchMap } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthData, AuthStatusService } from '../services/auth-status.service';
 import { AuthResponse } from '../services/auth-response';
 import { UsersService } from '../services/users.service';
@@ -34,7 +34,7 @@ export function expiredTokenInterceptor(
           router,
         );
 
-      return onOtherErrors();
+      return throwError(() => error);
     }),
   );
 
@@ -54,10 +54,10 @@ export function expiredTokenInterceptor(
     const refresh: string = data.refresh;
     const dto: AuthResponse = { accessToken: bearer, refreshToken: refresh };
     return authService.refreshSession(dto).pipe(
-      catchError((_: HttpErrorResponse) => {
+      catchError((error: HttpErrorResponse) => {
         authStatusService.logOut();
         router.navigate(['users/authorization']);
-        return onOtherErrors();
+        return throwError(() => error);
       }),
       switchMap(
         (envelope: Envelope<AuthResponse>): Observable<HttpEvent<unknown>> => {
@@ -66,14 +66,10 @@ export function expiredTokenInterceptor(
 
           router.navigate(['users/authorization']);
           authStatusService.logOut();
-          return onOtherErrors();
+          return throwError(() => envelope);
         },
       ),
     );
-  }
-
-  function onOtherErrors(): Observable<never> {
-    return new Observable<never>();
   }
 
   function onSuccessEnvelope(
