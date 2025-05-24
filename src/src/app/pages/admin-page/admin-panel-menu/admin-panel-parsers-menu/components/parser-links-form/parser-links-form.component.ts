@@ -17,6 +17,13 @@ import { FormsModule } from '@angular/forms';
 import { ParsersHttpService } from '../../services/parsers-http.service';
 import { ScrollPanel } from 'primeng/scrollpanel';
 import { NgIf } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { catchError, finalize, Observable } from 'rxjs';
+import { CustomHttpErrorFactory } from '../../../../../../shared/types/CustomHttpError';
+import { MessageServiceUtils } from '../../../../../../shared/utils/message-service-utils';
+import { Toast } from 'primeng/toast';
+import { HttpErrorResponse } from '@angular/common/http';
+import { EnvelopeErrorFactory } from '../../../../../../shared/types/EnvelopeError';
 
 interface NewLinkInputProperties {
   name: string;
@@ -33,6 +40,7 @@ interface NewLinkInputProperties {
     FormsModule,
     ScrollPanel,
     NgIf,
+    Toast,
   ],
   templateUrl: './parser-links-form.component.html',
   styleUrl: './parser-links-form.component.scss',
@@ -58,9 +66,13 @@ export class ParserLinksFormComponent {
     this.isEditingProfilesSignal.set(value);
   }
 
-  private readonly _httpService;
+  private readonly _httpService: ParsersHttpService;
+  private readonly _messageService: MessageService;
+
   readonly selectedParserSignal: WritableSignal<Parser>;
+
   readonly isEditingProfilesSignal: WritableSignal<boolean>;
+
   readonly profilesComputedSignal = computed(() => {
     if (this.searchByNameSignal().trim().length === 0) {
       return this.selectedParserSignal().profiles;
@@ -69,10 +81,12 @@ export class ParserLinksFormComponent {
       pr.name.toLowerCase().startsWith(this.searchByNameSignal().toLowerCase()),
     );
   });
+
   inputProperties: NewLinkInputProperties = { name: '', link: '' };
+
   readonly searchByNameSignal: WritableSignal<string>;
 
-  constructor(httpService: ParsersHttpService) {
+  constructor(httpService: ParsersHttpService, messageService: MessageService) {
     this.selectedParserSignal = signal(ParserFactory.empty());
     this.isEditingProfilesSignal = signal(false);
     this.linkRemoved = new EventEmitter<ParserProfile>();
@@ -84,6 +98,7 @@ export class ParserLinksFormComponent {
     this.allLinksEnabled = new EventEmitter<void>();
     this.allLinksDisabled = new EventEmitter<void>();
     this.updateParserLink = new EventEmitter<ParserProfile>();
+    this._messageService = messageService;
   }
 
   public navigateOnLinkSource(
@@ -96,15 +111,30 @@ export class ParserLinksFormComponent {
 
   public removeLink($event: MouseEvent, parserProfile: ParserProfile): void {
     $event.stopPropagation();
-    this._httpService.deleteParserProfile(parserProfile).subscribe((result) => {
-      if (result.code === 200) this.linkRemoved.emit(parserProfile);
-    });
+    this._httpService
+      .deleteLink(parserProfile)
+      .pipe(
+        catchError((err: any) => {
+          const error = CustomHttpErrorFactory.AsHttpError(err);
+          MessageServiceUtils.showError(this._messageService, error.message);
+          return new Observable<never>();
+        }),
+      )
+      .subscribe((result) => {
+        if (result.code === 200) {
+          this.linkRemoved.emit(parserProfile);
+          const parserName = this.selectedParserSignal().name;
+          const linkName = parserProfile.name;
+          const message = `Удалена ссылка: ${parserName} ${linkName}`;
+          MessageServiceUtils.showSuccess(this._messageService, message);
+        }
+      });
   }
 
-  public addLink($event: MouseEvent): void {
-    $event.stopPropagation();
+  public addLink(): void {
     const name = this.inputProperties.name;
     const value = this.inputProperties.link;
+
     const profile: ParserProfile = {
       id: '',
       parserId: this.selectedParserSignal().id,
@@ -117,32 +147,74 @@ export class ParserLinksFormComponent {
       lastNewAdvertisementsCount: 0,
       totalElapsedSeconds: 0,
     };
-    this._httpService.addParserProfile(profile).subscribe((result) => {
-      if (result.code === 200) {
-        this.linkAdded.emit(result.data);
-      }
-      this.refreshInputProperties();
-    });
+
+    this._httpService
+      .addLink(profile)
+      .pipe(
+        finalize(() => {
+          this.refreshInputProperties();
+        }),
+      )
+      .subscribe({
+        next: (value): void => {
+          if (value.code === 200 || value.code === 201) {
+            const parserName = this.selectedParserSignal().name;
+            const linkName = value.data.name;
+            const message = `Добавлена ссылка: ${parserName} ${linkName}`;
+            MessageServiceUtils.showSuccess(this._messageService, message);
+            this.linkAdded.emit(value.data);
+          }
+        },
+        error: (error: HttpErrorResponse): void => {
+          const envelope = EnvelopeErrorFactory.fromHttpErrorResponse(error);
+          const message = envelope.statusInfo;
+          MessageServiceUtils.showError(this._messageService, message);
+        },
+      });
   }
 
   public disableAllParserLinks(): void {
     const parser: Parser = this.selectedParserSignal();
     const parserId: string = parser.id;
-    this._httpService.disableAllParserLinks(parserId).subscribe((result) => {
-      if (result.code === 200) {
-        this.allLinksDisabled.emit();
-      }
-    });
+    this._httpService
+      .disableAllParserLinks(parserId)
+      .pipe(
+        catchError((err: any) => {
+          const error = CustomHttpErrorFactory.AsHttpError(err);
+          MessageServiceUtils.showError(this._messageService, error.message);
+          return new Observable<never>();
+        }),
+      )
+      .subscribe((result) => {
+        if (result.code === 200) {
+          const parserName = this.selectedParserSignal().name;
+          const message = `Выключены все ссылки: ${parserName}`;
+          MessageServiceUtils.showSuccess(this._messageService, message);
+          this.allLinksDisabled.emit();
+        }
+      });
   }
 
   public enableAllParserLinks(): void {
     const parser: Parser = this.selectedParserSignal();
     const parserId: string = parser.id;
-    this._httpService.enableAllParserLinks(parserId).subscribe((result) => {
-      if (result.code === 200) {
-        this.allLinksEnabled.emit();
-      }
-    });
+    this._httpService
+      .enableAllParserLinks(parserId)
+      .pipe(
+        catchError((err: any) => {
+          const error = CustomHttpErrorFactory.AsHttpError(err);
+          MessageServiceUtils.showError(this._messageService, error.message);
+          return new Observable<never>();
+        }),
+      )
+      .subscribe((result) => {
+        if (result.code === 200) {
+          const parserName = this.selectedParserSignal().name;
+          const message = `Включены все ссылки: ${parserName}`;
+          MessageServiceUtils.showSuccess(this._messageService, message);
+          this.allLinksEnabled.emit();
+        }
+      });
   }
 
   public turnLink(profile: ParserProfile): void {
@@ -152,8 +224,22 @@ export class ParserLinksFormComponent {
     const turnTerm: boolean = !profile.isEnabled;
     this._httpService
       .updateParserLink(parserId, profileId, turnTerm)
+      .pipe(
+        catchError((err: any) => {
+          const error = CustomHttpErrorFactory.AsHttpError(err);
+          MessageServiceUtils.showError(this._messageService, error.message);
+          return new Observable<never>();
+        }),
+      )
       .subscribe((result) => {
         if (result.code === 200) {
+          const parserName = this.selectedParserSignal().name;
+          const linkName = result.data.name;
+          const linkActive: string = result.data.isEnabled
+            ? 'Включен'
+            : 'Отключен';
+          const message: string = `Изменено состояние ссылки: ${parserName} ${linkName} ${linkActive}`;
+          MessageServiceUtils.showSuccess(this._messageService, message);
           this.updateParserLink.emit(result.data);
         }
       });
