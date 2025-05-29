@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { apiUrl } from '../../../shared/api/api-endpoint';
+import { advertisementsApi } from '../../../shared/api/api-endpoint';
 import { Envelope } from '../../../shared/types/Envelope';
 import { TransportItem } from '../types/transport-item';
 
@@ -9,11 +9,11 @@ import { TransportItem } from '../types/transport-item';
 })
 export class TransportItemHttpService {
   private readonly _httpClient: HttpClient = inject(HttpClient);
-  private readonly _apiUrl = `${apiUrl}/advertisements`;
+  private readonly _apiUrl = `${advertisementsApi}/advertisements`;
 
   public getTransportItemById(id: number) {
     return this._httpClient.get<Envelope<TransportItem>>(
-      `${this._apiUrl}/${id}`
+      `${this._apiUrl}/${id}`,
     );
   }
 }

@@ -7,7 +7,7 @@ export type Parser = {
   lastRun: Date;
   nextRun: Date;
   waitDays: number;
-  profiles: ParserProfile[];
+  links: ParserProfile[];
   lastNewAdvertisementsCount: number;
 };
 
@@ -26,7 +26,7 @@ export class ParserFactory {
       lastRun: new Date(1970, 0, 0, 0),
       nextRun: new Date(1970, 0, 0, 0),
       waitDays: 0,
-      profiles: [],
+      links: [],
       lastNewAdvertisementsCount: 0,
     };
   }

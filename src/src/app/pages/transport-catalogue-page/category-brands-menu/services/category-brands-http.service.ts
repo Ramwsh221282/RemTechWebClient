@@ -1,12 +1,16 @@
-﻿import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {apiUrl} from '../../../../shared/api/api-endpoint';
-import {Observable} from 'rxjs';
-import {Envelope} from '../../../../shared/types/Envelope';
-import {CategoryBrand} from '../types/category-brand';
+﻿import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { advertisementsApi } from '../../../../shared/api/api-endpoint';
+import { Observable } from 'rxjs';
+import { Envelope } from '../../../../shared/types/Envelope';
+import { CategoryBrand } from '../types/category-brand';
+import {
+  BrandViewModelResponse,
+  CategoryBrandViewModelResponse,
+} from '../../types/BrandViewModelResponse';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoryBrandsHttpService {
   private readonly _httpClient: HttpClient;
@@ -21,14 +25,20 @@ export class CategoryBrandsHttpService {
 
   public setCategoryId(categoryId: string): void {
     this._categoryId = categoryId;
-    this._apiUrl = `${apiUrl}/transport-categories/${this._categoryId}/brands`
+    this._apiUrl = `${advertisementsApi}/transport-categories/${this._categoryId}/brands`;
   }
 
-  public fetchCategoryBrands(): Observable<Envelope<CategoryBrand[]>> {
-    return this._httpClient.get<Envelope<CategoryBrand[]>>(this._apiUrl);
+  public fetchCategoryBrands(): Observable<Envelope<BrandViewModelResponse[]>> {
+    return this._httpClient.get<Envelope<BrandViewModelResponse[]>>(
+      this._apiUrl,
+    );
   }
 
-  public fetchCategoryBrandById(brandId: string): Observable<Envelope<CategoryBrand>> {
-    return this._httpClient.get<Envelope<CategoryBrand>>(`${this._apiUrl}/${brandId}`);
+  public fetchCategoryBrandById(
+    brandId: string,
+  ): Observable<Envelope<CategoryBrandViewModelResponse>> {
+    return this._httpClient.get<Envelope<CategoryBrandViewModelResponse>>(
+      `${this._apiUrl}/${brandId}`,
+    );
   }
 }

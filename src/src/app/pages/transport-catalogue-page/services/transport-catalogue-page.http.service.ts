@@ -13,6 +13,11 @@ import { Observable } from 'rxjs';
 import { AdvertisementsPageResponse } from '../responses/advertisements-page-response';
 import { TransportCharacteristic } from '../types/transport-characteristic';
 import { AdvertisementPricesResponse } from '../types/advertisement-prices-response';
+import {
+  CategoryBrandCharacteristicsItemViewModelResponse,
+  CategoryBrandCharacteristicsViewModelResponse,
+} from '../types/CategoryBrandCharacteristicsViewModelResponse';
+import { AdvertisementsPageViewModelResponse } from '../types/AdvertisementsPageViewModelResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +44,7 @@ export class TransportCataloguePageHttpService {
   public fetchCharacteristics(
     categoryId: string,
     brandId: string,
-  ): Observable<Envelope<TransportCharacteristic[]>> {
+  ): Observable<Envelope<CategoryBrandCharacteristicsViewModelResponse[]>> {
     return this._advertisementsHttpService.fetchAdvertisementDetailedCharacteristics(
       categoryId,
       brandId,
@@ -62,7 +67,7 @@ export class TransportCataloguePageHttpService {
     filter: AdvertisementFilter,
     pagination: Pagination,
     sort: Sorting,
-  ): Observable<Envelope<AdvertisementsPageResponse>> {
+  ): Observable<Envelope<AdvertisementsPageViewModelResponse>> {
     return this._advertisementsHttpService.fetchAdvertisements(
       categoryId,
       brandId,

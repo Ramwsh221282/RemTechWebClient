@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { apiUrl } from '../../../shared/api/api-endpoint';
+import { advertisementsApi } from '../../../shared/api/api-endpoint';
 import { AdvertisementFilter } from '../dto/advertisement-filter';
 import { Pagination } from '../../../shared/types/Pagination';
 import { Sorting } from '../../../shared/types/Sorting';
@@ -14,6 +14,11 @@ import { Advertisement } from '../types/advertisement';
 import { StatisticalCategory } from '../../admin-page/admin-panel-menu/admin-panel-analytics-menu/types/statistical-category';
 import { AdvertisementPricesResponse } from '../types/advertisement-prices-response';
 import { TransportModelDto } from '../dto/advertisement-dto';
+import {
+  CategoryBrandCharacteristicsItemViewModelResponse,
+  CategoryBrandCharacteristicsViewModelResponse,
+} from '../types/CategoryBrandCharacteristicsViewModelResponse';
+import { AdvertisementsPageViewModelResponse } from '../types/AdvertisementsPageViewModelResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +36,8 @@ export class AdvertisementsHttpService {
     filter: AdvertisementFilter,
     pagination: Pagination,
     sort: Sorting,
-  ): Observable<Envelope<AdvertisementsPageResponse>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements`;
-
+  ): Observable<Envelope<AdvertisementsPageViewModelResponse>> {
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/advertisements`;
     const httpParams: HttpParams = new HttpParams()
       .append('page', pagination.page)
       .append('pageSize', pagination.pageSize)
@@ -67,7 +71,7 @@ export class AdvertisementsHttpService {
         characteristicsFilter,
       },
     };
-    return this._httpClient.post<Envelope<AdvertisementsPageResponse>>(
+    return this._httpClient.post<Envelope<AdvertisementsPageViewModelResponse>>(
       url,
       payload,
       { params: httpParams },
@@ -78,23 +82,25 @@ export class AdvertisementsHttpService {
     categoryId: string,
     brandId: string,
   ): Observable<Envelope<GeoInformation[]>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/geo`;
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/geo`;
     return this._httpClient.get<Envelope<GeoInformation[]>>(url);
   }
 
   public fetchAdvertisementDetailedCharacteristics(
     categoryId: string,
     brandId: string,
-  ): Observable<Envelope<TransportCharacteristic[]>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/characteristics`;
-    return this._httpClient.get<Envelope<TransportCharacteristic[]>>(url);
+  ): Observable<Envelope<CategoryBrandCharacteristicsViewModelResponse[]>> {
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/characteristics`;
+    return this._httpClient.get<
+      Envelope<CategoryBrandCharacteristicsViewModelResponse[]>
+    >(url);
   }
 
   public fetchCategoriesOfBrand(
     brandId: string,
     brandName: string,
   ): Observable<Envelope<CategoryOfConcreteBrand[]>> {
-    const url = `${apiUrl}/transport-categories/brands/${brandId}/${brandName}/categories`;
+    const url = `${advertisementsApi}/transport-categories/brands/${brandId}/${brandName}/categories`;
     return this._httpClient.get<Envelope<CategoryOfConcreteBrand[]>>(url);
   }
 
@@ -103,12 +109,12 @@ export class AdvertisementsHttpService {
     brandId: string,
     advertisementId: string,
   ): Observable<Envelope<Advertisement>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements/${advertisementId}`;
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/advertisements/${advertisementId}`;
     return this._httpClient.get<Envelope<Advertisement>>(url);
   }
 
   public getStatisticalData(): Observable<Envelope<StatisticalCategory[]>> {
-    const url = `${apiUrl}/transport-categories/statistics`;
+    const url = `${advertisementsApi}/transport-categories/statistics`;
     return this._httpClient.get<Envelope<StatisticalCategory[]>>(url);
   }
 
@@ -117,7 +123,7 @@ export class AdvertisementsHttpService {
     brandId: string,
     filter: AdvertisementFilter,
   ): Observable<Envelope<AdvertisementPricesResponse>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/advertisements/prices`;
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/advertisements/prices`;
 
     const priceFilter = {
       priceFrom:
@@ -158,7 +164,7 @@ export class AdvertisementsHttpService {
     brandId: string,
     geoId?: string | null,
   ): Observable<Envelope<TransportModelDto[]>> {
-    const url = `${apiUrl}/transport-categories/${categoryId}/brands/${brandId}/models`;
+    const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/models`;
     let params: HttpParams = new HttpParams();
 
     if (geoId) params = params.append('geoId', geoId);

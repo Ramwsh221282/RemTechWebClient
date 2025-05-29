@@ -46,7 +46,7 @@ export class LastAdvertisementsCountParserChartComponent {
   readonly colorsSignal: WritableSignal<string[]>;
   readonly parserChartDataItemsSignal: Signal<ParserLinkChartItem[]> = computed(
     (): ParserLinkChartItem[] => {
-      const profiles: ParserProfile[] = this.parserSignal().profiles;
+      const profiles: ParserProfile[] = this.parserSignal().links;
       return profiles.map((profile: ParserProfile): ParserLinkChartItem => {
         return {
           label: profile.name,

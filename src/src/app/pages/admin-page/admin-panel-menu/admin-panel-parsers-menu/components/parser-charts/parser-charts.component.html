@@ -2,6 +2,6 @@
   <div class="grid grid-cols-3">
     <app-last-advertisements-count-parser-chart [colors]="colorsSignal()" [parser]="parserSignal()"/>
     <app-elapsed-seconds-parser-chart [colors]="colorsSignal()" [parser]="parserSignal()"/>
-    <app-advertisements-count-by-parsers-chart/>
+    <app-advertisements-count-by-parsers-chart [colors]="colorsSignal()" [parsers]="parsersSignal()"/>
   </div>
 </p-panel>

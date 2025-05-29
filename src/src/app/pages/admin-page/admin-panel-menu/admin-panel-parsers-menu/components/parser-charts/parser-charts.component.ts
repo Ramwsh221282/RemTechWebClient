@@ -20,18 +20,24 @@ import { ChartStyleInformationFactory } from './services/chart-style.information
   styleUrl: './parser-charts.component.scss',
 })
 export class ParserChartsComponent {
+  @Input({ required: true, alias: 'parsers' }) set _parsers(parsers: Parser[]) {
+    this.parsersSignal.set(parsers);
+  }
+
   @Input({ required: true, alias: 'parser' })
   set _parser(value: Parser) {
     this.parserSignal.set(value);
     this.colorsSignal.set(
-      value.profiles.map(() => ChartStyleInformationFactory.getRandomColor()),
+      value.links.map(() => ChartStyleInformationFactory.getRandomColor()),
     );
   }
 
+  readonly parsersSignal: WritableSignal<Parser[]>;
   readonly parserSignal: WritableSignal<Parser>;
   readonly colorsSignal: WritableSignal<string[]>;
 
   constructor() {
+    this.parsersSignal = signal([]);
     this.parserSignal = signal(ParserFactory.empty());
     this.colorsSignal = signal([]);
   }

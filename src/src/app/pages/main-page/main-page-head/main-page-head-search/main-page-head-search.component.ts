@@ -11,6 +11,7 @@ import { CategoryBrandsHttpService } from '../../../transport-catalogue-page/cat
 import { AdvertisementsHttpService } from '../../../transport-catalogue-page/services/advertisements-http.service';
 import { PrimeNgSelectUtil } from '../../../../shared/utils/primeng-select-util';
 import { Router } from '@angular/router';
+import { BrandViewModelResponse } from '../../../transport-catalogue-page/types/BrandViewModelResponse';
 
 @Component({
   selector: 'app-main-page-head-search',
@@ -74,7 +75,9 @@ export class MainPageHeadSearchComponent implements OnInit {
     this._brandsHttpService.fetchCategoryBrands().subscribe((response) => {
       if (response.code === 200) {
         const data = response.data;
-        this.brands.set(data);
+        this.brands.set(data.map((item: BrandViewModelResponse): CategoryBrand => {
+          return { brandId: item.brandId, categoryId: item.categoryId, name: item.brandName }
+        }));
       }
     });
   }

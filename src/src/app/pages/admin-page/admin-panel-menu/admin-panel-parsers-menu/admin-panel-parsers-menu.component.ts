@@ -31,7 +31,7 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   readonly isEditingLinks: WritableSignal<boolean>;
 
   constructor(httpService: ParsersHttpService, title: Title) {
-    title.setTitle('Администрирование. Парсеры')
+    title.setTitle('Администрирование. Парсеры');
     this._httpService = httpService;
     this.isLoadingSignal = signal(false);
     this.parsersSignal = signal([]);
@@ -82,10 +82,10 @@ export class AdminPanelParsersMenuComponent implements OnInit {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
     if (currentParser.id !== link.parserId) return;
-    const updatedLinks: ParserProfile[] = currentParser.profiles.filter(
+    const updatedLinks: ParserProfile[] = currentParser.links.filter(
       (profile: ParserProfile) => profile.link !== link.link,
     );
-    const updatedParser: Parser = { ...currentParser, profiles: updatedLinks };
+    const updatedParser: Parser = { ...currentParser, links: updatedLinks };
     this.selectedParserSignal.set(updatedParser);
     this.updateParsersArray(updatedParser);
   }
@@ -93,7 +93,7 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   public handleLinksEnabled(): void {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
-    const profiles: ParserProfile[] = currentParser.profiles;
+    const profiles: ParserProfile[] = currentParser.links;
     for (const profile of profiles) {
       profile.isEnabled = true;
     }
@@ -105,7 +105,7 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   public handleLinksDisabled(): void {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
-    const profiles: ParserProfile[] = currentParser.profiles;
+    const profiles: ParserProfile[] = currentParser.links;
     for (const profile of profiles) {
       profile.isEnabled = false;
     }
@@ -117,7 +117,7 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   public handleLinkUpdated(link: ParserProfile): void {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
-    const profiles: ParserProfile[] = currentParser.profiles;
+    const profiles: ParserProfile[] = currentParser.links;
     for (let i = 0; i < profiles.length; i++) {
       const profile = profiles[i];
       if (profile.id === link.id) {
@@ -133,8 +133,8 @@ export class AdminPanelParsersMenuComponent implements OnInit {
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
     if (currentParser.id !== link.parserId) return;
-    const updatedLinks: ParserProfile[] = [link, ...currentParser.profiles];
-    const updatedParser: Parser = { ...currentParser, profiles: updatedLinks };
+    const updatedLinks: ParserProfile[] = [link, ...currentParser.links];
+    const updatedParser: Parser = { ...currentParser, links: updatedLinks };
     this.selectedParserSignal.set(updatedParser);
     this.updateParsersArray(updatedParser);
   }

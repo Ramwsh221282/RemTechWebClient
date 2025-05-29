@@ -42,6 +42,13 @@ import {
 import { TransportCatalogueRouteBuilder } from './transport-catalogue-routes';
 import { AdvertisementPricesResponse } from './types/advertisement-prices-response';
 import { PricesChartComponent } from './components/transport-items-filter-form/prices-chart/prices-chart.component';
+import { CategoryBrandCharacteristicsViewModelResponse } from './types/CategoryBrandCharacteristicsViewModelResponse';
+import { Envelope } from '../../shared/types/Envelope';
+import {
+  AdvertisementsPageViewModelResponse,
+  AdvertisementsViewModelResponseConverter,
+  AdvertisementViewModelResponse,
+} from './types/AdvertisementsPageViewModelResponse';
 
 @Component({
   selector: 'app-transport-catalogue-page',
@@ -131,15 +138,32 @@ export class TransportCataloguePageComponent implements OnInit {
         .subscribe((result) => {
           if (result.code === 200) {
             const data = result.data;
-            this.characteristicsSignal.set(data);
+            this.characteristicsSignal.set(
+              data.map(
+                (
+                  item: CategoryBrandCharacteristicsViewModelResponse,
+                ): TransportCharacteristic => {
+                  return {
+                    id: item.id,
+                    name: item.name,
+                    values: item.values.map((ctx) => ctx.value),
+                  };
+                },
+              ),
+            );
 
             if (modelName) {
               const modelCharacteristicIndex: number = data.findIndex(
                 (ctx) => ctx.name === 'модель',
               );
               if (modelCharacteristicIndex >= 0) {
-                const modelCharacteristics: TransportCharacteristic =
+                const ctxViewModel: CategoryBrandCharacteristicsViewModelResponse =
                   data[modelCharacteristicIndex];
+                const modelCharacteristics: TransportCharacteristic = {
+                  id: ctxViewModel.id,
+                  name: ctxViewModel.name,
+                  values: ctxViewModel.values.map((ctx) => ctx.value),
+                };
                 const selectedModelIndex =
                   modelCharacteristics.values.findIndex((m) => m === modelName);
 
@@ -197,7 +221,7 @@ export class TransportCataloguePageComponent implements OnInit {
             `Список спец.техники ${result.category.name} ${result.categoryBrand.name}`,
           );
           this.refetchAdvertisements();
-          this.refetchPrices();
+          // this.refetchPrices();
         });
     });
   }
@@ -207,7 +231,7 @@ export class TransportCataloguePageComponent implements OnInit {
     this.isSelectingGeoInformation.set(true);
   }
 
-  public handleGeoInformationClosed($event: boolean): void {
+  public handleGeoInformationClosed(_: boolean): void {
     this.isSelectingGeoInformation.set(false);
   }
 
@@ -235,14 +259,29 @@ export class TransportCataloguePageComponent implements OnInit {
         this.sortSignal(),
       )
       .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe((result) => {
+      .subscribe((result: Envelope<AdvertisementsPageViewModelResponse>) => {
         if (result.code === 200) {
-          this.advertisementsSignal.set(result.data.advertisements);
-          this.totalPagesCountSignal.set(result.data.totals);
-          this.scalarData =
-            AggregatedScalarDataFactory.fromAdvertisementsPageResponse(
-              result.data,
-            );
+          const responseData: AdvertisementViewModelResponse[] =
+            result.data.data;
+          const totals = result.data.totals;
+          const minPrice = result.data.minimalPrice;
+          const maxPrice = result.data.maximumPrice;
+          const avgPrice = result.data.averagePrice;
+          const mappedAdvertisements: Advertisement[] = responseData.map(
+            (item) =>
+              AdvertisementsViewModelResponseConverter.convertToAdvertisement(
+                item,
+              ),
+          );
+          const scalarData: AggregatedScalarData = {
+            total: totals,
+            minimal: minPrice,
+            maximum: maxPrice,
+            average: avgPrice,
+          };
+          this.advertisementsSignal.set(mappedAdvertisements);
+          this.totalPagesCountSignal.set(totals);
+          this.scalarData = scalarData;
         }
       });
   }

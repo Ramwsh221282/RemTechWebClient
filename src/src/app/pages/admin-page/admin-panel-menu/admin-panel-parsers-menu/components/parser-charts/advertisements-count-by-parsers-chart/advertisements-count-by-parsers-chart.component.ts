@@ -3,18 +3,16 @@ import {
   Component,
   computed,
   Input,
-  OnInit,
   Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
-import { AdvertisementsCountByParsers } from '../../../types/advertisements-count-by-parsers';
-import { ParsersHttpService } from '../../../services/parsers-http.service';
 import {
   ChartStyleInformation,
   ChartStyleInformationFactory,
 } from '../services/chart-style.information';
 import { UIChart } from 'primeng/chart';
+import { Parser } from '../../../types/parser';
 
 interface ParserLinkChartItem {
   label: string;
@@ -32,26 +30,30 @@ interface ParserLinkChartData {
   templateUrl: './advertisements-count-by-parsers-chart.component.html',
   styleUrl: './advertisements-count-by-parsers-chart.component.scss',
 })
-export class AdvertisementsCountByParsersChartComponent implements OnInit {
-  private readonly _httpService: ParsersHttpService;
-  readonly advertisementsCountByParsersSignal: WritableSignal<
-    AdvertisementsCountByParsers[]
-  >;
+export class AdvertisementsCountByParsersChartComponent {
+  @Input({ required: true, alias: 'parsers' }) set _parsers(value: Parser[]) {
+    this.parsersSignal.set(value);
+  }
+
+  @Input({ required: true, alias: 'colors' }) set _colors(value: string[]) {
+    this.colorsSignal.set(value);
+  }
+
+  readonly colorsSignal: WritableSignal<string[]> = signal([]);
+  readonly parsersSignal: WritableSignal<Parser[]> = signal([]);
 
   readonly parserChartDataItemsSignal: Signal<ParserLinkChartItem[]> = computed(
     (): ParserLinkChartItem[] => {
-      const data: AdvertisementsCountByParsers[] =
-        this.advertisementsCountByParsersSignal();
-      return data.map(
-        (item: AdvertisementsCountByParsers): ParserLinkChartItem => {
-          return {
-            label: item.parserName,
-            count: item.advertisementsCount,
-          };
-        },
-      );
+      const data: Parser[] = this.parsersSignal();
+      return data.map((item: Parser): ParserLinkChartItem => {
+        return {
+          label: item.name,
+          count: item.lastNewAdvertisementsCount,
+        };
+      });
     },
   );
+
   readonly parserChartDataSignal: Signal<ParserLinkChartData> = computed(
     (): ParserLinkChartData => {
       const items: ParserLinkChartItem[] = this.parserChartDataItemsSignal();
@@ -60,8 +62,6 @@ export class AdvertisementsCountByParsersChartComponent implements OnInit {
       return { labels: labels, counts: counts };
     },
   );
-
-  readonly colorsSignal: WritableSignal<string[]>;
 
   readonly chartStyleInformationSignal: Signal<ChartStyleInformation> =
     computed((): ChartStyleInformation => {
@@ -119,21 +119,8 @@ export class AdvertisementsCountByParsersChartComponent implements OnInit {
 
   private readonly _cd;
 
-  constructor(httpService: ParsersHttpService, cd: ChangeDetectorRef) {
-    this.advertisementsCountByParsersSignal = signal([]);
+  constructor(cd: ChangeDetectorRef) {
     this._cd = cd;
-    this._httpService = httpService;
     this.colorsSignal = signal([]);
-  }
-
-  public ngOnInit() {
-    this._httpService.getAdvertisementsCountByParsers().subscribe((result) => {
-      if (result.code === 200) {
-        this.advertisementsCountByParsersSignal.set(result.data);
-        this.colorsSignal.set(
-          result.data.map(() => ChartStyleInformationFactory.getRandomColor()),
-        );
-      }
-    });
   }
 }

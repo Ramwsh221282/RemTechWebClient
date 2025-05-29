@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import {
-  apiUrl,
+  advertisementsApi,
   parsersServiceApiUrl,
 } from '../../../../../shared/api/api-endpoint';
 import { HttpClient } from '@angular/common/http';

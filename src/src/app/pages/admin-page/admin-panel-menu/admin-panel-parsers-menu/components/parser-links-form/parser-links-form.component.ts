@@ -75,9 +75,9 @@ export class ParserLinksFormComponent {
 
   readonly profilesComputedSignal = computed(() => {
     if (this.searchByNameSignal().trim().length === 0) {
-      return this.selectedParserSignal().profiles;
+      return this.selectedParserSignal().links;
     }
-    return this.selectedParserSignal().profiles.filter((pr) =>
+    return this.selectedParserSignal().links.filter((pr) =>
       pr.name.toLowerCase().startsWith(this.searchByNameSignal().toLowerCase()),
     );
   });

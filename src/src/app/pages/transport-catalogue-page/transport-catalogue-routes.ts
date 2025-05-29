@@ -91,6 +91,6 @@ export class TransportCatalogueRouteBuilder {
     brandId: string,
     brandName: string,
   ): string {
-    return `/transport-catalogue/${brandId}/${brandName}/categories`;
+    return `/transport-catalogue/${brandId}/categories`;
   }
 }

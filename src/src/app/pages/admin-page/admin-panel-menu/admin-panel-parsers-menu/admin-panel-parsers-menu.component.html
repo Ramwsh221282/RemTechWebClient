@@ -8,7 +8,10 @@
                           (parserUpdated)="handleParserUpdated($event)"/>
   </section>
   <section class="w-full">
-    <app-parser-charts *ngIf="selectedParserSignal()" [parser]="selectedParserSignal()!"/>
+    <app-parser-charts *ngIf="selectedParserSignal()"
+                       [parser]="selectedParserSignal()!"
+                       [parsers]="parsersSignal()"
+    />
     <app-parser-links-form *ngIf="selectedParserSignal()"
                            [selectedParser]="selectedParserSignal()!"
                            [isEditingProfiles]="isEditingLinks()"

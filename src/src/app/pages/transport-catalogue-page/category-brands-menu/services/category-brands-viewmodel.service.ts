@@ -7,6 +7,7 @@ import {
 } from '../../transport-categories-menu/services/transport-categories-http.service';
 import {TransportCategory, TransportCategoryFactory} from '../../transport-categories-menu/types/TransportCategory';
 import {Title} from '@angular/platform-browser';
+import { BrandViewModelResponse } from '../../types/BrandViewModelResponse';
 
 @Injectable({
   providedIn: 'any'
@@ -49,7 +50,11 @@ export class CategoryBrandsViewModelService {
     this._categoryBrandsHttpService.fetchCategoryBrands()
       .pipe(finalize(() => this._isLoading.set(false)))
       .subscribe((response) => {
-        if (response.code === 200) this._categoryBrands = response.data;
+        if (response.code === 200) {
+          this._categoryBrands = response.data.map((item: BrandViewModelResponse): CategoryBrand => {
+            return { brandId: item.brandId, categoryId: item.categoryId, name: item.brandName }
+          });
+        }
       })
   }
 
