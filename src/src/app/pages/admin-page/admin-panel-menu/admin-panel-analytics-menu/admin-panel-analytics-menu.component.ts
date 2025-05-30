@@ -47,7 +47,7 @@ export class AdminPanelAnalyticsMenuComponent implements OnInit {
   >;
 
   constructor(httpService: AdvertisementsHttpService, title: Title) {
-    title.setTitle('Администрирование. Аналитика')
+    title.setTitle('Администрирование. Аналитика');
     this._httpService = httpService;
     this.categoriesSignal = signal([]);
     this.brandsOfSelectedCategorySignal = signal([]);
@@ -83,9 +83,7 @@ export class AdminPanelAnalyticsMenuComponent implements OnInit {
     const selectedCategory = this.selectedCategorySignal();
     if (selectedCategory === null) return;
     const indexOfCategoryBrand = selectedCategory.brands.findIndex(
-      (br) =>
-        br.categoryName === selectedCategory.name &&
-        br.brandName === categoryBrandName,
+      (br) => br.brandName === categoryBrandName,
     );
     const selectedCategoryBrand: StatisticalCategoryBrand =
       selectedCategory.brands[indexOfCategoryBrand];
@@ -98,7 +96,6 @@ export class AdminPanelAnalyticsMenuComponent implements OnInit {
     this.transportModelsOfSelectedCategoryBrandSignal.set(
       transportModelsOfSelectedCategoryBrand,
     );
-    console.log(this.transportModelsOfSelectedCategoryBrandSignal());
   }
 
   public detachSelectedCategory(): void {

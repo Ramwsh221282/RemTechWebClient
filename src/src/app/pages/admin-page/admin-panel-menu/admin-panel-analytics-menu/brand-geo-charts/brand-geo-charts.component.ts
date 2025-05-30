@@ -27,7 +27,6 @@ import { UIChart } from 'primeng/chart';
 export class BrandGeoChartsComponent {
   @Input({ required: true, alias: 'brandGeos' })
   set _brandGeos(value: StatisticalCategoryBrandGeo[]) {
-    console.log(value);
     this.brandGeos.set(value);
     this.colors.set(
       value.map(() => ChartStyleInformationFactory.getRandomColor()),

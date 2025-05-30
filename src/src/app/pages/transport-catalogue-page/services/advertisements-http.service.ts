@@ -18,7 +18,10 @@ import {
   CategoryBrandCharacteristicsItemViewModelResponse,
   CategoryBrandCharacteristicsViewModelResponse,
 } from '../types/CategoryBrandCharacteristicsViewModelResponse';
-import { AdvertisementsPageViewModelResponse } from '../types/AdvertisementsPageViewModelResponse';
+import {
+  AdvertisementsPageViewModelResponse,
+  AdvertisementViewModelResponse,
+} from '../types/AdvertisementsPageViewModelResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -108,9 +111,9 @@ export class AdvertisementsHttpService {
     categoryId: string,
     brandId: string,
     advertisementId: string,
-  ): Observable<Envelope<Advertisement>> {
+  ): Observable<Envelope<AdvertisementViewModelResponse>> {
     const url = `${advertisementsApi}/transport-categories/${categoryId}/brands/${brandId}/advertisements/${advertisementId}`;
-    return this._httpClient.get<Envelope<Advertisement>>(url);
+    return this._httpClient.get<Envelope<AdvertisementViewModelResponse>>(url);
   }
 
   public getStatisticalData(): Observable<Envelope<StatisticalCategory[]>> {

@@ -221,7 +221,7 @@ export class TransportCataloguePageComponent implements OnInit {
             `Список спец.техники ${result.category.name} ${result.categoryBrand.name}`,
           );
           this.refetchAdvertisements();
-          // this.refetchPrices();
+          this.refetchPrices();
         });
     });
   }

@@ -18,6 +18,11 @@ import {
   Advertisement,
   AdvertisementsFactory,
 } from '../transport-catalogue-page/types/advertisement';
+import {
+  AdvertisementsViewModelResponseConverter,
+  AdvertisementViewModelResponse,
+} from '../transport-catalogue-page/types/AdvertisementsPageViewModelResponse';
+import { Envelope } from '../../shared/types/Envelope';
 
 @Component({
   selector: 'app-transport-item-page',
@@ -56,10 +61,14 @@ export class TransportItemPageComponent implements OnInit {
       const transportId = params['transportId'] as string;
       this._httpService
         .fetchAdvertisementByCategoryBrandId(categoryId, brandId, transportId)
-        .subscribe((result) => {
+        .subscribe((result: Envelope<AdvertisementViewModelResponse>) => {
           if (result.code === 200) {
-            this._titleService.setTitle(result.data.title);
-            this.advertisementSignal.set(result.data);
+            const advertisement =
+              AdvertisementsViewModelResponseConverter.convertToAdvertisement(
+                result.data,
+              );
+            this._titleService.setTitle(advertisement.title);
+            this.advertisementSignal.set(advertisement);
           }
         });
     });
