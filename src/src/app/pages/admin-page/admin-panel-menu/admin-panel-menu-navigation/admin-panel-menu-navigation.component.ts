@@ -24,23 +24,32 @@ export class AdminPanelMenuNavigationComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.addMenuButton('Управление парсерами', 'parsersManagement', false);
+    this.addMenuButton(
+      'Управление парсерами техники',
+      'parsersManagement',
+      false,
+    );
+    this.addMenuButton(
+      'Управление парсерами запчастей',
+      'sparesParsersManagement',
+      false,
+    );
     this.addMenuButton('Визуализация', 'analytics', false);
     this.addMenuButton(
       'Управление почтой сервиса',
       'mailSenderManagement',
       false,
     );
-    this.addMenuButton(
-      'Регистрация администраторов (WIP)',
-      'adminsManagement',
-      true,
-    );
-    this.addMenuButton(
-      'Управление синхронизатором объявлений (WIP)',
-      'parserSynchronizator',
-      true,
-    );
+    // this.addMenuButton(
+    //   'Регистрация администраторов (WIP)',
+    //   'adminsManagement',
+    //   true,
+    // );
+    // this.addMenuButton(
+    //   'Управление синхронизатором объявлений (WIP)',
+    //   'parserSynchronizator',
+    //   true,
+    // );
   }
 
   public handleMenuButtonClick(
