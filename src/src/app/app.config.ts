@@ -33,6 +33,7 @@ import { authInterceptor } from './shared/middleware/auth.interceptor';
 import { expiredTokenInterceptor } from './shared/middleware/expired-token.interceptor';
 import { tokenApplyInterceptor } from './shared/middleware/token-apply.interceptor';
 import { SpareParserHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spare-parser-http.service';
+import { SparesHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spares-http.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -85,5 +86,6 @@ export const appConfig: ApplicationConfig = {
     CookieService,
     AuthStatusService,
     SpareParserHttpService,
+    SparesHttpService,
   ],
 };

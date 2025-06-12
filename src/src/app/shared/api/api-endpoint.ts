@@ -4,3 +4,4 @@ export const usersServiceApiUrl: string = 'http://localhost:5031/api';
 export const parsersServiceApiUrl: string = 'http://localhost:5239/api/parsers';
 export const spareParsersApiUrl: string =
   'http://localhost:5239/api/spare-parsers';
+export const sparesApiUrl: string = 'http://localhost:5094/api';

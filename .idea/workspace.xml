@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c790e9f-1063-4ba5-9361-afba49f3d483" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/models/spare-parser-link.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/models/spare-parser-ts.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spare-parser-http.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/models/spares-statistical-data.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spares-http.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu-navigation/admin-panel-menu-navigation.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu-navigation/admin-panel-menu-navigation.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/src/app/shared/api/api-endpoint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/shared/api/api-endpoint.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +80,7 @@
       <workItem from="1748592436244" duration="40000" />
       <workItem from="1749739336076" duration="28000" />
       <workItem from="1749739397663" duration="283000" />
-      <workItem from="1749739726808" duration="7457000" />
+      <workItem from="1749739726808" duration="8871000" />
     </task>
     <servers />
   </component>
