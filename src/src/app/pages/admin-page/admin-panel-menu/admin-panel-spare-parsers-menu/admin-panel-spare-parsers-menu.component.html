@@ -7,8 +7,8 @@
                                 (onInstantlyActivate)="handleInstantlyActivate($event)" />
   </section>
   <section class="w-full">
-    <!--  statistics component  -->
-    <!--  links form  -->
+    <app-spare-parser-charts *ngIf="selectedSpareParserSignal()" [parser]="selectedSpareParserSignal()!" />
+    <app-spare-parser-links-form *ngIf="selectedSpareParserSignal()" [spareParser]="selectedSpareParserSignal()!" />
   </section>
 </section>
 <p-toast [position]="'bottom-right'" />

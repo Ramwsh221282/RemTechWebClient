@@ -1,136 +1,48 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  computed,
-  Input,
-  Signal,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
+import { ChartStyleInformationFactory } from '../../../admin-panel-parsers-menu/components/parser-charts/services/chart-style.information';
+import { SpareParser } from '../../models/spare-parser-ts';
+import { AdvertisementsCountByParsersChartComponent } from '../../../admin-panel-parsers-menu/components/parser-charts/advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component';
+import { ElapsedSecondsParserChartComponent } from '../../../admin-panel-parsers-menu/components/parser-charts/elapsed-seconds-parser-chart/elapsed-seconds-parser-chart.component';
+import { LastAdvertisementsCountParserChartComponent } from '../../../admin-panel-parsers-menu/components/parser-charts/last-advertisements-count-parser-chart/last-advertisements-count-parser-chart.component';
 import { Panel } from 'primeng/panel';
-import { SparesStatisticalData } from '../../models/spares-statistical-data';
-import {
-  ChartDataItem,
-  ChartItem,
-} from '../../../admin-panel-analytics-menu/types/chart-item.interface';
-import {
-  ChartStyleInformation,
-  ChartStyleInformationFactory,
-} from '../../../admin-panel-parsers-menu/components/parser-charts/services/chart-style.information';
-import { UIChart } from 'primeng/chart';
+import { SpareParsersLastAdvertisementsCountChartComponent } from './spare-parsers-last-advertisements-count-chart/spare-parsers-last-advertisements-count-chart.component';
+import { SpareParserLink } from '../../models/spare-parser-link';
+import { SpareParsersElapsedSecondsChartComponent } from './spare-parsers-elapsed-seconds-chart/spare-parsers-elapsed-seconds-chart.component';
 
 @Component({
   selector: 'app-spare-parser-charts',
-  imports: [Panel, UIChart],
   templateUrl: './spare-parser-charts.component.html',
   styleUrl: './spare-parser-charts.component.scss',
+  imports: [
+    AdvertisementsCountByParsersChartComponent,
+    ElapsedSecondsParserChartComponent,
+    LastAdvertisementsCountParserChartComponent,
+    Panel,
+    SpareParsersLastAdvertisementsCountChartComponent,
+    SpareParsersElapsedSecondsChartComponent,
+  ],
 })
 export class SpareParserChartsComponent {
-  @Input({ required: true, alias: 'data' }) set _statisticalData(
-    data: SparesStatisticalData[],
-  ) {
-    this.statisticalInfoSignal.set(data);
-    const colors = data.map(() =>
+  @Input({ required: true, alias: 'parser' }) set _parser(parser: SpareParser) {
+    const colors = parser.links.map(() =>
       ChartStyleInformationFactory.getRandomColor(),
     );
     this.colorsSignal.set(colors);
   }
 
-  readonly chartItemsSignal: Signal<ChartItem[]> = computed((): ChartItem[] => {
-    return this.statisticalInfoSignal().map(
-      (info: SparesStatisticalData): ChartItem => {
-        return { label: info.spareType, numeric: info.count };
-      },
-    );
-  });
-
-  readonly chartDataSignal: Signal<ChartDataItem> = computed(
-    (): ChartDataItem => {
-      const data: ChartItem[] = this.chartItemsSignal();
-      const labels: string[] = data.map((i) => i.label);
-      const numerics: number[] = data.map((i) => i.numeric);
-      return { labels: labels, numerics: numerics };
-    },
-  );
-
-  readonly chartDataViewModel = computed(() => {
-    const data = this.chartDataSignal();
-    return {
-      labels: data.labels,
-      datasets: [
-        {
-          label: 'Типы запчастей и количество',
-          data: data.numerics,
-          borderWidth: 1,
-          backgroundColor: this.colorsSignal(),
-        },
-      ],
-    };
-  });
-
-  readonly chartOptions = computed(() => {
-    const chartStyleInformation: ChartStyleInformation =
-      this.chartStyleInformationSignal();
-    const options = {
-      indexAxis: 'x',
-      maintainAspectRatio: false,
-      aspectRatio: 0.6,
-      plugins: {
-        legend: {
-          labels: {
-            color: chartStyleInformation.primaryTextColor,
-          },
-        },
-        tooltip: {
-          enabled: true,
-        },
-      },
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: 'xy',
-        },
-        zoom: {
-          enabled: true,
-          mode: 'xy',
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: chartStyleInformation.secondaryTextColor,
-          },
-          grid: {
-            color: chartStyleInformation.surfaceBorder,
-          },
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            color: chartStyleInformation.secondaryTextColor,
-          },
-          grid: {
-            color: chartStyleInformation.surfaceBorder,
-          },
-        },
-      },
-    };
-    this._cd.markForCheck();
-    return options;
-  });
-
-  readonly chartStyleInformationSignal: Signal<ChartStyleInformation> =
-    computed((): ChartStyleInformation => {
-      return ChartStyleInformationFactory.createChartStyleInformation();
-    });
-
-  readonly statisticalInfoSignal: WritableSignal<SparesStatisticalData[]>;
   readonly colorsSignal: WritableSignal<string[]>;
-  private readonly _cd: ChangeDetectorRef;
+  readonly parserSignal: WritableSignal<SpareParser>;
 
-  constructor(cd: ChangeDetectorRef) {
-    this.statisticalInfoSignal = signal([]);
+  constructor() {
     this.colorsSignal = signal([]);
-    this._cd = cd;
+    this.parserSignal = signal({
+      name: '',
+      state: '',
+      lastRun: new Date(),
+      nextRun: new Date(),
+      waitDays: 0,
+      links: [],
+      lastNewAdvertisementsCount: 0,
+    });
   }
 }
