@@ -4,6 +4,7 @@ import { spareParsersApiUrl } from '../../../../../shared/api/api-endpoint';
 import { Observable } from 'rxjs';
 import { Envelope } from '../../../../../shared/types/Envelope';
 import { SpareParser } from '../models/spare-parser-ts';
+import { SpareParserUpdateDetails } from '../models/spare-parser-update-details';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,22 @@ export class SpareParserHttpService {
     this._apiUrl = spareParsersApiUrl;
     this._httpClient = httpClient;
   }
-  
+
   public fetchAll(): Observable<Envelope<SpareParser[]>> {
     return this._httpClient.get<Envelope<SpareParser[]>>(this._apiUrl);
+  }
+
+  public update(
+    details: SpareParserUpdateDetails,
+  ): Observable<Envelope<SpareParser>> {
+    const url = `${this._apiUrl}/${details.name}`;
+    return this._httpClient.patch<Envelope<SpareParser>>(url, details);
+  }
+
+  public instantlyActivate(
+    parser: SpareParser,
+  ): Observable<Envelope<SpareParser>> {
+    const url = `${this._apiUrl}/${parser.name}/activate`;
+    return this._httpClient.patch<Envelope<SpareParser>>(url, null);
   }
 }

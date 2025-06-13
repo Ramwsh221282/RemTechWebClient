@@ -4,7 +4,15 @@
   }
   @if (spareParserSignal()) {
     <ng-template #header>
-      <label class="font-bold">{{ spareParserSignal()!.name }}</label>
+      <div class="flex flex-col gap-1">
+        <label class="font-bold">{{ spareParserSignal()!.name }}</label>
+        <!--        <label>{{ 'Последних новых объявлений: ' + selectedParserSignal().lastNewAdvertisementsCount }}</label>-->
+        <p-button [size]="'small'"
+                  [outlined]="true"
+                  [label]="'Немедленно запустить'"
+                  [disabled]="!isEditingSignal()"
+                  (onClick)="instantlyStart($event)" />
+      </div>
     </ng-template>
     <p-panel [header]="'Расписание'" styleClass="my-1">
       <div class="flex flex-col gap-1">
