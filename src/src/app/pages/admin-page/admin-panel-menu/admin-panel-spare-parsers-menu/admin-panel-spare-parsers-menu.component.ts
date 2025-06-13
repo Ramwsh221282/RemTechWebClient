@@ -13,6 +13,7 @@ import { SpareParserInfoFormComponent } from './components/spare-parser-info-for
 import { NgIf } from '@angular/common';
 import { SparesStatisticalData } from './models/spares-statistical-data';
 import { SparesHttpService } from './services/spares-http.service';
+import { SpareParserChartsComponent } from './components/spare-parser-charts/spare-parser-charts.component';
 
 @Component({
   selector: 'app-admin-panel-spare-parsers-menu',
@@ -21,6 +22,7 @@ import { SparesHttpService } from './services/spares-http.service';
     SpareParsersSelectComponent,
     SpareParserInfoFormComponent,
     NgIf,
+    SpareParserChartsComponent,
   ],
   templateUrl: './admin-panel-spare-parsers-menu.component.html',
   styleUrl: './admin-panel-spare-parsers-menu.component.scss',

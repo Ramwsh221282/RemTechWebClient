@@ -67,6 +67,7 @@ export class AdvertisementsCountByParsersChartComponent {
     computed((): ChartStyleInformation => {
       return ChartStyleInformationFactory.createChartStyleInformation();
     });
+  
   readonly chartData = computed(() => {
     return {
       labels: this.parserChartDataSignal().labels,
