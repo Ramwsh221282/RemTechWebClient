@@ -17,6 +17,7 @@ import { SpareParserChartsComponent } from './components/spare-parser-charts/spa
 import { Title } from '@angular/platform-browser';
 import { SpareParserUpdateDetails } from './models/spare-parser-update-details';
 import { ArrayUtils } from '../../../../shared/utils/array-utils';
+import { SpareParserLinksFormComponent } from './components/spare-parser-links-form/spare-parser-links-form.component';
 
 @Component({
   selector: 'app-admin-panel-spare-parsers-menu',
@@ -26,6 +27,7 @@ import { ArrayUtils } from '../../../../shared/utils/array-utils';
     SpareParserInfoFormComponent,
     NgIf,
     SpareParserChartsComponent,
+    SpareParserLinksFormComponent,
   ],
   templateUrl: './admin-panel-spare-parsers-menu.component.html',
   styleUrl: './admin-panel-spare-parsers-menu.component.scss',

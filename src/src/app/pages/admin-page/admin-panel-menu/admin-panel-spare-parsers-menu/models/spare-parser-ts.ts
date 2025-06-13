@@ -7,4 +7,5 @@ export type SpareParser = {
   nextRun: Date;
   waitDays: number;
   links: SpareParserLink[];
+  lastNewAdvertisementsCount: number;
 };
