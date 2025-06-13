@@ -6,19 +6,26 @@
   <component name="ChangeListManager">
     <list default="true" id="1c790e9f-1063-4ba5-9361-afba49f3d483" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/admin-panel-analytics-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/admin-panel-analytics-menu.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/brand-charts/brand-charts.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/brand-charts/brand-charts.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/brand-geo-charts/brand-geo-charts.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-analytics-menu/brand-geo-charts/brand-geo-charts.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/transport-catalogue-page/services/advertisements-http.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/transport-catalogue-page/services/advertisements-http.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/transport-catalogue-page/transport-catalogue-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/transport-catalogue-page/transport-catalogue-page.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/services/transport-item-facade.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/services/transport-item-facade.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/services/transport-item-http.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/services/transport-item-http.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/transport-item-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/transport-item-page/transport-item-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/components/parser-charts/advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/components/parser-charts/advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="FormatOnSaveOptions">
     <option name="myRunOnSave" value="true" />
@@ -42,7 +49,9 @@
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;issue-42&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -57,7 +66,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-WS-251.26094.131" />
       </set>
     </attachedChunks>
   </component>
@@ -71,6 +80,12 @@
       <workItem from="1748523848173" duration="6071000" />
       <workItem from="1748539510312" duration="662000" />
       <workItem from="1748576509537" duration="4020000" />
+      <workItem from="1748592436244" duration="40000" />
+      <workItem from="1749739336076" duration="28000" />
+      <workItem from="1749739397663" duration="283000" />
+      <workItem from="1749739726808" duration="11937000" />
+      <workItem from="1749812962405" duration="637000" />
+      <workItem from="1749838893255" duration="485000" />
     </task>
     <servers />
   </component>

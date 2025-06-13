@@ -1,0 +1,42 @@
+<p-panel>
+  @if (!spareParserSignal()) {
+    <label>not inited.</label>
+  }
+  @if (spareParserSignal()) {
+    <ng-template #header>
+      <label class="font-bold">{{ spareParserSignal()!.name }}</label>
+    </ng-template>
+    <p-panel [header]="'Расписание'" styleClass="my-1">
+      <div class="flex flex-col gap-1">
+        <label>{{ 'Последний запуск: ' + (spareParserSignal()!.lastRun | date:'dd.MM.yyyy') }}</label>
+        <label>{{ 'Следующий запуск: ' + (spareParserSignal()!.nextRun | date:'dd.MM.yyyy') }}</label>
+        <div>
+          <label>Время ожидания:</label>
+          <label>{{ ' ' + spareParserSignal()!.waitDays + ' день' }}</label>
+        </div>
+      </div>
+      <p-select [options]="waitDaysComputedSignal()"
+                [disabled]="!isEditingSignal()"
+                [(ngModel)]="spareParserSignal()!.waitDays"
+                [placeholder]="'Время ожидания'"
+                (onChange)="handleWaitDaysChange($event)"
+                styleClass="w-50" />
+    </p-panel>
+    <p-panel [header]="'Текущее состояние:'">
+      <div class="flex flex-col gap-1">
+        <label>{{ 'Состояние: ' + spareParserSignal()!.state }}</label>
+        <p-select [options]="statesComputedSignal()"
+                  [disabled]="!isEditingSignal()"
+                  [(ngModel)]="spareParserSignal()!.state"
+                  [placeholder]="'Состояние'"
+                  (onChange)="handleStateChange($event)"
+                  styleClass="w-50">
+        </p-select>
+      </div>
+    </p-panel>
+    <div class="flex flex-row gap-1">
+      <p-button [size]="'small'" [label]="'Редактировать'" styleClass="my-2" (onClick)="startEditing($event)" />
+      <p-button [size]="'small'" [label]="'Сохранить изменения'" styleClass="my-2" (onClick)="saveChanges($event)" />
+    </div>
+  }
+</p-panel>

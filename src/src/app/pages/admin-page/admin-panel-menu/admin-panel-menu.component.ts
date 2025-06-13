@@ -4,6 +4,7 @@ import { AdminPanelParsersMenuComponent } from './admin-panel-parsers-menu/admin
 import { ScrollPanel } from 'primeng/scrollpanel';
 import { AdminPanelAnalyticsMenuComponent } from './admin-panel-analytics-menu/admin-panel-analytics-menu.component';
 import { AdminPanelMailingServiceMenuComponent } from './admin-panel-mailing-service-menu/admin-panel-mailing-service-menu.component';
+import { AdminPanelSpareParsersMenuComponent } from './admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component';
 
 @Component({
   selector: 'app-admin-panel-menu',
@@ -13,6 +14,7 @@ import { AdminPanelMailingServiceMenuComponent } from './admin-panel-mailing-ser
     ScrollPanel,
     AdminPanelAnalyticsMenuComponent,
     AdminPanelMailingServiceMenuComponent,
+    AdminPanelSpareParsersMenuComponent,
   ],
   templateUrl: './admin-panel-menu.component.html',
   styleUrl: './admin-panel-menu.component.scss',
