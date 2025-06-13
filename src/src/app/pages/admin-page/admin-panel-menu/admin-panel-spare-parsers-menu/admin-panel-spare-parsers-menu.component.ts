@@ -14,6 +14,9 @@ import { NgIf } from '@angular/common';
 import { SparesStatisticalData } from './models/spares-statistical-data';
 import { SparesHttpService } from './services/spares-http.service';
 import { SpareParserChartsComponent } from './components/spare-parser-charts/spare-parser-charts.component';
+import { Title } from '@angular/platform-browser';
+import { SpareParserUpdateDetails } from './models/spare-parser-update-details';
+import { ArrayUtils } from '../../../../shared/utils/array-utils';
 
 @Component({
   selector: 'app-admin-panel-spare-parsers-menu',
@@ -29,23 +32,20 @@ import { SpareParserChartsComponent } from './components/spare-parser-charts/spa
 })
 export class AdminPanelSpareParsersMenuComponent implements OnInit {
   private readonly _spareParsersHttpService: SpareParserHttpService;
-  private readonly _spareHttpService: SparesHttpService;
   private readonly _isLoadingSignal: WritableSignal<boolean>;
   private readonly _messageService: MessageService;
   readonly spareParsersSignal: WritableSignal<SpareParser[]>;
   readonly selectedSpareParserSignal: WritableSignal<SpareParser | null>;
-  readonly spareStatisticsInfo: WritableSignal<SparesStatisticalData[]>;
 
   constructor(
     spareParsersHttpService: SpareParserHttpService,
-    spareHttpService: SparesHttpService,
     messageService: MessageService,
+    title: Title,
   ) {
+    title.setTitle('Администрирование. Парсеры запчастей');
     this._spareParsersHttpService = spareParsersHttpService;
-    this._spareHttpService = spareHttpService;
     this.selectedSpareParserSignal = signal(null);
     this.spareParsersSignal = signal([]);
-    this.spareStatisticsInfo = signal([]);
     this._isLoadingSignal = signal(false);
     this.selectedSpareParserSignal.set(null);
     this._messageService = messageService;
@@ -53,7 +53,7 @@ export class AdminPanelSpareParsersMenuComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initializeArrayFromHttpRequest();
-    this.initializeStatisticalInfo();
+    // this.initializeStatisticalInfo();
   }
 
   private initializeArrayFromHttpRequest(): void {
@@ -82,21 +82,69 @@ export class AdminPanelSpareParsersMenuComponent implements OnInit {
       });
   }
 
-  private initializeStatisticalInfo(): void {
+  public handleSaveChangesOnUpdate(details: SpareParserUpdateDetails): void {
     this._isLoadingSignal.set(true);
-    this._spareHttpService
-      .fetchStatistics()
+    this._spareParsersHttpService
+      .update(details)
       .pipe(
         finalize(() => {
           this._isLoadingSignal.set(false);
         }),
       )
       .subscribe({
-        next: (value: Envelope<SparesStatisticalData[]>): void => {
-          if (value.code === 200) {
-            const data: SparesStatisticalData[] = value.data;
-            this.spareStatisticsInfo.set(data);
+        next: (envelope: Envelope<SpareParser>) => {
+          const updated: SpareParser = envelope.data;
+          const current = this.spareParsersSignal();
+          const index = current.findIndex(
+            (item: SpareParser) => item.name === updated.name,
+          );
+          if (index < 0) {
+            this.triggerError('Ошибка на уровне приложения');
+            return;
           }
+          const updatedArray = ArrayUtils.updateItemByIndex(
+            updated,
+            current,
+            (item) => item.name === updated.name,
+          );
+          this.spareParsersSignal.set(updatedArray);
+          this.triggerSuccess(`Изменён парсер запчастей: ${updated.name}`);
+        },
+        error: (error: HttpErrorResponse) => {
+          const envelope = EnvelopeErrorFactory.fromHttpErrorResponse(error);
+          const message = envelope.statusInfo;
+          MessageServiceUtils.showError(this._messageService, message);
+        },
+      });
+  }
+
+  public handleInstantlyActivate($event: SpareParser): void {
+    this._isLoadingSignal.set(true);
+    this._spareParsersHttpService
+      .instantlyActivate($event)
+      .pipe(
+        finalize(() => {
+          this._isLoadingSignal.set(false);
+        }),
+      )
+      .subscribe({
+        next: (envelope: Envelope<SpareParser>) => {
+          const updated: SpareParser = envelope.data;
+          const current = this.spareParsersSignal();
+          const index = current.findIndex(
+            (item: SpareParser) => item.name === updated.name,
+          );
+          if (index < 0) {
+            this.triggerError('Ошибка на уровне приложения');
+            return;
+          }
+          const updatedArray = ArrayUtils.updateItemByIndex(
+            updated,
+            current,
+            (item) => item.name === updated.name,
+          );
+          this.spareParsersSignal.set(updatedArray);
+          this.triggerSuccess(`Парсер запчастей активирован: ${updated.name}`);
         },
         error: (error: HttpErrorResponse) => {
           const envelope = EnvelopeErrorFactory.fromHttpErrorResponse(error);
