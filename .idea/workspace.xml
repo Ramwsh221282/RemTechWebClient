@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1c790e9f-1063-4ba5-9361-afba49f3d483" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/components/parser-charts/advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-parsers-menu/components/parser-charts/advertisements-count-by-parsers-chart/advertisements-count-by-parsers-chart.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/app/pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/admin-panel-spare-parsers-menu.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +23,25 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="issue-41" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Ramwsh221282&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Ramwsh221282/RemTechWebClient.git&quot;,
+    &quot;accountId&quot;: &quot;66b5a263-5b15-4c51-b8ec-55599d8a5e76&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
@@ -51,7 +60,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;issue-42&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -86,10 +95,19 @@
       <workItem from="1749739726808" duration="11937000" />
       <workItem from="1749812962405" duration="637000" />
       <workItem from="1749838893255" duration="485000" />
+      <workItem from="1749846081382" duration="13000" />
+      <workItem from="1749846166814" duration="305000" />
+      <workItem from="1749846539310" duration="1638000" />
+      <workItem from="1749894968554" duration="1210000" />
+      <workItem from="1750005640627" duration="3000" />
+      <workItem from="1750006478535" duration="1000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>
