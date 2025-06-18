@@ -148,7 +148,8 @@ export class ParserInfoFormComponent {
       .subscribe((result) => {
         if (result.code === 200) {
           const data = result.data;
-          this.parserUpdated.emit(data);
+          const formatted = { ...data, lastNewAdvertisementsCount: 0 };
+          this.parserUpdated.emit(formatted);
           const message = `Немедленно запущен парсер: ${data.name} ${data.state}`;
           MessageServiceUtils.showSuccess(this._messageService, message);
         }

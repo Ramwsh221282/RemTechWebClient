@@ -1,0 +1,24 @@
+@if (spare()) {
+<app-dialog-container [visible]="visibility">
+    <app-dialog-content>
+        <app-dialog-header [header]="getHeader(spare()!)" />
+        <p-galleria [value]="mapPhotos(spare()!)" [showIndicators]="true" [showThumbnails]="false"
+            [showIndicatorsOnItem]="true" indicatorsPosition="left" [containerStyle]="{ 'margin-top': '2em' }">
+            <ng-template pTemplate="item" let-item>
+                <img [ngSrc]="item" [width]="360" [height]="360" [alt]="'Photo'" priority />
+            </ng-template>
+            <ng-template pTemplate="indicator" let-index>
+                <span style="color: #ffffff; cursor: pointer">
+                    {{ index + 1 }}
+                </span>
+            </ng-template>
+        </p-galleria>
+    </app-dialog-content>
+    <app-dialog-footer>
+        <p-button label="Закрыть окно" [text]="true" [fluid]="'true'"
+            styleClass="w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10" class="w-full"
+            (onClick)="closeDialog($event)" />
+    </app-dialog-footer>
+</app-dialog-container>
+
+}

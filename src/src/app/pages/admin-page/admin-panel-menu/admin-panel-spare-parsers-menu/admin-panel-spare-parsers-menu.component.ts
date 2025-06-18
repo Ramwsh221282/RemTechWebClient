@@ -55,7 +55,6 @@ export class AdminPanelSpareParsersMenuComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initializeArrayFromHttpRequest();
-    // this.initializeStatisticalInfo();
   }
 
   private initializeArrayFromHttpRequest(): void {

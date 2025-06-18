@@ -5,13 +5,13 @@ import {
   Advertisement,
   AdvertisementsFactory,
 } from '../../types/advertisement';
-import { NgOptimizedImage } from '@angular/common';
+import { DecimalPipe, NgOptimizedImage } from '@angular/common';
 import { Chip } from 'primeng/chip';
 import { AnimationsFactory } from '../../../../shared/animations/animations-factory';
 
 @Component({
   selector: 'app-transport-item',
-  imports: [CardModule, ButtonModule, NgOptimizedImage, Chip],
+  imports: [CardModule, ButtonModule, NgOptimizedImage, Chip, DecimalPipe],
   templateUrl: './transport-item.component.html',
   styleUrl: './transport-item.component.scss',
   animations: [

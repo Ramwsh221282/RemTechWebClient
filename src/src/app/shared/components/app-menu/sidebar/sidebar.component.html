@@ -1,14 +1,11 @@
 <aside class="side-bar-layout bg-primary-500 shadowed">
-  <app-side-bar-button
-    [label]="'Техника'"
-    [icon]="'pi pi-truck'"
-    [isLabelShown]="isExpanded"
-    [navigationRoute]="'transport-catalogue/categories'"
-  ></app-side-bar-button>
-  <app-side-bar-button
-    [label]="'Администрирование'"
-    [icon]="'pi pi-warehouse'"
-    [isLabelShown]="isExpanded"
+  <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'" [isLabelShown]="isExpanded"
+    [navigationRoute]="'transport-catalogue/categories'"></app-side-bar-button>
+  <app-side-bar-button [label]="'Запчасти'" [icon]="'pi pi-wrench'" [isLabelShown]="isExpanded"
+    [navigationRoute]="'spares/catalogue'">
+
+  </app-side-bar-button>
+  <app-side-bar-button [label]="'Администрирование'" [icon]="'pi pi-warehouse'" [isLabelShown]="isExpanded"
     [navigationRoute]="'admin'">
   </app-side-bar-button>
 </aside>

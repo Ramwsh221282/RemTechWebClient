@@ -14,7 +14,6 @@ import {
   ChartStyleInformation,
   ChartStyleInformationFactory,
 } from '../../../../admin-page/admin-panel-menu/admin-panel-parsers-menu/components/parser-charts/services/chart-style.information';
-import { Button } from 'primeng/button';
 import { UIChart } from 'primeng/chart';
 
 @Component({

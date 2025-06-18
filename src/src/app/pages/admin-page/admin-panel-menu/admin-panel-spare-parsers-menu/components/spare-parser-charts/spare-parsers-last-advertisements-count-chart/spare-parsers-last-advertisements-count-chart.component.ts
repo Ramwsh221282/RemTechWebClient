@@ -70,7 +70,7 @@ export class SpareParsersLastAdvertisementsCountChartComponent {
       labels: this.parserChartDataSignal().labels,
       datasets: [
         {
-          label: 'Время парсинга (секунды)',
+          label: 'Последние новые объявления',
           data: this.parserChartDataSignal().numerics,
           borderWidth: 1,
           backgroundColor: this.colorsSignal(),
@@ -82,7 +82,7 @@ export class SpareParsersLastAdvertisementsCountChartComponent {
     const chartStyleInformation: ChartStyleInformation =
       this.chartStyleInformationSignal();
     const options = {
-      indexAxis: 'y',
+      indexAxis: 'x',
       maintainAspectRatio: false,
       aspectRatio: 0.8,
       plugins: {

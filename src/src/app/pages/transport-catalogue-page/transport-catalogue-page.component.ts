@@ -7,7 +7,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TransportItemsListComponent } from './components/transport-items-list/transport-items-list.component';
 import { TransportItemsFilterFormComponent } from './components/transport-items-filter-form/transport-items-filter-form.component';
 import { TransportItemPhotoGalleryDialogComponent } from './components/transport-item/transport-item-photo-gallery-dialog/transport-item-photo-gallery-dialog.component';
-import { NgIf } from '@angular/common';
+import { DecimalPipe, NgIf } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -69,6 +69,7 @@ import {
     CharacteristicsFilterInputComponent,
     RouterLink,
     PricesChartComponent,
+    DecimalPipe,
   ],
   templateUrl: './transport-catalogue-page.component.html',
   styleUrl: './transport-catalogue-page.component.scss',

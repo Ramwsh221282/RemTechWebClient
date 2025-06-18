@@ -72,12 +72,16 @@ export class ElapsedSecondsParserChartComponent {
       return ChartStyleInformationFactory.createChartStyleInformation();
     });
   readonly chartData = computed(() => {
+    const hours: number[] = this.parserChartDataSignal().seconds.map(
+      (n: number): number => n / 3600,
+    );
+    const labels: string[] = this.parserChartDataSignal().labels;
     return {
-      labels: this.parserChartDataSignal().labels,
+      labels: labels,
       datasets: [
         {
           label: 'Время парсинга (секунды)',
-          data: this.parserChartDataSignal().seconds,
+          data: hours,
           borderWidth: 1,
           backgroundColor: this.colorsSignal(),
         },

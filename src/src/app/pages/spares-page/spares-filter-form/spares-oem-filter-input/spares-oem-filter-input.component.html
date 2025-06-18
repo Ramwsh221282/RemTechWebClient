@@ -1,0 +1,18 @@
+<section class="flex flex-col gap-1.5">
+    <div class="flex justify-start">
+        <p-chip [style]="{ width: chipWidth }" class="!py-0 !pl-0 !pr-4 text-sm select-none" [label]="chipLabel">
+            <p-button [fluid]="true" [icon]="'pi pi-tag'" rounded="'true'" outlined="'true'" />
+        </p-chip>
+    </div>
+    <div class="flex flex-row justify-between gap-1">
+        <input pInputText [(ngModel)]="oemInput" [placeholder]="'Указать номер запчасти или артикул'" [fluid]="'true'">
+    </div>
+    <div class="flex flex-row gap-1 w-full">
+        <div class="w-full">
+            <p-button [fluid]="true" [label]="'Применить'" [size]="'small'" (onClick)="acceptOemFilter($event)" />
+        </div>
+        <div class="w-full">
+            <p-button [fluid]="true" [label]="'Очистить'" [size]="'small'" (onClick)="flushOemFilter($event)" />
+        </div>
+    </div>
+</section>

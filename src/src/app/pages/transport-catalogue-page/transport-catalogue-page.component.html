@@ -7,48 +7,48 @@
       <div class="inline-flex gap-2 font-bold text-sm -m-0 p-0">
 
         <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
-           [routerLink]="routeBuilder.buildCategoriesRoute()">
+          [routerLink]="routeBuilder.buildCategoriesRoute()">
           {{ 'Категория' }}</a>
 
         <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
-           [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
+          [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
           {{ categorySignal().name }}</a>
 
-        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
+        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!" />
         <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
-           [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
+          [routerLink]="routeBuilder.buildCategoryBrandsRoute(categorySignal().id)">
           {{ 'Бренд' }}</a>
 
         <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
-           [routerLink]="routeBuilder.buildCategoriesOfBrandNameRoute(brandSignal().brandId, brandSignal().name)">
+          [routerLink]="routeBuilder.buildCategoriesOfBrandNameRoute(brandSignal().brandId, brandSignal().name)">
           {{ brandSignal().name }}</a>
 
-        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
+        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!" />
 
-        <a class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">Регион</a>
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400"
+          (click)="openGeoInformationSelectDialog($event)">Регион</a>
 
-        <a
-          class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">
+        <a class="-my-1 cursor-pointer underline hover:text-cyan-400" (click)="openGeoInformationSelectDialog($event)">
           {{ selectedGeoInformationSignal() === null ? 'Любой' : selectedGeoInformationSignal()?.details! }}
         </a>
 
-        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!"/>
+        <p-divider [layout]="'vertical'" styleClass="h-10! m-0! gap-0! p-0! -my-3.5!" />
 
         <a class="-my-1 cursor-pointer">{{ 'Количество' }}</a>
 
-        <a class="-my-1 cursor-pointer">{{ scalarData.total }}</a>
+        <a class="-my-1 cursor-pointer">{{ (scalarData.total | number:'1.0-0') }}</a>
 
         <a class="-my-1 cursor-pointer">{{ 'Ср. цена' }}</a>
 
-        <a class="-my-1 cursor-pointer">{{ scalarData.average + ' Р.' }}</a>
+        <a class="-my-1 cursor-pointer">{{ (scalarData.average | number:'1.0-0') + ' Р.' }}</a>
 
         <a class="-my-1 cursor-pointer">{{ 'Мин. цена' }}</a>
 
-        <a class="-my-1 cursor-pointer">{{ scalarData.minimal + ' Р.' }}</a>
+        <a class="-my-1 cursor-pointer">{{ (scalarData.minimal | number:'1.0-0') + ' Р.' }}</a>
 
         <a class="-my-1 cursor-pointer">{{ 'Макс. цена' }}</a>
 
-        <a class="-my-1 cursor-pointer">{{ scalarData.maximum + ' Р.' }}</a>
+        <a class="-my-1 cursor-pointer">{{ (scalarData.maximum | number:'1.0-0') + ' Р.' }}</a>
 
       </div>
 
@@ -63,18 +63,15 @@
       <app-transport-items-filter-form>
 
         <app-price-criteria-filter-input [priceToValue]="filterSignal().priceFilter.priceTo"
-                                         [priceFromValue]="filterSignal().priceFilter.priceFrom"
-                                         (priceToChange)="acceptPriceToChange($event)"
-                                         (priceFromChange)="acceptPriceFromChange($event)"
-                                         (priceFilterFlushed)="acceptPriceFlush()"
-                                         (priceFilterApplied)="acceptPriceFilterSubmit()"/>
+          [priceFromValue]="filterSignal().priceFilter.priceFrom" (priceToChange)="acceptPriceToChange($event)"
+          (priceFromChange)="acceptPriceFromChange($event)" (priceFilterFlushed)="acceptPriceFlush()"
+          (priceFilterApplied)="acceptPriceFilterSubmit()" />
 
-        <app-characteristics-filter-input
-          [characteristics]="characteristicsSignal()"
+        <app-characteristics-filter-input [characteristics]="characteristicsSignal()"
           (characteristicSelected)="acceptCharacteristicChange($event)"
-          (characteristicsFlushed)="acceptCharacteristicsFlush()"/>
+          (characteristicsFlushed)="acceptCharacteristicsFlush()" />
 
-        <app-prices-chart [prices]="advertisementsPricesSignal()"/>
+        <app-prices-chart [prices]="advertisementsPricesSignal()" />
 
       </app-transport-items-filter-form>
 
@@ -82,15 +79,12 @@
 
     <div class="w-3/4 ml-0.75">
 
-      <app-transport-items-list [isLoading]="isLoading()"
-                                [items]="advertisementsSignal()"
-                                (sortChange)="acceptSortChange($event)"
-                                (textSearchSumit)="acceptTextSearch($event)"
-                                (advertisementPhotoInvoked)="onAdvertisementPhotoViewOpen($event)">
+      <app-transport-items-list [isLoading]="isLoading()" [items]="advertisementsSignal()"
+        (sortChange)="acceptSortChange($event)" (textSearchSumit)="acceptTextSearch($event)"
+        (advertisementPhotoInvoked)="onAdvertisementPhotoViewOpen($event)">
 
-        <app-transport-items-pagination [pagination]="paginationSignal()"
-                                        [total]="totalPagesCountSignal()"
-                                        (onPageChanged)="onPageChanged($event)"/>
+        <app-transport-items-pagination [pagination]="paginationSignal()" [total]="totalPagesCountSignal()"
+          (onPageChanged)="onPageChanged($event)" />
       </app-transport-items-list>
 
     </div>
@@ -99,14 +93,9 @@
 
 </section>
 
-<app-transport-item-photo-gallery-dialog
-  *ngIf="selectedAdvertisement() !== null"
-  [visibility]="selectedAdvertisement() !== null"
-  [advertisement]="selectedAdvertisement()"
-  (onClose)="onAdvertisementPhotoViewClose()"
-/>
+<app-transport-item-photo-gallery-dialog *ngIf="selectedAdvertisement() !== null"
+  [visibility]="selectedAdvertisement() !== null" [advertisement]="selectedAdvertisement()"
+  (onClose)="onAdvertisementPhotoViewClose()" />
 
-<app-geo-information-select-dialog [geoInformations]="geoInformationSignal()"
-                                   [visibility]="isSelectingGeoInformation()"
-                                   (onCitySelected)="acceptGeoInformationChange($event)"
-                                   (visibilityChanged)="handleGeoInformationClosed($event)"/>
+<app-geo-information-select-dialog [geoInformations]="geoInformationSignal()" [visibility]="isSelectingGeoInformation()"
+  (onCitySelected)="acceptGeoInformationChange($event)" (visibilityChanged)="handleGeoInformationClosed($event)" />

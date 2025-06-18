@@ -130,10 +130,21 @@ export class AdminPanelParsersMenuComponent implements OnInit {
   }
 
   public handleLinkAdded(link: ParserProfile): void {
+    const linkWithNormalTime = {
+      ...link,
+      lastNewAdvertisementsCount: 0,
+      elapsedHours: 0,
+      elapsedMinutes: 0,
+      elapsedSeconds: 0,
+      totalElapsedSeconds: 0,
+    };
     const currentParser: Parser | null = this.selectedParserSignal();
     if (!currentParser) return;
-    if (currentParser.id !== link.parserId) return;
-    const updatedLinks: ParserProfile[] = [link, ...currentParser.links];
+    if (currentParser.id !== linkWithNormalTime.parserId) return;
+    const updatedLinks: ParserProfile[] = [
+      linkWithNormalTime,
+      ...currentParser.links,
+    ];
     const updatedParser: Parser = { ...currentParser, links: updatedLinks };
     this.selectedParserSignal.set(updatedParser);
     this.updateParsersArray(updatedParser);

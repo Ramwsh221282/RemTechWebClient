@@ -29,6 +29,7 @@ import { UIChart } from 'primeng/chart';
 export class SpareParsersElapsedSecondsChartComponent {
   @Input({ required: true, alias: 'parser' })
   set _parser(value: SpareParser) {
+    console.log(value);
     this.parserSignal.set(value);
   }
 
@@ -38,7 +39,9 @@ export class SpareParsersElapsedSecondsChartComponent {
   }
 
   readonly parserSignal: WritableSignal<SpareParser>;
+
   readonly colorsSignal: WritableSignal<string[]>;
+
   readonly parserChartDataItemsSignal: Signal<ChartItem[]> = computed(
     (): ChartItem[] => {
       const links: SpareParserLink[] = this.parserSignal().links;
@@ -50,6 +53,7 @@ export class SpareParsersElapsedSecondsChartComponent {
       });
     },
   );
+
   readonly parserChartDataSignal: Signal<ChartDataItem> = computed(
     (): ChartDataItem => {
       const items: ChartItem[] = this.parserChartDataItemsSignal();
@@ -62,23 +66,31 @@ export class SpareParsersElapsedSecondsChartComponent {
       return { labels: labels, numerics: seconds };
     },
   );
+
   readonly chartStyleInformationSignal: Signal<ChartStyleInformation> =
     computed((): ChartStyleInformation => {
       return ChartStyleInformationFactory.createChartStyleInformation();
     });
+
   readonly chartData = computed(() => {
+    const labels: string[] = this.parserChartDataSignal().labels;
+    const numerics: number[] = this.parserChartDataSignal().numerics.map(
+      (n) => n / 3600,
+    );
+
     return {
-      labels: this.parserChartDataSignal().labels,
+      labels: labels,
       datasets: [
         {
-          label: 'Время парсинга (секунды)',
-          data: this.parserChartDataSignal().numerics,
+          label: 'Время парсинга (часы)',
+          data: numerics,
           borderWidth: 1,
           backgroundColor: this.colorsSignal(),
         },
       ],
     };
   });
+
   readonly chartOptions = computed(() => {
     const chartStyleInformation: ChartStyleInformation =
       this.chartStyleInformationSignal();
