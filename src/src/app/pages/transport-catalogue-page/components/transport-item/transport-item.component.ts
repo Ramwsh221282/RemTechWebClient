@@ -47,4 +47,8 @@ export class TransportItemComponent {
   public get itemHref(): string {
     return `transport-catalogue/categories/${this.item.categoryId}/brands/${this.item.brandId}/transports/${this.item.id}`;
   }
+
+  public hasPhoto(): boolean {
+    return this.item.photos.length > 0;
+  }
 }
