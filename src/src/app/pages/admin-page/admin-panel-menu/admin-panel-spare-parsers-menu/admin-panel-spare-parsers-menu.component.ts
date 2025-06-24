@@ -18,6 +18,7 @@ import { Title } from '@angular/platform-browser';
 import { SpareParserUpdateDetails } from './models/spare-parser-update-details';
 import { ArrayUtils } from '../../../../shared/utils/array-utils';
 import { SpareParserLinksFormComponent } from './components/spare-parser-links-form/spare-parser-links-form.component';
+import { Parser } from '../admin-panel-parsers-menu/types/parser';
 
 @Component({
   selector: 'app-admin-panel-spare-parsers-menu',
@@ -161,5 +162,9 @@ export class AdminPanelSpareParsersMenuComponent implements OnInit {
 
   public triggerError(message: string): void {
     MessageServiceUtils.showError(this._messageService, message);
+  }
+
+  public handleParserSelected(parser: SpareParser): void {
+    this.selectedSpareParserSignal.set(parser);
   }
 }
