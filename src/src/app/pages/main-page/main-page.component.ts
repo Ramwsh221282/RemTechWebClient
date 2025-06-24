@@ -17,6 +17,7 @@ import { CustomHttpErrorFactory } from '../../shared/types/CustomHttpError';
 import { Toast } from 'primeng/toast';
 import { Title } from '@angular/platform-browser';
 import { AuthDto } from '../../shared/services/auth-dto';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-main-page',
@@ -28,6 +29,7 @@ import { AuthDto } from '../../shared/services/auth-dto';
     MainPageAdvantagesBlockComponent,
     MainPageAnalyticsBlockComponent,
     Toast,
+    NgOptimizedImage,
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
@@ -47,7 +49,7 @@ export class MainPageComponent implements OnInit {
     usersService: UsersService,
     title: Title,
   ) {
-    title.setTitle('Агрегатор лесозаготовительной спец. техники')
+    title.setTitle('Агрегатор лесозаготовительной спец. техники');
     this._messageService = messageService;
     this._usersService = usersService;
     this._advertisementsHttpService = advertisementsHttpService;
@@ -101,20 +103,25 @@ export class MainPageComponent implements OnInit {
   public acceptUserAuthorization($event: AuthDto): void {
     this.isAuthLoadingSignal.set(true);
 
-    this._usersService.auth($event)
-      .pipe(finalize(() => {
-        this.isAuthLoadingSignal.set(false);
-      }), catchError((err) => {
-        const error = CustomHttpErrorFactory.AsHttpError(err);
-        MessageServiceUtils.showError(this._messageService, error.message);
-        return new Observable<never>();
-      })).subscribe((response) => {
+    this._usersService
+      .auth($event)
+      .pipe(
+        finalize(() => {
+          this.isAuthLoadingSignal.set(false);
+        }),
+        catchError((err) => {
+          const error = CustomHttpErrorFactory.AsHttpError(err);
+          MessageServiceUtils.showError(this._messageService, error.message);
+          return new Observable<never>();
+        }),
+      )
+      .subscribe((response) => {
         if (response.code === 200) {
           const message = 'Авторизация прошла успешно.';
           MessageServiceUtils.showStickySuccess(this._messageService, message);
           this.isAuthorizedSignal.set(true);
         }
-    })
+      });
   }
 
   private isEmailValid(dto: UserRegisterDto): boolean {

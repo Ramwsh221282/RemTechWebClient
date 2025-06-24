@@ -1,5 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SpareViewModel, SpareViewModelFactory } from '../../types/spare-viewmodel';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import {
+  SpareViewModel,
+  SpareViewModelFactory,
+} from '../../types/spare-viewmodel';
 import { Chip } from 'primeng/chip';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -30,5 +39,9 @@ export class SpareItemComponent {
   public showPhotoGallery($event: MouseEvent): void {
     $event.stopPropagation();
     this.spareSelected.emit(this.spare);
+  }
+
+  public hasPhoto(): boolean {
+    return this.spare.photos.length > 0;
   }
 }
