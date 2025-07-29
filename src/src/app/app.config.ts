@@ -34,6 +34,9 @@ import { expiredTokenInterceptor } from './shared/middleware/expired-token.inter
 import { tokenApplyInterceptor } from './shared/middleware/token-apply.interceptor';
 import { SpareParserHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spare-parser-http.service';
 import { SparesHttpService } from './pages/admin-page/admin-panel-menu/admin-panel-spare-parsers-menu/services/spares-http.service';
+import { ApiVehicleKindSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclekindsource';
+import { ApiVehicleBrandsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclebrandssource';
+import { ApiVehicleModelsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclemodelssource';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -71,7 +74,9 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
       ]),
     ),
-
+    ApiVehicleKindSource,
+    ApiVehicleBrandsSource,
+    ApiVehicleModelsSource,
     AppMenuService,
     AdvertisementsHttpService,
     TransportItemHttpService,
