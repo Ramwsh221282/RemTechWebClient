@@ -11,13 +11,6 @@ import { AnimationsFactory } from './shared/animations/animations-factory';
   imports: [ButtonModule, HeaderComponent, SidebarComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  animations: [
-    AnimationsFactory.expandCollapseAnimation(
-      'grid-template-columns',
-      '300px 1fr',
-      '85px 1fr',
-    ),
-  ],
 })
 export class AppComponent {
   private readonly _appMenuService: AppMenuService;
@@ -28,6 +21,10 @@ export class AppComponent {
 
   public get isSideBarVisible(): boolean {
     return this._appMenuService.isSideBarVisible;
+  }
+
+  public acceptSideBarClose(): void {
+    this._appMenuService.turnSideBarVisibility();
   }
 
   public onAnimationStart(event: any) {

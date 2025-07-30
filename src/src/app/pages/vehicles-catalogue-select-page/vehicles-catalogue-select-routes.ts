@@ -8,4 +8,11 @@ export const VehicleCatalogueSelectRoutes: Routes = [
         (c) => c.VehiclesCatalogueSelectPageComponent,
       ),
   },
+  {
+    path: 'vehicles/kinds/:kindId/brands/:brandId/models/:modelId/catalogue',
+    loadComponent: () =>
+      import(
+        '../vehicles-catalogue-page/vehicles-catalogue-page.component'
+      ).then((c) => c.VehiclesCataloguePageComponent),
+  },
 ];

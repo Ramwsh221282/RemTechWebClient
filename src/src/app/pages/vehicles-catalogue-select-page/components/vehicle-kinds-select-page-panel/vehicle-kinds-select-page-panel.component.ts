@@ -28,7 +28,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './vehicle-kinds-select-page-panel.component.scss',
 })
 export class VehicleKindsSelectPagePanelComponent implements OnInit {
-  @Output() kindSelected = new EventEmitter<VehicleKind>();
+  @Output() kindSelected: EventEmitter<VehicleKind> =
+    new EventEmitter<VehicleKind>();
   private readonly _kinds: WritableSignal<VehicleKind[]>;
   private readonly _kindsLoading: WritableSignal<boolean>;
   private readonly _kindsSource: VehicleKindSource;

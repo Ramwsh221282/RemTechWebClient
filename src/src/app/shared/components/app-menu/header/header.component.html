@@ -8,37 +8,5 @@
       (onClick)="onMenuButtonClick($event)">
       <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo"/>
     </p-button>
-    <p-button
-      [icon]="'pi pi-home'"
-      [fluid]="true"
-      [size]="'large'"
-      [routerLink]="''"
-      label="Главная">
-    </p-button>
-  </div>
-  <div class="header-menu-part">
-    <p-button
-      *ngIf="!isAuthorized"
-      [fluid]="true"
-      [size]="'large'"
-      [icon]="'pi pi-user-plus'"
-      [label]="'Регистрация'"
-      [routerLink]="'users/registration'"
-    />
-    <p-button
-      *ngIf="!isAuthorized"
-      [fluid]="true"
-      [size]="'large'"
-      [icon]="'pi pi-sign-in'"
-      [label]="'Авторизация'"
-      [routerLink]="'users/authorization'"
-    />
-    <p-button
-      *ngIf="isAuthorized"
-      [fluid]="true"
-      [size]="'large'"
-      [icon]="'pi pi-user'"
-      [label]="'Профиль'"
-    />
   </div>
 </nav>

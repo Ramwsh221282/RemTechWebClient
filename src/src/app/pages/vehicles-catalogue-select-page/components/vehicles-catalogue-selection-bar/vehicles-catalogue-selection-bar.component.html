@@ -1,0 +1,16 @@
+<p-toolbar>
+  <ng-template #start>
+    <div class="flex flex-row flex-wrap gap-2 sm:flex-col">
+      <p-badge [severity]="'contrast'" [value]="kindName"/>
+      <p-badge [severity]="'contrast'" [value]="brandName"/>
+      <p-badge [severity]="'contrast'" [value]="modelName"/>
+    </div>
+  </ng-template>
+  <ng-template #center>
+    <h5 class="text-lg font-bold">Параметры каталога</h5>
+  </ng-template>
+  <ng-template #end>
+    <p-button [style]="{ color: 'black' }" [severity]="buttonSeverity" [disabled]="!buttonAvailability"
+              [label]="'Перейти в каталог'" (onClick)="goToCatalogue()"/>
+  </ng-template>
+</p-toolbar>

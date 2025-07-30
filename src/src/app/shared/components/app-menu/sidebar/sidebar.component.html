@@ -1,11 +1,79 @@
-<aside class="side-bar-layout bg-primary-500 shadowed">
-  <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'" [isLabelShown]="isExpanded"
-                       [navigationRoute]="'vehicles'"></app-side-bar-button>
-  <app-side-bar-button [label]="'Запчасти'" [icon]="'pi pi-wrench'" [isLabelShown]="isExpanded"
-                       [navigationRoute]="'spares/catalogue'">
-
-  </app-side-bar-button>
-  <app-side-bar-button [label]="'Администрирование'" [icon]="'pi pi-warehouse'" [isLabelShown]="isExpanded"
-                       [navigationRoute]="'admin'">
-  </app-side-bar-button>
-</aside>
+<p-drawer [visible]="isExpanded" [dismissible]="false">
+  <ng-template #headless>
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between px-6 pt-4 shrink-0">
+        <span class="inline-flex items-center gap-2">
+          <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo"/>
+          <span>Навигационное меню</span>
+        </span>
+        <span>
+          <p-button type="button"
+                    [icon]="'pi pi-times'"
+                    [severity]="'contrast'"
+                    [rounded]="true"
+                    [outlined]="true"
+                    [style]="{ color: 'black' }"
+                    (onClick)="closeClick()"
+                    styleClass="h-8 w-8"/>
+        </span>
+      </div>
+      <div class="overflow-auto">
+        <ul class="list-none p-4 m-0 flex flex-col gap-2">
+          <li>
+            <p-button
+              [style]="{color:'black'}"
+              [icon]="'pi pi-home'"
+              [fluid]="true"
+              [size]="'large'"
+              [routerLink]="''"
+              label="Главная">
+            </p-button>
+          </li>
+          <li>
+            <!--            *ngIf="!isAuthorized"-->
+            <p-button
+              [style]="{color:'black'}"
+              [fluid]="true"
+              [size]="'large'"
+              [icon]="'pi pi-user-plus'"
+              [label]="'Регистрация'"
+              [routerLink]="'users/registration'"
+            />
+          </li>
+          <li>
+            <!--            *ngIf="!isAuthorized"-->
+            <p-button
+              [style]="{color:'black'}"
+              [fluid]="true"
+              [size]="'large'"
+              [icon]="'pi pi-sign-in'"
+              [label]="'Авторизация'"
+              [routerLink]="'users/authorization'"
+            />
+          </li>
+          <li>
+<!--            *ngIf="!isAuthorized"-->
+            <p-button
+              [style]="{color:'black'}"
+              [fluid]="true"
+              [size]="'large'"
+              [icon]="'pi pi-user'"
+              [label]="'Профиль'"
+            />
+          </li>
+          <li>
+            <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'" [isLabelShown]="isExpanded"
+                                 [navigationRoute]="'vehicles'"/>
+          </li>
+          <li>
+            <app-side-bar-button [label]="'Запчасти'" [icon]="'pi pi-wrench'" [isLabelShown]="isExpanded"
+                                 [navigationRoute]="'spares/catalogue'"/>
+          </li>
+          <li>
+            <app-side-bar-button [label]="'Администрирование'" [icon]="'pi pi-warehouse'" [isLabelShown]="isExpanded"
+                                 [navigationRoute]="'admin'"/>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
