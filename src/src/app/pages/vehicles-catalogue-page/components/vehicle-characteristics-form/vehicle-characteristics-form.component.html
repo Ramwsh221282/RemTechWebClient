@@ -1,0 +1,20 @@
+<p-panel [header]="'Фильтр характеристик'">
+  <div class="flex flex-col gap-2 p-2">
+    @for (ctx of characteristics; track ctx.id) {
+      <p-select
+        [fluid]="true"
+        [size]="'small'"
+        [placeholder]="
+              `${ctx.name === 'Эксплуатационная масса' ? 'масса' : ctx.name }
+              ${ctx.measure === 'Б/у' ? '' : ctx.name === 'Моточасы' ? '' : ctx.name === 'Год выпуска' ? '' : ctx.measure}`"
+        [options]="ctx.values.values"
+      >
+        <ng-template let-value #item>
+          <label class="text-xs sm:text-sm md:text-base">
+            {{ value }}
+          </label>
+        </ng-template>
+      </p-select>
+    }
+  </div>
+</p-panel>

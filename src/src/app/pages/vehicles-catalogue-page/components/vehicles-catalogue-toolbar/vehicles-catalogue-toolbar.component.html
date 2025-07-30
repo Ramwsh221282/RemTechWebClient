@@ -1,0 +1,31 @@
+<p-menubar [model]="menuItems()">
+  <ng-template #start>
+    <span class="font-bold text-xs sm:text-sm md:text-base">Параметры:</span>
+  </ng-template>
+
+  <ng-template #item let-item let-root="root">
+    <a pRipple class="flex items-center p-menubar-item-link px-2 sm:px-3 md:px-4">
+      <span class="font-bold underline text-xs sm:text-sm md:text-base">{{ item.label }}</span>
+      <p-badge
+        *ngIf="item.badge"
+        [ngClass]="{ 'ml-auto': !root, 'ml-1 sm:ml-2': root }"
+        [value]="item.badge"
+      />
+    </a>
+  </ng-template>
+
+  <ng-template #end>
+    <p-select
+      [options]="regions"
+      [optionLabel]="'name'"
+      [placeholder]="'Регион'"
+      class="text-xs sm:text-xs md:text-base"
+    >
+      <ng-template let-region #item>
+        <label class="text-xs sm:text-xs md:text-base">
+          {{ region.name + ' ' + region.kind }}
+        </label>
+      </ng-template>
+    </p-select>
+  </ng-template>
+</p-menubar>

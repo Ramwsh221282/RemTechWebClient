@@ -15,10 +15,21 @@ import {
   BaseVehiclesCatalogueQuery,
   VehiclesCatalogueQuery,
 } from './Models/Query/VehiclesCatalogueQuery';
+import { VehiclesCatalogueToolbarComponent } from './components/vehicles-catalogue-toolbar/vehicles-catalogue-toolbar.component';
+import { Panel } from 'primeng/panel';
+import { Select } from 'primeng/select';
+import { VehicleCharacteristicsFormComponent } from './components/vehicle-characteristics-form/vehicle-characteristics-form.component';
+import { Badge } from 'primeng/badge';
 
 @Component({
   selector: 'app-vehicles-catalogue-page',
-  imports: [],
+  imports: [
+    VehiclesCatalogueToolbarComponent,
+    Panel,
+    Select,
+    VehicleCharacteristicsFormComponent,
+    Badge,
+  ],
   templateUrl: './vehicles-catalogue-page.component.html',
   styleUrl: './vehicles-catalogue-page.component.scss',
 })
@@ -28,12 +39,31 @@ export class VehiclesCataloguePageComponent implements OnInit {
   private readonly _isLoading: WritableSignal<boolean>;
   private readonly _query: WritableSignal<VehiclesCatalogueQuery>;
   private readonly _httpClient: HttpClient;
+  private readonly _currentKindId: WritableSignal<string>;
+  private readonly _currentBrandId: WritableSignal<string>;
+  private readonly _currentModelId: WritableSignal<string>;
+  private readonly _catalogueData: WritableSignal<VehiclesCatalogue>;
 
   constructor(activatedRoute: ActivatedRoute, httpClient: HttpClient) {
     this._activatedRoute = activatedRoute;
     this._isLoading = signal(false);
     this._query = signal(BaseVehiclesCatalogueQuery.default());
     this._httpClient = httpClient;
+    this._currentKindId = signal('');
+    this._currentBrandId = signal('');
+    this._currentModelId = signal('');
+    this._catalogueData = signal({
+      vehicles: [],
+      aggregatedData: {
+        totalCount: 0,
+        pagesCount: 0,
+        averagePrice: 0,
+        maximalPrice: 0,
+        minimalPrice: 0,
+      },
+      characteristics: { characteristics: [] },
+      geoLocations: [],
+    });
   }
 
   public ngOnInit(): void {
@@ -42,6 +72,9 @@ export class VehiclesCataloguePageComponent implements OnInit {
       const brandId = params['brandId'] as string;
       const modelId = params['modelId'] as string;
       const page = 1;
+      this._currentKindId.set(kindId);
+      this._currentModelId.set(modelId);
+      this._currentBrandId.set(brandId);
       const query = new BaseVehiclesCatalogueQuery(
         kindId,
         brandId,
@@ -58,7 +91,7 @@ export class VehiclesCataloguePageComponent implements OnInit {
         )
         .subscribe({
           next: (data: VehiclesCatalogue): void => {
-            console.log(data);
+            this._catalogueData.set(data);
           },
           error: (err: HttpErrorResponse): void => {
             console.log(err);
@@ -68,5 +101,21 @@ export class VehiclesCataloguePageComponent implements OnInit {
         new BaseVehiclesCatalogueQuery(kindId, brandId, modelId, page),
       );
     });
+  }
+
+  public get currentKindId(): string {
+    return this._currentKindId();
+  }
+
+  public get currentBrandId(): string {
+    return this._currentBrandId();
+  }
+
+  public get currentModelId(): string {
+    return this._currentModelId();
+  }
+
+  public get catalogueData(): VehiclesCatalogue {
+    return this._catalogueData();
   }
 }
