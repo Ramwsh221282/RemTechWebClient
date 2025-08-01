@@ -2,10 +2,13 @@ import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { VehiclesCatalogueCharacteristicsDictionaryEntry } from '../../Models/Catalogue/CatalogueVehicle';
 import { Panel } from 'primeng/panel';
 import { Select } from 'primeng/select';
+import { InputText } from 'primeng/inputtext';
+import { InputNumber } from 'primeng/inputnumber';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-vehicle-characteristics-form',
-  imports: [Panel, Select],
+  imports: [Panel, Select, InputText, InputNumber, Checkbox],
   templateUrl: './vehicle-characteristics-form.component.html',
   styleUrl: './vehicle-characteristics-form.component.scss',
 })

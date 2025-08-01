@@ -1,19 +1,21 @@
-<p-menubar [model]="menuItems()">
+<p-toolbar>
   <ng-template #start>
-    <span class="font-bold text-xs sm:text-sm md:text-base">Параметры:</span>
+    <section class="flex flex-row gap-4 items-center">
+      <p-button [size]="'small'" [label]="'Поменять навигацию'" (click)="turnChangeNavigationDialogVisibility()" />
+      <label class="inline-flex gap-1">
+        <span class="font-bold">Тип техники:</span>
+        <span class="underline">{{ currentKindName }}</span>
+      </label>
+      <label class="inline-flex gap-1">
+        <span class="font-bold">Марка:</span>
+        <span class="underline">{{ currentBrandName }}</span>
+      </label>
+      <label class="inline-flex gap-1">
+        <span class="font-bold">Модель:</span>
+        <span class="underline">{{ currentModelName }}</span>
+      </label>
+    </section>
   </ng-template>
-
-  <ng-template #item let-item let-root="root">
-    <a pRipple class="flex items-center p-menubar-item-link px-2 sm:px-3 md:px-4">
-      <span class="font-bold underline text-xs sm:text-sm md:text-base">{{ item.label }}</span>
-      <p-badge
-        *ngIf="item.badge"
-        [ngClass]="{ 'ml-auto': !root, 'ml-1 sm:ml-2': root }"
-        [value]="item.badge"
-      />
-    </a>
-  </ng-template>
-
   <ng-template #end>
     <p-select
       [options]="regions"
@@ -28,4 +30,11 @@
       </ng-template>
     </p-select>
   </ng-template>
-</p-menubar>
+</p-toolbar>
+<app-vehicles-select-navigation-change-dialog *ngIf="changeNavigationDialogVisibility"
+                                              (navigationParamsChange)="acceptNavigationChange($event)"
+                                              [visibility_setter]="changeNavigationDialogVisibility"
+                                              [current_brand_setter]="currentBrand"
+                                              [current_kind_setter]="currentKind"
+                                              [current_model_setter]="currentModel"
+                                              (dialogClosed)="turnOffChangeNavigationDialogVisibility()" />

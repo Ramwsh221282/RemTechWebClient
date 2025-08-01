@@ -4,24 +4,25 @@
     [brand_id_setter]="currentBrandId"
     [model_id_setter]="currentModelId"
     [regions_setter]="catalogueData.geoLocations"
+    (navigationChanged)="acceptNavigationChange($event)"
   />
-  <div class="grid grid-cols-12 row-span-1">
+  <div class="grid grid-cols-12 row-span-1 gap-1 p-1">
     <div class="col-span-12 md:col-span-3">
       <app-vehicle-characteristics-form
         [characteristics_setter]="catalogueData.characteristics.characteristics"
       />
     </div>
     <div class="col-span-12 md:col-span-9">
-      <p-panel>
+      <p-panel [styleClass]="'custom-panel'">
         <ng-template #header>
-          <div class="sm:grid sm:grid-cols-4 sm:grid-rows-2 gap-1 sm:gap-1">
-            <p-badge [value]="'Количество ' + catalogueData.aggregatedData.totalCount"/>
-            <p-badge [value]="'Ср. цена ' + catalogueData.aggregatedData.averagePrice"/>
-            <p-badge [value]="'Мин. цена ' + catalogueData.aggregatedData.minimalPrice"/>
-            <p-badge [value]="'Макс. цена ' + catalogueData.aggregatedData.maximalPrice"/>
+          <div class="sm:grid sm:grid-cols-4 sm:grid-rows-2 gap-1 sm:gap-1 p-1">
+            <p-badge [value]="'Количество ' + catalogueData.aggregatedData.totalCount" />
+            <p-badge [value]="'Ср. цена ' + catalogueData.aggregatedData.averagePrice" />
+            <p-badge [value]="'Мин. цена ' + catalogueData.aggregatedData.minimalPrice" />
+            <p-badge [value]="'Макс. цена ' + catalogueData.aggregatedData.maximalPrice" />
           </div>
         </ng-template>
-        <label>123</label>
+        <app-vehicles-data-view [vehicles_setter]="catalogueData.vehicles" />
       </p-panel>
     </div>
   </div>

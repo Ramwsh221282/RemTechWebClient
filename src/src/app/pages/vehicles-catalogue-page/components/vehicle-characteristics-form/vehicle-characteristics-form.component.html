@@ -16,5 +16,13 @@
         </ng-template>
       </p-select>
     }
+    <div class="grid grid-cols-2 grid-rows-2 gap-1">
+      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена от'"/>
+      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена до'"/>
+      <div class="flex flex-row gap-5">
+        <label>с НДС</label>
+        <p-checkbox/>
+      </div>
+    </div>
   </div>
 </p-panel>

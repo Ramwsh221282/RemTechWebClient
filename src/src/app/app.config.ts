@@ -37,6 +37,9 @@ import { SparesHttpService } from './pages/admin-page/admin-panel-menu/admin-pan
 import { ApiVehicleKindSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclekindsource';
 import { ApiVehicleBrandsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclebrandssource';
 import { ApiVehicleModelsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclemodelssource';
+import { BasicVehicleBrandsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleBrandsSource';
+import { BasicVehicleKindsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleKindsSource';
+import { BasicVehicleModelsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleModelsSource';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -74,6 +77,9 @@ export const appConfig: ApplicationConfig = {
         authInterceptor,
       ]),
     ),
+    BasicVehicleBrandsSource,
+    BasicVehicleKindsSource,
+    BasicVehicleModelsSource,
     ApiVehicleKindSource,
     ApiVehicleBrandsSource,
     ApiVehicleModelsSource,

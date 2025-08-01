@@ -147,6 +147,120 @@ export class VehiclesCatalogueQueryWithLocation
   }
 }
 
+export class VehicleCatalogueQueryWithOtherModel
+  implements VehiclesCatalogueQuery
+{
+  private readonly _modelId: string;
+  private readonly _origin: VehiclesCatalogueQuery;
+  constructor(modelId: string, origin: VehiclesCatalogueQuery) {
+    this._modelId = modelId;
+    this._origin = origin;
+  }
+
+  bodyObject(): object {
+    return {
+      ...this._origin.bodyObject(),
+      modelId: { id: this._modelId },
+    };
+  }
+
+  query(
+    kindId: string,
+    brandId: string,
+    modelId: string,
+    httpClient: HttpClient,
+  ): Observable<VehiclesCatalogue> {
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const body = this.bodyObject();
+    return httpClient.post<VehiclesCatalogue>(url, body);
+  }
+}
+
+export class VehicleCatalogueQueryWithOtherPage
+  implements VehiclesCatalogueQuery
+{
+  private readonly _page: number;
+  private readonly _origin: VehiclesCatalogueQuery;
+  constructor(page: number, origin: VehiclesCatalogueQuery) {
+    this._page = page;
+    this._origin = origin;
+  }
+
+  bodyObject(): object {
+    return {
+      ...this._origin.bodyObject(),
+      pagination: { page: this._page },
+    };
+  }
+
+  query(
+    kindId: string,
+    brandId: string,
+    modelId: string,
+    httpClient: HttpClient,
+  ): Observable<VehiclesCatalogue> {
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const body = this.bodyObject();
+    return httpClient.post<VehiclesCatalogue>(url, body);
+  }
+}
+
+export class VehicleCatalogueQueryWithOtherBrand
+  implements VehiclesCatalogueQuery
+{
+  private readonly _brandId: string;
+  private readonly _origin: VehiclesCatalogueQuery;
+  constructor(brandId: string, origin: VehiclesCatalogueQuery) {
+    this._brandId = brandId;
+    this._origin = origin;
+  }
+
+  bodyObject(): object {
+    return {
+      ...this._origin.bodyObject(),
+      brandId: { id: this._brandId },
+    };
+  }
+
+  query(
+    kindId: string,
+    brandId: string,
+    modelId: string,
+    httpClient: HttpClient,
+  ): Observable<VehiclesCatalogue> {
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const body = this.bodyObject();
+    return httpClient.post<VehiclesCatalogue>(url, body);
+  }
+}
+
+export class VehicleCatalogueQueryOtherKind implements VehiclesCatalogueQuery {
+  private readonly _kindId: string;
+  private readonly _origin: VehiclesCatalogueQuery;
+  constructor(kindId: string, origin: VehiclesCatalogueQuery) {
+    this._kindId = kindId;
+    this._origin = origin;
+  }
+
+  bodyObject(): object {
+    return {
+      ...this._origin.bodyObject(),
+      kindId: { id: this._kindId },
+    };
+  }
+
+  query(
+    kindId: string,
+    brandId: string,
+    modelId: string,
+    httpClient: HttpClient,
+  ): Observable<VehiclesCatalogue> {
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const body = this.bodyObject();
+    return httpClient.post<VehiclesCatalogue>(url, body);
+  }
+}
+
 export class BaseVehiclesCatalogueQuery implements VehiclesCatalogueQuery {
   private readonly _kindId: string;
   private readonly _brandId: string;
