@@ -1,0 +1,65 @@
+<p-data-view #dv [value]="vehicles" [layout]="'grid'">
+  <ng-template #grid let-items>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-1">
+      <div *ngFor="let item of items"
+           class="group relative bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-200 dark:border-gray-700 flex flex-col h-full">
+        <div class="relative overflow-hidden">
+          @if (item.photos.photos.length > 0) {
+            <img
+              class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+              [src]="item.photos.photos[0].source"
+              [alt]="item.model.name"
+            />
+          } @else {
+            <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                 [src]="'images/no_photo.png'"
+                 [alt]="item.model.name" />
+          }
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+        <div class="p-4 space-y-3 flex-grow overflow-y-auto">
+          <div class="space-y-1">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ item.kind.name }}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
+              <span class="font-bold">{{ item.brand.name }}</span>
+              <span class="text-gray-400 font-bold">•</span>
+              <span class="font-bold">{{ item.model.name }}</span>
+            </p>
+          </div>
+          <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
+            <div class="space-y-2">
+              <div *ngFor="let ctx of item.characteristics.characteristics"
+                   class="flex items-center justify-between text-sm py-1.5 px-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <span class="font-medium text-gray-700 dark:text-gray-300">
+              {{ ctx.name === 'Эксплуатационная масса' ? 'Масса' : ctx.name }}
+            </span>
+                <span class="text-gray-900 dark:text-white font-medium">
+              {{ ctx.value }} {{ ctx.name === 'Б/у' ? '' : ctx.measure }}
+            </span>
+              </div>
+              <div class="flex flex-row gap-1 w-full">
+                <p-badge [value]="`${'Цена:' + item.price.price}`" [severity]="'secondary'" />
+                <p-badge [value]="itemNdsString(item)" [severity]="'secondary'" />
+              </div>
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-white transition-colors">{{ item.region.name + ' ' + item.region.kind }}</label>
+            </div>
+          </div>
+        </div>
+        <div
+          class="px-4 py-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center flex-shrink-0">
+          <button
+            class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">
+            Подробнее
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #footer>
+    <ng-content>
+      
+    </ng-content>
+  </ng-template>
+</p-data-view>

@@ -3,8 +3,17 @@
     return value.trim().length === 0;
   }
 
+  public static anyEmpty(values: string[]): boolean {
+    for (const value of values) {
+      if (value.trim().length === 0) return true;
+    }
+    return false;
+  }
+
   public static isEmailValid(value: string): boolean {
-    const emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    const emailRegex = new RegExp(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
     return emailRegex.test(value);
   }
 
