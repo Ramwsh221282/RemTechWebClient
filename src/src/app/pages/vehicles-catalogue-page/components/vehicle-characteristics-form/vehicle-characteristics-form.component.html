@@ -1,30 +1,40 @@
 <p-panel [header]="'Фильтр характеристик'">
-  <div class="flex flex-col gap-2 p-2">
+  <div class="flex flex-col gap-3 p-2">
     @for (ctx of characteristics; track ctx.ctxId) {
-      <p-select
-        [fluid]="true"
-        [size]="'small'"
-        [placeholder]="
-              `${ctx.ctxName === 'Эксплуатационная масса' ? 'масса' : ctx.ctxName }
-              ${ctx.ctxMeasure === 'Б/у' ? '' : ctx.ctxName === 'Моточасы' ? '' : ctx.ctxName === 'Год выпуска' ? '' : ctx.ctxMeasure}`"
-        [options]="ctx.values"
-        optionLabel="ctxValue"
-        (onChange)="characteristicPicked($event)"
-      >
-        <ng-template let-value #item>
-          <label class="text-xs sm:text-sm md:text-base">
-            {{ value.ctxValue }}
-          </label>
-        </ng-template>
-      </p-select>
-    }
-    <div class="grid grid-cols-2 grid-rows-2 gap-1">
-      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена от'" />
-      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена до'" />
-      <div class="flex flex-row gap-5">
-        <label>с НДС</label>
-        <p-checkbox />
+      <div class="flex flex-row gap-2 items-center justify-between w-full">
+        <p-select class="flex-1"
+                  [fluid]="true"
+                  [size]="'small'"
+                  [placeholder]="
+        `${ctx.ctxName === 'Эксплуатационная масса' ? 'масса' : ctx.ctxName }
+        ${ctx.ctxMeasure === 'Б/у' ? '' : ctx.ctxName === 'Моточасы' ? '' : ctx.ctxName === 'Год выпуска' ? '' : ctx.ctxMeasure}`"
+                  [options]="ctx.values"
+                  optionLabel="ctxValue"
+                  [ngModel]="ctx.selectedValue"
+                  (onChange)="characteristicPicked($event)"
+        >
+          <ng-template #selectedItem let-selectedOption>
+            <div class="flex items-center gap-2 justify-between">
+              <label>{{ selectedOption.ctxValue }}</label>
+            </div>
+          </ng-template>
+          <ng-template let-value #item>
+            <label class="text-xs sm:text-sm md:text-base">
+              {{ value.ctxValue }}
+            </label>
+          </ng-template>
+        </p-select>
+        <p-button *ngIf="ctx.selectedValue"
+                  [style]="{width:'18px', height: '18px', 'margin-top':'2px'}"
+                  [rounded]="true"
+                  [severity]="'contrast'"
+                  [outlined]="true"
+                  (onClick)="clearSelection(ctx.ctxId, $event)"
+                  [icon]="'pi pi-times'" />
       </div>
-    </div>
+    }
+    <ng-content>
+      
+    </ng-content>
   </div>
 </p-panel>

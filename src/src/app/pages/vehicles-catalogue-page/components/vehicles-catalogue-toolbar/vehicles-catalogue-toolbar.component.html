@@ -1,7 +1,8 @@
 <p-toolbar>
   <ng-template #start>
     <section class="flex flex-row gap-4 items-center">
-      <p-button [size]="'small'" [label]="'Поменять навигацию'" (click)="turnChangeNavigationDialogVisibility()" />
+      <p-button [style]="{color:'black'}" [size]="'small'" [label]="'Поменять навигацию'"
+                (click)="turnChangeNavigationDialogVisibility()" />
       <label class="inline-flex gap-1">
         <span class="font-bold">Тип техники:</span>
         <span class="underline">{{ currentKindName }}</span>
@@ -17,18 +18,9 @@
     </section>
   </ng-template>
   <ng-template #end>
-    <p-select
-      [options]="regions"
-      [optionLabel]="'name'"
-      [placeholder]="'Регион'"
-      class="text-xs sm:text-xs md:text-base"
-    >
-      <ng-template let-region #item>
-        <label class="text-xs sm:text-xs md:text-base">
-          {{ region.name + ' ' + region.kind }}
-        </label>
-      </ng-template>
-    </p-select>
+    <ng-content>
+
+    </ng-content>
   </ng-template>
 </p-toolbar>
 <app-vehicles-select-navigation-change-dialog *ngIf="changeNavigationDialogVisibility"

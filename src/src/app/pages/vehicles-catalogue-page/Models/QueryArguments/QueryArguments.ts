@@ -53,6 +53,54 @@ export class VehiclesCatalogueQueryPriceSpecification {
     this._endAt = endAt;
   }
 
+  public withoutPriceFrom(): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(
+      this._isNds,
+      null,
+      this._endAt,
+    );
+  }
+
+  public withoutPriceTo(): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(
+      this._isNds,
+      this._startFrom,
+      null,
+    );
+  }
+
+  public reset(): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(null, null, null);
+  }
+
+  public withStartFrom(
+    value: number,
+  ): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(
+      this._isNds,
+      value,
+      this._endAt,
+    );
+  }
+
+  public withEndAt(value: number): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(
+      this._isNds,
+      this._startFrom,
+      value,
+    );
+  }
+
+  public withNdsSpecification(
+    isNds: boolean,
+  ): VehiclesCatalogueQueryPriceSpecification {
+    return new VehiclesCatalogueQueryPriceSpecification(
+      isNds,
+      this._startFrom,
+      this._endAt,
+    );
+  }
+
   public addTo(query: VehiclesCatalogueQuery): VehiclesCatalogueQuery {
     return new VehiclesCatalogueQueryWithPrice(query, this);
   }
@@ -76,6 +124,14 @@ export class VehiclesCatalogueQueryCharacteristicsList {
 
   public addTo(query: VehiclesCatalogueQuery): VehiclesCatalogueQuery {
     return new VehiclesCatalogueQueryWithCharacteristics(query, this);
+  }
+
+  public removeById(id: string): VehiclesCatalogueQueryCharacteristicsList {
+    const withoutItem: VehiclesCatalogueQueryCharacteristic[] =
+      this._characteristics.filter(
+        (c: VehiclesCatalogueQueryCharacteristic): boolean => c.id !== id,
+      );
+    return new VehiclesCatalogueQueryCharacteristicsList(withoutItem);
   }
 
   public accept(

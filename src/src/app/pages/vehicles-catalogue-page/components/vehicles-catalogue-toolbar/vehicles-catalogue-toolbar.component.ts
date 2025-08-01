@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { VehiclesCatalogueGeoLocations } from '../../Models/Catalogue/CatalogueVehicle';
 import { Select } from 'primeng/select';
 import { BasicVehicleKindsSource } from '../../services/data-sources/BasicVehicleKindsSource';
 import { BasicVehicleKind } from '../../types/BasicVehicleKind';
@@ -43,7 +42,6 @@ export class VehiclesCatalogueToolbarComponent {
   private readonly _currentKindId: WritableSignal<string>;
   private readonly _currentBrandId: WritableSignal<string>;
   private readonly _currentModelId: WritableSignal<string>;
-  private readonly _regions: WritableSignal<VehiclesCatalogueGeoLocations[]>;
   private readonly _currentKind: WritableSignal<BasicVehicleKind | null>;
   private readonly _currentModel: WritableSignal<BasicVehicleModel | null>;
   private readonly _currentBrand: WritableSignal<BasicVehicleBrand | null>;
@@ -68,7 +66,6 @@ export class VehiclesCatalogueToolbarComponent {
     this._currentKind = signal(null);
     this._currentModel = signal(null);
     this._currentBrand = signal(null);
-    this._regions = signal([]);
     this._kinds = signal([]);
     this._brands = signal([]);
     this._models = signal([]);
@@ -154,14 +151,6 @@ export class VehiclesCatalogueToolbarComponent {
     if (!this._isModelsFirstlyInited) {
       this._currentModelId.set(value);
     }
-  }
-
-  @Input() set regions_setter(value: VehiclesCatalogueGeoLocations[]) {
-    this._regions.set(value);
-  }
-
-  public get regions(): VehiclesCatalogueGeoLocations[] {
-    return this._regions();
   }
 
   public get currentKindName(): string {

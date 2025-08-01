@@ -1,44 +1,41 @@
-import {
-  Component,
-  DestroyRef,
-  effect,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { finalize } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { VehiclesCatalogue } from './Models/Catalogue/CatalogueVehicle';
 import {
   BaseVehiclesCatalogueQuery,
   VehicleCatalogueQueryOtherKind,
   VehicleCatalogueQueryWithOtherBrand,
   VehicleCatalogueQueryWithOtherModel,
+  VehicleCatalogueQueryWithOtherPage,
   VehiclesCatalogueQuery,
   VehiclesCatalogueQueryWithCharacteristics,
+  VehiclesCatalogueQueryWithLocation,
+  VehiclesCatalogueQueryWithPrice,
 } from './Models/Query/VehiclesCatalogueQuery';
 import { VehiclesCatalogueToolbarComponent } from './components/vehicles-catalogue-toolbar/vehicles-catalogue-toolbar.component';
 import { Panel } from 'primeng/panel';
-import { Select } from 'primeng/select';
 import { VehicleCharacteristicsFormComponent } from './components/vehicle-characteristics-form/vehicle-characteristics-form.component';
-import { Badge } from 'primeng/badge';
 import { VehiclesDataViewComponent } from './components/vehicles-data-view/vehicles-data-view.component';
-import { ScrollPanel } from 'primeng/scrollpanel';
-import { StringUtils } from '../../shared/utils/string-utils';
-import { VehiclesSelectNavigationChangeDialogComponent } from './components/vehicles-select-navigation-change-dialog/vehicles-select-navigation-change-dialog.component';
 import { CatalogueNavigationChange } from './types/CatalogueNavigationChange';
-import { Dialog } from 'primeng/dialog';
-import { NgClass } from '@angular/common';
-import { VehiclesCatalogueQueryCharacteristicsList } from './Models/QueryArguments/QueryArguments';
-
-interface CurrentNavigationOptions {
-  kindId: string;
-  brandId: string;
-  modelId: string;
-}
+import {
+  VehiclesCatalogueQueryCharacteristicsList,
+  VehiclesCatalogueQueryLocationId,
+  VehiclesCatalogueQueryPriceSpecification,
+} from './Models/QueryArguments/QueryArguments';
+import { VehiclesCatalogueAggregatedDataGridComponent } from './components/vehicles-catalogue-aggregated-data-grid/vehicles-catalogue-aggregated-data-grid.component';
+import {
+  VehiclesAggregatedDataBasicQuery,
+  VehiclesAggregatedDataBrandChangedQuery,
+  VehiclesAggregatedDataCharacteristicsChangedQuery,
+  VehiclesAggregatedDataKindChangedQuery,
+  VehiclesAggregatedDataModelChangedQuery,
+  VehiclesAggregatedDataPriceChangedQuery,
+  VehiclesAggregatedDataQuery,
+  VehiclesAggregatedDataRegionChangedQuery,
+} from './Models/Query/VehiclesAggregatedDataQuery';
+import { VehiclesCatalogueRegionsSelectComponent } from './components/vehicles-catalogue-regions-select/vehicles-catalogue-regions-select.component';
+import { VehiclesCatlaoguePricesFilterComponent } from './components/vehicles-catlaogue-prices-filter/vehicles-catlaogue-prices-filter.component';
+import { Paginator, PaginatorState } from 'primeng/paginator';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-vehicles-catalogue-page',
@@ -46,74 +43,37 @@ interface CurrentNavigationOptions {
     VehiclesCatalogueToolbarComponent,
     Panel,
     VehicleCharacteristicsFormComponent,
-    Badge,
     VehiclesDataViewComponent,
-    Dialog,
-    NgClass,
+    VehiclesCatalogueAggregatedDataGridComponent,
+    VehiclesCatalogueRegionsSelectComponent,
+    VehiclesCatlaoguePricesFilterComponent,
+    Paginator,
+    NgIf,
   ],
   templateUrl: './vehicles-catalogue-page.component.html',
   styleUrl: './vehicles-catalogue-page.component.scss',
 })
 export class VehiclesCataloguePageComponent implements OnInit {
   private readonly _activatedRoute: ActivatedRoute;
-  private readonly _destroyRef: DestroyRef = inject(DestroyRef);
-  private readonly _isLoading: WritableSignal<boolean>;
   private readonly _query: WritableSignal<VehiclesCatalogueQuery>;
-  private readonly _httpClient: HttpClient;
+  private readonly _aggregatedDataQuery: WritableSignal<VehiclesAggregatedDataQuery>;
   private readonly _currentKindId: WritableSignal<string>;
   private readonly _currentBrandId: WritableSignal<string>;
   private readonly _currentModelId: WritableSignal<string>;
-  private readonly _catalogueData: WritableSignal<VehiclesCatalogue>;
   private readonly _currentPage: WritableSignal<number>;
+  private readonly _currentItemsCount: WritableSignal<number>;
 
-  constructor(activatedRoute: ActivatedRoute, httpClient: HttpClient) {
+  constructor(activatedRoute: ActivatedRoute) {
     this._currentPage = signal(1);
     this._activatedRoute = activatedRoute;
-    this._isLoading = signal(false);
     this._query = signal(BaseVehiclesCatalogueQuery.default());
-    this._httpClient = httpClient;
+    this._aggregatedDataQuery = signal(
+      VehiclesAggregatedDataBasicQuery.default(),
+    );
     this._currentKindId = signal('');
     this._currentBrandId = signal('');
     this._currentModelId = signal('');
-    this._catalogueData = signal({
-      vehicles: [],
-      aggregatedData: {
-        totalCount: 0,
-        pagesCount: 0,
-        averagePrice: 0,
-        maximalPrice: 0,
-        minimalPrice: 0,
-      },
-      characteristics: { characteristics: [] },
-      geoLocations: [],
-    });
-    effect(() => {
-      const kindId = this._currentKindId();
-      if (StringUtils.isEmptyOrWhiteSpace(kindId)) return;
-      const brandId = this._currentBrandId();
-      if (StringUtils.isEmptyOrWhiteSpace(brandId)) return;
-      const modelId = this._currentModelId();
-      if (StringUtils.isEmptyOrWhiteSpace(modelId)) return;
-      const currentPage = this._currentPage();
-      if (currentPage <= 0) return;
-      const query = this._query();
-      query
-        .query(kindId, brandId, modelId, this._httpClient)
-        .pipe(
-          takeUntilDestroyed(this._destroyRef),
-          finalize((): void => {
-            this._isLoading.set(false);
-          }),
-        )
-        .subscribe({
-          next: (data: VehiclesCatalogue): void => {
-            this._catalogueData.set(data);
-          },
-          error: (err: HttpErrorResponse): void => {
-            console.log(err);
-          },
-        });
-    });
+    this._currentItemsCount = signal(0);
   }
 
   public ngOnInit(): void {
@@ -132,32 +92,102 @@ export class VehiclesCataloguePageComponent implements OnInit {
         modelId,
         page,
       );
+      const aggregatedDataQuery = new VehiclesAggregatedDataBasicQuery(
+        kindId,
+        modelId,
+        brandId,
+      );
+      this._aggregatedDataQuery.set(aggregatedDataQuery);
       this._query.set(query);
     });
   }
 
+  public acceptItemsCountChange($event: number): void {
+    this._currentItemsCount.set($event);
+  }
+
   public acceptNavigationChange($event: CatalogueNavigationChange): void {
-    const current: VehiclesCatalogueQuery = this._query();
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    const currentAggregatedDataQuery: VehiclesAggregatedDataQuery =
+      this._aggregatedDataQuery();
     this._currentKindId.set($event.kind.id);
     this._currentBrandId.set($event.brand.id);
     this._currentModelId.set($event.model.id);
-    const changed = new VehicleCatalogueQueryOtherKind(
+    const vehiclesQueryChanged = new VehicleCatalogueQueryOtherKind(
       $event.kind.id,
       new VehicleCatalogueQueryWithOtherBrand(
         $event.brand.id,
-        new VehicleCatalogueQueryWithOtherModel($event.model.id, current),
+        new VehicleCatalogueQueryWithOtherModel(
+          $event.model.id,
+          currentVehiclesQuery,
+        ),
       ),
     );
-    this._query.set(changed);
+    const aggregatedDataQueryChanged =
+      new VehiclesAggregatedDataKindChangedQuery(
+        $event.kind.id,
+        new VehiclesAggregatedDataBrandChangedQuery(
+          $event.brand.id,
+          new VehiclesAggregatedDataModelChangedQuery(
+            $event.model.id,
+            currentAggregatedDataQuery,
+          ),
+        ),
+      );
+    this._query.set(vehiclesQueryChanged);
+    this._aggregatedDataQuery.set(aggregatedDataQueryChanged);
   }
 
   public acceptCharacteristicsList(
     $event: VehiclesCatalogueQueryCharacteristicsList,
   ): void {
-    const currentQuery: VehiclesCatalogueQuery = this._query();
-    const queryWithCharacteristics: VehiclesCatalogueQuery =
-      new VehiclesCatalogueQueryWithCharacteristics(currentQuery, $event);
-    this._query.set(queryWithCharacteristics);
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    const currentAggregatedDataQuery: VehiclesAggregatedDataQuery =
+      this._aggregatedDataQuery();
+    this._query.set(
+      new VehiclesCatalogueQueryWithCharacteristics(
+        currentVehiclesQuery,
+        $event,
+      ),
+    );
+    this._aggregatedDataQuery.set(
+      new VehiclesAggregatedDataCharacteristicsChangedQuery(
+        $event,
+        currentAggregatedDataQuery,
+      ),
+    );
+  }
+
+  public acceptRegionChange($event: VehiclesCatalogueQueryLocationId): void {
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    const currentAggregatedDataQuery: VehiclesAggregatedDataQuery =
+      this._aggregatedDataQuery();
+    this._query.set(
+      new VehiclesCatalogueQueryWithLocation(currentVehiclesQuery, $event),
+    );
+    this._aggregatedDataQuery.set(
+      new VehiclesAggregatedDataRegionChangedQuery(
+        $event,
+        currentAggregatedDataQuery,
+      ),
+    );
+  }
+
+  public acceptPriceFilterChange(
+    $event: VehiclesCatalogueQueryPriceSpecification,
+  ): void {
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    const currentAggregatedDataQuery: VehiclesAggregatedDataQuery =
+      this._aggregatedDataQuery();
+    this._query.set(
+      new VehiclesCatalogueQueryWithPrice(currentVehiclesQuery, $event),
+    );
+    this._aggregatedDataQuery.set(
+      new VehiclesAggregatedDataPriceChangedQuery(
+        $event,
+        currentAggregatedDataQuery,
+      ),
+    );
   }
 
   public get currentKindId(): string {
@@ -168,22 +198,44 @@ export class VehiclesCataloguePageComponent implements OnInit {
     return this._currentBrandId();
   }
 
+  public get currentItemsCount(): number {
+    return this._currentItemsCount();
+  }
+
   public get currentModelId(): string {
     return this._currentModelId();
   }
 
-  public get catalogueData(): VehiclesCatalogue {
-    return this._catalogueData();
+  public acceptPageChange(paginator: PaginatorState): void {
+    const page: number | undefined = paginator.page;
+    const totalPages: number | undefined = paginator.pageCount;
+    if (!page || !totalPages) {
+      this._currentPage.set(1);
+      this.updatePageQuery();
+      return;
+    }
+    if (totalPages - page === 1) {
+      this._currentPage.set(totalPages);
+      this.updatePageQuery();
+      return;
+    }
+    const incremented: number = page + 1;
+    this._currentPage.set(incremented);
+    this.updatePageQuery();
   }
 
-  private getCurrentNavigationOptions(): CurrentNavigationOptions {
-    const currentBrandId: string = this._currentKindId();
-    const currentKindId: string = this._currentKindId();
-    const currentModelId: string = this._currentModelId();
-    return {
-      kindId: currentKindId,
-      brandId: currentBrandId,
-      modelId: currentModelId,
-    };
+  private updatePageQuery(): void {
+    const query: VehiclesCatalogueQuery = this._query();
+    this._query.set(
+      new VehicleCatalogueQueryWithOtherPage(this._currentPage(), query),
+    );
+  }
+
+  public get aggregatedDataQuery(): VehiclesAggregatedDataQuery {
+    return this._aggregatedDataQuery();
+  }
+
+  public get vehiclesQuery(): VehiclesCatalogueQuery {
+    return this._query();
   }
 }

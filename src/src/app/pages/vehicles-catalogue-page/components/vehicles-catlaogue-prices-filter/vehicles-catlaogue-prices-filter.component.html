@@ -1,0 +1,12 @@
+<div class="grid grid-cols-2 grid-rows-2 gap-1">
+  <p-inputNumber (onInput)="onPriceFromInput($event)" [style]="{width: '75px'}" [fluid]="true" [size]="'small'"
+                 [placeholder]="'Цена от'" />
+  <p-inputNumber (onInput)="onPriceToInput($event)" [style]="{width: '75px'}" [fluid]="true" [size]="'small'"
+                 [placeholder]="'Цена до'" />
+  <div class="flex flex-row gap-5">
+    <label class="flex flex-row justify-between gap-5">НДС
+      <p-checkbox [ngModel]="isNds" [binary]="true" (click)="onIsNdsCheckBoxClick()" />
+    </label>
+    <p-button [style]="{color:'black'}" [label]="'Сбросить'" [size]="'small'" />
+  </div>
+</div>

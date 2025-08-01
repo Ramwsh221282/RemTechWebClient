@@ -1,39 +1,3 @@
-export interface VehiclesCatalogue {
-  vehicles: CatalogueVehicle[];
-  characteristics: VehiclesCatalogueCharacteristicsDictionary;
-  aggregatedData: VehiclesCatalogueAggregatedData;
-  geoLocations: VehiclesCatalogueGeoLocations[];
-}
-
-export interface VehiclesCatalogueGeoLocations {
-  id: string;
-  name: string;
-  kind: string;
-}
-
-export interface VehiclesCatalogueAggregatedData {
-  totalCount: number;
-  averagePrice: number;
-  minimalPrice: number;
-  maximalPrice: number;
-  pagesCount: number;
-}
-
-export interface VehiclesCatalogueCharacteristicsDictionary {
-  characteristics: VehiclesCatalogueCharacteristicsDictionaryEntry[];
-}
-
-export interface VehiclesCatalogueCharacteristicsDictionaryEntry {
-  id: string;
-  name: string;
-  measure: string;
-  values: VehicleCatalogueCharacteristicsDictionaryEntryValue;
-}
-
-export interface VehicleCatalogueCharacteristicsDictionaryEntryValue {
-  values: string[];
-}
-
 export interface CatalogueVehicle {
   brand: CatalogueVehicleBrand;
   characteristics: CatalogueVehicleCharacteristics;

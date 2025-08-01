@@ -3,27 +3,39 @@
     [kind_id_setter]="currentKindId"
     [brand_id_setter]="currentBrandId"
     [model_id_setter]="currentModelId"
-    [regions_setter]="catalogueData.geoLocations"
     (navigationChanged)="acceptNavigationChange($event)"
-  />
+  >
+    <app-vehicles-catalogue-regions-select [kind_id_setter]="currentKindId" [brand_id_setter]="currentBrandId"
+                                           [model_id_setter]="currentModelId"
+                                           (regionChange)="acceptRegionChange($event)" />
+  </app-vehicles-catalogue-toolbar>
   <div class="grid grid-cols-12 row-span-1 gap-1 p-1">
     <div class="col-span-12 md:col-span-3">
       <app-vehicle-characteristics-form
-        [characteristics_setter]="catalogueData.characteristics.characteristics"
+        [kind_id_setter]="currentKindId"
+        [brand_id_setter]="currentBrandId"
+        [model_id_setter]="currentModelId"
         (characteristicsListChange)="acceptCharacteristicsList($event)"
-      />
+      >
+        <app-vehicles-catlaogue-prices-filter (priceFilterChanged)="acceptPriceFilterChange($event)" />
+      </app-vehicle-characteristics-form>
     </div>
     <div class="col-span-12 md:col-span-9">
       <p-panel [styleClass]="'custom-panel'">
         <ng-template #header>
-          <div class="sm:grid sm:grid-cols-4 sm:grid-rows-2 gap-1 sm:gap-1 p-1">
-            <p-badge [value]="'Количество ' + catalogueData.aggregatedData.totalCount" />
-            <p-badge [value]="'Ср. цена ' + catalogueData.aggregatedData.averagePrice" />
-            <p-badge [value]="'Мин. цена ' + catalogueData.aggregatedData.minimalPrice" />
-            <p-badge [value]="'Макс. цена ' + catalogueData.aggregatedData.maximalPrice" />
-          </div>
+          <app-vehicles-catalogue-aggregated-data-grid [kind_id_setter]="currentKindId"
+                                                       [brand_id_setter]="currentBrandId"
+                                                       [model_id_setter]="currentModelId"
+                                                       [query_setter]="aggregatedDataQuery"
+                                                       (currentItemsCountChanged)="acceptItemsCountChange($event)" />
         </ng-template>
-        <app-vehicles-data-view [vehicles_setter]="catalogueData.vehicles" />
+        <app-vehicles-data-view [kind_id_setter]="currentKindId"
+                                [brand_id_setter]="currentBrandId"
+                                [model_id_setter]="currentModelId"
+                                [query_setter]="vehiclesQuery">
+          <p-paginator *ngIf="currentItemsCount > 20" [rows]="20" [totalRecords]="currentItemsCount"
+                       (onPageChange)="acceptPageChange($event)" />
+        </app-vehicles-data-view>
       </p-panel>
     </div>
   </div>

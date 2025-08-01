@@ -38,6 +38,12 @@
               {{ ctx.value }} {{ ctx.name === 'Б/у' ? '' : ctx.measure }}
             </span>
               </div>
+              <div class="flex flex-row gap-1 w-full">
+                <p-badge [value]="`${'Цена:' + item.price.price}`" [severity]="'secondary'" />
+                <p-badge [value]="itemNdsString(item)" [severity]="'secondary'" />
+              </div>
+              <label
+                class="text-sm font-medium text-gray-900 dark:text-white transition-colors">{{ item.region.name + ' ' + item.region.kind }}</label>
             </div>
           </div>
         </div>
@@ -50,5 +56,10 @@
         </div>
       </div>
     </div>
+  </ng-template>
+  <ng-template #footer>
+    <ng-content>
+      
+    </ng-content>
   </ng-template>
 </p-data-view>
