@@ -1,27 +1,29 @@
 <p-panel [header]="'Фильтр характеристик'">
   <div class="flex flex-col gap-2 p-2">
-    @for (ctx of characteristics; track ctx.id) {
+    @for (ctx of characteristics; track ctx.ctxId) {
       <p-select
         [fluid]="true"
         [size]="'small'"
         [placeholder]="
-              `${ctx.name === 'Эксплуатационная масса' ? 'масса' : ctx.name }
-              ${ctx.measure === 'Б/у' ? '' : ctx.name === 'Моточасы' ? '' : ctx.name === 'Год выпуска' ? '' : ctx.measure}`"
-        [options]="ctx.values.values"
+              `${ctx.ctxName === 'Эксплуатационная масса' ? 'масса' : ctx.ctxName }
+              ${ctx.ctxMeasure === 'Б/у' ? '' : ctx.ctxName === 'Моточасы' ? '' : ctx.ctxName === 'Год выпуска' ? '' : ctx.ctxMeasure}`"
+        [options]="ctx.values"
+        optionLabel="ctxValue"
+        (onChange)="characteristicPicked($event)"
       >
         <ng-template let-value #item>
           <label class="text-xs sm:text-sm md:text-base">
-            {{ value }}
+            {{ value.ctxValue }}
           </label>
         </ng-template>
       </p-select>
     }
     <div class="grid grid-cols-2 grid-rows-2 gap-1">
-      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена от'"/>
-      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена до'"/>
+      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена от'" />
+      <p-inputNumber [style]="{width: '75px'}" [fluid]="true" [size]="'small'" [placeholder]="'Цена до'" />
       <div class="flex flex-row gap-5">
         <label>с НДС</label>
-        <p-checkbox/>
+        <p-checkbox />
       </div>
     </div>
   </div>

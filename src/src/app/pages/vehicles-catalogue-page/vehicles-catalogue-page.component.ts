@@ -18,6 +18,7 @@ import {
   VehicleCatalogueQueryWithOtherBrand,
   VehicleCatalogueQueryWithOtherModel,
   VehiclesCatalogueQuery,
+  VehiclesCatalogueQueryWithCharacteristics,
 } from './Models/Query/VehiclesCatalogueQuery';
 import { VehiclesCatalogueToolbarComponent } from './components/vehicles-catalogue-toolbar/vehicles-catalogue-toolbar.component';
 import { Panel } from 'primeng/panel';
@@ -30,6 +31,14 @@ import { StringUtils } from '../../shared/utils/string-utils';
 import { VehiclesSelectNavigationChangeDialogComponent } from './components/vehicles-select-navigation-change-dialog/vehicles-select-navigation-change-dialog.component';
 import { CatalogueNavigationChange } from './types/CatalogueNavigationChange';
 import { Dialog } from 'primeng/dialog';
+import { NgClass } from '@angular/common';
+import { VehiclesCatalogueQueryCharacteristicsList } from './Models/QueryArguments/QueryArguments';
+
+interface CurrentNavigationOptions {
+  kindId: string;
+  brandId: string;
+  modelId: string;
+}
 
 @Component({
   selector: 'app-vehicles-catalogue-page',
@@ -40,6 +49,7 @@ import { Dialog } from 'primeng/dialog';
     Badge,
     VehiclesDataViewComponent,
     Dialog,
+    NgClass,
   ],
   templateUrl: './vehicles-catalogue-page.component.html',
   styleUrl: './vehicles-catalogue-page.component.scss',
@@ -127,7 +137,7 @@ export class VehiclesCataloguePageComponent implements OnInit {
   }
 
   public acceptNavigationChange($event: CatalogueNavigationChange): void {
-    const current = this._query();
+    const current: VehiclesCatalogueQuery = this._query();
     this._currentKindId.set($event.kind.id);
     this._currentBrandId.set($event.brand.id);
     this._currentModelId.set($event.model.id);
@@ -139,6 +149,15 @@ export class VehiclesCataloguePageComponent implements OnInit {
       ),
     );
     this._query.set(changed);
+  }
+
+  public acceptCharacteristicsList(
+    $event: VehiclesCatalogueQueryCharacteristicsList,
+  ): void {
+    const currentQuery: VehiclesCatalogueQuery = this._query();
+    const queryWithCharacteristics: VehiclesCatalogueQuery =
+      new VehiclesCatalogueQueryWithCharacteristics(currentQuery, $event);
+    this._query.set(queryWithCharacteristics);
   }
 
   public get currentKindId(): string {
@@ -155,5 +174,16 @@ export class VehiclesCataloguePageComponent implements OnInit {
 
   public get catalogueData(): VehiclesCatalogue {
     return this._catalogueData();
+  }
+
+  private getCurrentNavigationOptions(): CurrentNavigationOptions {
+    const currentBrandId: string = this._currentKindId();
+    const currentKindId: string = this._currentKindId();
+    const currentModelId: string = this._currentModelId();
+    return {
+      kindId: currentKindId,
+      brandId: currentBrandId,
+      modelId: currentModelId,
+    };
   }
 }

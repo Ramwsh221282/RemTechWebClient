@@ -81,6 +81,15 @@ export class VehiclesCatalogueQueryCharacteristicsList {
   public accept(
     characteristic: VehiclesCatalogueQueryCharacteristic,
   ): VehiclesCatalogueQueryCharacteristicsList {
+    const id: string = characteristic.id;
+    const indexOfExisting: number = this._characteristics.findIndex(
+      (item: VehiclesCatalogueQueryCharacteristic): boolean => item.id === id,
+    );
+    if (indexOfExisting > -1) {
+      this._characteristics[indexOfExisting] = characteristic;
+      return this;
+    }
+
     return new VehiclesCatalogueQueryCharacteristicsList([
       ...this._characteristics,
       characteristic,
@@ -89,7 +98,11 @@ export class VehiclesCatalogueQueryCharacteristicsList {
 
   public print(): object | null {
     if (this._characteristics.length === 0) return null;
-    return { arguments: this._characteristics.map((c) => c.print()) };
+    return {
+      arguments: this._characteristics.map(
+        (c: VehiclesCatalogueQueryCharacteristic) => c.print(),
+      ),
+    };
   }
 }
 
@@ -102,6 +115,10 @@ export class VehiclesCatalogueQueryCharacteristic {
     this._id = id;
     this._value = value;
     this._name = name;
+  }
+
+  public get id(): string {
+    return this._id;
   }
 
   public addTo(
