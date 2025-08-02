@@ -8,6 +8,7 @@ import { UserAuthRoutes } from './pages/user-auth-page/user-auth-routes';
 import { ForbiddenPageRoutes } from './pages/forbidden-page/forbidden-page-routes';
 import { SparesPageRoutes } from './pages/spares-page/spares-page-routes';
 import { VehicleCatalogueSelectRoutes } from './pages/vehicles-catalogue-select-page/vehicles-catalogue-select-routes';
+import { MailingManagementPageRoutes } from './pages/mailing-management-page/routing/MailingManagementPageRoutes';
 
 export const routes: Routes = [
   ...MainPageRoutes,
@@ -19,4 +20,5 @@ export const routes: Routes = [
   ...ForbiddenPageRoutes,
   ...SparesPageRoutes,
   ...VehicleCatalogueSelectRoutes,
+  ...MailingManagementPageRoutes,
 ];
