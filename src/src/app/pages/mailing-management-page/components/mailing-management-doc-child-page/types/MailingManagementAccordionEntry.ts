@@ -5,6 +5,7 @@ export interface MailingManagementAccordionEntry {
   iconClasses: string;
   iconViewBox: string;
   iconFill: string;
+  value: number;
 }
 
 export interface MailingManagementAccordionEntryGuidance {

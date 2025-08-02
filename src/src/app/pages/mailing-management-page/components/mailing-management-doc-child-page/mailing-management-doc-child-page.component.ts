@@ -17,6 +17,7 @@ export class MailingManagementDocChildPageComponent {
       iconClasses: 'w-6 h-6 text-yellow-600 dark:text-yellow-400',
       iconFill: 'currentColor',
       iconViewBox: '0 0 24 24',
+      value: 0,
       guidances: [
         {
           guidance:
@@ -40,6 +41,7 @@ export class MailingManagementDocChildPageComponent {
       iconClasses: 'w-6 h-6 text-red-600 dark:text-red-400',
       iconFill: 'currentColor',
       iconViewBox: '0 0 24 24',
+      value: 1,
       guidances: [
         {
           guidance:
@@ -63,6 +65,7 @@ export class MailingManagementDocChildPageComponent {
       iconClasses: 'w-6 h-6 text-blue-600 dark:text-blue-400',
       iconFill: 'currentColor',
       iconViewBox: '0 0 24 24',
+      value: 2,
       guidances: [
         {
           guidance:

@@ -22,6 +22,7 @@ export class MailingManagementDocAccordionEntryComponent {
   }
 
   public entry: MailingManagementAccordionEntry = {
+    value: 0,
     guidanceName: '',
     guidances: [],
     iconFill: '',
