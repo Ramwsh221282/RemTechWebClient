@@ -35,31 +35,12 @@
               [style]="{color:'black'}"
               [fluid]="true"
               [size]="'large'"
-              [icon]="'pi pi-user-plus'"
-              [label]="'Регистрация'"
-              [routerLink]="'users/registration'"
-            />
-          </li>
-          <li>
-            <!--            *ngIf="!isAuthorized"-->
-            <p-button
-              [style]="{color:'black'}"
-              [fluid]="true"
-              [size]="'large'"
-              [icon]="'pi pi-sign-in'"
-              [label]="'Авторизация'"
-              [routerLink]="'users/authorization'"
-            />
-          </li>
-          <li>
-            <!--            *ngIf="!isAuthorized"-->
-            <p-button
-              [style]="{color:'black'}"
-              [fluid]="true"
-              [size]="'large'"
               [icon]="'pi pi-user'"
               [label]="'Профиль'"
             />
+          </li>
+          <li>
+            <app-side-bar-button [label]="'Авторизация'" [navigationRoute]="'sign-in'" [icon]="'pi pi-sign-in'" />
           </li>
           <li>
             <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'"
