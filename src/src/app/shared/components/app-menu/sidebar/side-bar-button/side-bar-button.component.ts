@@ -13,6 +13,5 @@ import { RouterLink } from '@angular/router';
 export class SideBarButtonComponent {
   @Input({ required: true }) label: string = '';
   @Input({ required: true }) icon: string = '';
-  @Input({ required: true }) isLabelShown: boolean = false;
   @Input({ required: true }) navigationRoute: string = '';
 }
