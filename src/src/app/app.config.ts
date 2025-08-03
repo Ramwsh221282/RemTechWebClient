@@ -42,6 +42,7 @@ import { BasicVehicleKindsSource } from './pages/vehicles-catalogue-page/service
 import { BasicVehicleModelsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleModelsSource';
 import { VehicleCharacteristicsSource } from './pages/vehicles-catalogue-page/types/VehicleCharacteristics';
 import { MailingManagementService } from './pages/mailing-management-page/services/MailingManagementService';
+import { JwtTokenManagingInterceptor } from './shared/middleware/JwtTokenManagingInterceptor';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -72,13 +73,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
 
-    provideHttpClient(
-      withInterceptors([
-        tokenApplyInterceptor,
-        expiredTokenInterceptor,
-        authInterceptor,
-      ]),
-    ),
+    provideHttpClient(withInterceptors([JwtTokenManagingInterceptor])),
     MailingManagementService,
     VehicleCharacteristicsSource,
     BasicVehicleBrandsSource,

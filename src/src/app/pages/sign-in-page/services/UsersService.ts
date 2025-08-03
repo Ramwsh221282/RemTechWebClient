@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { apiUrl } from '../../../shared/api/api-endpoint';
 import { Observable } from 'rxjs';
+import { StringUtils } from '../../../shared/utils/string-utils';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +23,23 @@ export class UsersService {
   ): Observable<any> {
     const body = { email: email, password: password, name: name };
     return this._httpClient.post(this._apiUrl, body);
+  }
+
+  public authenticate(
+    password: string,
+    email?: string | null,
+    name?: string | null,
+  ): Observable<any> {
+    const requestUrl: string = `${this._apiUrl}/auth`;
+    const headers: HttpHeaders = new HttpHeaders().set('password', password);
+    let params: HttpParams = new HttpParams();
+    if (email && !StringUtils.isEmptyOrWhiteSpace(email))
+      params = params.set('email', email);
+    if (name && !StringUtils.isEmptyOrWhiteSpace(name))
+      params = params.set('name', name);
+    return this._httpClient.post<Observable<any>>(requestUrl, null, {
+      headers: headers,
+      params: params,
+    });
   }
 }

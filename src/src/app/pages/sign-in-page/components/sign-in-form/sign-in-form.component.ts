@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 import { MessageServiceUtils } from '../../../../shared/utils/message-service-utils';
+import { UsersService } from '../../services/UsersService';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -20,9 +23,12 @@ export class SignInFormComponent {
   });
 
   private readonly _messageService: MessageService;
+  private readonly _service: UsersService;
+  private readonly _destroyRef: DestroyRef = inject(DestroyRef);
 
-  constructor(messageService: MessageService) {
+  constructor(messageService: MessageService, service: UsersService) {
     this._messageService = messageService;
+    this._service = service;
   }
 
   public submit(): void {
@@ -35,12 +41,37 @@ export class SignInFormComponent {
         this._messageService,
         'Необходимо ввести пароль.',
       );
+      return;
     }
-    if (StringUtils.isEmptyOrWhiteSpace(email && name)) {
+    if (StringUtils.allEmpty([email, name])) {
       MessageServiceUtils.showError(
         this._messageService,
         'Необходимо ввести почту или псевдоним',
       );
+      return;
     }
+    this.authenticate(password, email, name);
+  }
+
+  private authenticate(
+    password: string,
+    email?: string | null,
+    name?: string | null,
+  ): void {
+    this._service
+      .authenticate(password, email, name)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (value: any): void => {
+          MessageServiceUtils.showSuccess(
+            this._messageService,
+            'Авторизация успешна.',
+          );
+        },
+        error: (err: HttpErrorResponse): void => {
+          const message: string = err.error.message;
+          MessageServiceUtils.showError(this._messageService, message);
+        },
+      });
   }
 }
