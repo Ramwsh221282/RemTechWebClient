@@ -9,8 +9,10 @@
 
     <div class="flex items-center gap-2 flex-wrap">
       <app-scraper-state-select [scraper_setter]="scraper" />
-      <app-scraper-activate-button [scraper_setter]="scraper" />
-      <app-scraper-deactivate-button [scraper_setter]="scraper" />
+      <app-scraper-activate-button (onParserStateChange)="acceptScraperChangedState($event)"
+                                   [scraper_setter]="scraper" />
+      <app-scraper-deactivate-button (scraperDeactivated)="acceptScraperChangedState($event)"
+                                     [scraper_setter]="scraper" />
     </div>
   </div>
 
@@ -25,7 +27,7 @@
       <app-scraper-next-run-info [scraper_setter]="scraper" />
       <div class="mt-2">
         <label for="waitDaysSelect" class="text-xs text-gray-500 dark:text-gray-400">Дней ожидания:</label>
-        <app-scraper-wait-days-select [scraper_setter]="scraper" />
+        <app-scraper-wait-days-select (parserChanged)="acceptScraperChangedState($event)" [scraper_setter]="scraper" />
       </div>
     </div>
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">

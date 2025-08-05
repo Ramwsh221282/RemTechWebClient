@@ -17,19 +17,13 @@ import { FormsModule } from '@angular/forms';
 import { ScraperDomainInfoComponent } from './components/scraper-domain-info/scraper-domain-info.component';
 import { ScraperLastRunInfoComponent } from './components/scraper-last-run-info/scraper-last-run-info.component';
 import { ScraperNextRunInfoComponent } from './components/scraper-next-run-info/scraper-next-run-info.component';
-import {
-  ScraperWaitDaysSelectComponent
-} from './components/scraper-wait-days-select/scraper-wait-days-select.component';
-import {
-  ScraperProcessedAmountComponent
-} from './components/scraper-processed-amount/scraper-processed-amount.component';
+import { ScraperWaitDaysSelectComponent } from './components/scraper-wait-days-select/scraper-wait-days-select.component';
+import { ScraperProcessedAmountComponent } from './components/scraper-processed-amount/scraper-processed-amount.component';
 import { ScraperElapsedTimeComponent } from './components/scraper-elapsed-time/scraper-elapsed-time.component';
 import { ScraperStateSelectComponent } from './components/scraper-state-select/scraper-state-select.component';
 import { ScraperLinksListComponent } from './components/scraper-links-list/scraper-links-list.component';
 import { ScraperActivateButtonComponent } from './components/scraper-activate-button/scraper-activate-button.component';
-import {
-  ScraperDeactivateButtonComponent
-} from './components/scraper-deactivate-button/scraper-deactivate-button.component';
+import { ScraperDeactivateButtonComponent } from './components/scraper-deactivate-button/scraper-deactivate-button.component';
 
 @Component({
   selector: 'app-scrapers-management-concrete-scraper-page',
@@ -85,7 +79,6 @@ export class ScrapersManagementConcreteScraperPageComponent {
             .pipe(takeUntilDestroyed(this._destroyRef))
             .subscribe({
               next: (scraper: Scraper): void => {
-                console.log(scraper);
                 this._scraper.set(scraper);
               },
               error: (err: HttpErrorResponse): void =>
@@ -93,6 +86,10 @@ export class ScrapersManagementConcreteScraperPageComponent {
             });
         });
     });
+  }
+
+  public acceptScraperChangedState($event: Scraper): void {
+    this._scraper.set($event);
   }
 
   public get scraper(): Scraper {

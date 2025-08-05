@@ -1,6 +1,7 @@
-<p-select [options]="waitDaysOptions">
+<p-select [ngModel]="currentWaitDays" (onChange)="onSelect($event)" [options]="waitDaysOptions">
 
 </p-select>
+<p-toast [position]="'bottom-right'" />
 <!--<select-->
 <!--  id="waitDaysSelect"-->
 <!--  class="block w-full mt-1 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"-->
