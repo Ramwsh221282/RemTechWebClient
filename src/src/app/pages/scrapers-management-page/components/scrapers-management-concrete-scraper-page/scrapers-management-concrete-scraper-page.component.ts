@@ -28,6 +28,8 @@ import { ScraperActivateButtonComponent } from './components/scraper-activate-bu
 import { ScraperDeactivateButtonComponent } from './components/scraper-deactivate-button/scraper-deactivate-button.component';
 import { ScraperAddLinkDialogComponent } from './components/scraper-add-link-dialog/scraper-add-link-dialog.component';
 import { MessageService } from 'primeng/api';
+import { ScraperLink } from '../scrapers-management-settings-page/types/ScraperLink';
+import { ScraperEditLinkDialogComponent } from './components/scraper-edit-link-dialog/scraper-edit-link-dialog.component';
 
 @Component({
   selector: 'app-scrapers-management-concrete-scraper-page',
@@ -44,6 +46,8 @@ import { MessageService } from 'primeng/api';
     ScraperActivateButtonComponent,
     ScraperDeactivateButtonComponent,
     ScraperAddLinkDialogComponent,
+    ScraperEditLinkDialogComponent,
+    NgIf,
   ],
   templateUrl: './scrapers-management-concrete-scraper-page.component.html',
   styleUrl: './scrapers-management-concrete-scraper-page.component.scss',
@@ -55,6 +59,8 @@ export class ScrapersManagementConcreteScraperPageComponent {
   private readonly _scraper: WritableSignal<Scraper>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   private readonly _isCreatingLink: WritableSignal<boolean>;
+  private readonly _isEditingLink: WritableSignal<boolean>;
+  private readonly _linkToEdit: WritableSignal<ScraperLink | null>;
   private readonly _messageService: MessageService;
 
   constructor(
@@ -62,6 +68,8 @@ export class ScrapersManagementConcreteScraperPageComponent {
     service: VehicleScrapersService,
     messageService: MessageService,
   ) {
+    this._linkToEdit = signal(null);
+    this._isEditingLink = signal(false);
     this._messageService = messageService;
     this._scraper = signal(VehicleScrapersService.defaultScraper());
     this._isCreatingLink = signal(false);
@@ -85,16 +93,38 @@ export class ScrapersManagementConcreteScraperPageComponent {
     });
   }
 
+  public get scraperLinkToEdit(): ScraperLink | null {
+    return this._linkToEdit();
+  }
+
   public acceptCreatingLink(flag: boolean): void {
     this._isCreatingLink.set(flag);
+  }
+
+  public acceptLinkEditClick(flag: boolean): void {
+    console.log(flag);
+    this._isEditingLink.set(flag);
   }
 
   public get isCreatingLink(): boolean {
     return this._isCreatingLink();
   }
 
+  public acceptLinkToEdit(link: ScraperLink): void {
+    this._linkToEdit.set(link);
+  }
+
   public acceptScraperChangedState($event: Scraper): void {
     this._scraper.set($event);
+  }
+
+  public onEditClose(): void {
+    this._isEditingLink.set(false);
+    this._linkToEdit.set(null);
+  }
+
+  public get isEditingLink(): boolean {
+    return this._isEditingLink();
   }
 
   public get scraper(): Scraper {

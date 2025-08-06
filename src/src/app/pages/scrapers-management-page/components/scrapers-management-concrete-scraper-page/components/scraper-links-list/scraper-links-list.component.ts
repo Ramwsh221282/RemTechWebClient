@@ -8,7 +8,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ScraperLink } from '../../../scrapers-management-settings-page/types/ScraperLink';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
@@ -19,10 +19,11 @@ import { RemoveParserLinkResponse } from '../../../scrapers-management-settings-
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageServiceUtils } from '../../../../../../shared/utils/message-service-utils';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { LinkWithChangedActivityResponse } from '../../../scrapers-management-settings-page/types/LinkWithChangedActivityResponse';
 
 @Component({
   selector: 'app-scraper-links-list',
-  imports: [NgForOf, NgIf, Toast, ConfirmDialog],
+  imports: [NgForOf, NgIf, Toast, ConfirmDialog, NgClass],
   templateUrl: './scraper-links-list.component.html',
   styleUrl: './scraper-links-list.component.scss',
   providers: [MessageService, ConfirmationService],
@@ -30,6 +31,9 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 export class ScraperLinksListComponent {
   @Output() onLinkCreateChange: EventEmitter<boolean> = new EventEmitter();
   @Output() onLinkRemoved: EventEmitter<Scraper> = new EventEmitter();
+  @Output() onLinkEditChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() linkToEditSelect: EventEmitter<ScraperLink> = new EventEmitter();
+  @Output() linkActivityChanged: EventEmitter<Scraper> = new EventEmitter();
   @Input({ required: true }) set scraper_setter(value: Scraper) {
     this._scraper.set(value);
   }
@@ -61,6 +65,36 @@ export class ScraperLinksListComponent {
 
   public click(): void {
     this.onLinkCreateChange.emit(true);
+  }
+
+  public editClick(link: ScraperLink): void {
+    this.onLinkEditChange.emit(true);
+    this.linkToEditSelect.emit(link);
+  }
+
+  public changeLinkActivity(link: ScraperLink): void {
+    const scraper: Scraper = this._scraper();
+    const indexOfLink: number = scraper.links.findIndex(
+      (l: ScraperLink): boolean => l.name === link.name && l.url === link.url,
+    );
+    const oppositeActivity: boolean = !link.activity;
+    this._service
+      .changeLinkActivity(link, { activity: oppositeActivity })
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (response: LinkWithChangedActivityResponse): void => {
+          scraper.links[indexOfLink].activity = response.newActivity;
+          this.linkActivityChanged.emit(scraper);
+          MessageServiceUtils.showSuccess(
+            this._messageService,
+            `Активность ссылки ${link.name} изменена на ${response.newActivity ? 'Активна' : 'Неактивна'}`,
+          );
+        },
+        error: (err: HttpErrorResponse): void => {
+          const message: string = err.error.message as string;
+          MessageServiceUtils.showError(this._messageService, message);
+        },
+      });
   }
 
   public confirmRemove($event: Event, link: ScraperLink): void {

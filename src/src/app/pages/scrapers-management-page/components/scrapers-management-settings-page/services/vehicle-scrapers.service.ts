@@ -11,6 +11,11 @@ import { CreateNewParserLinkRequest } from '../types/CreateNewParserLinkRequest'
 import { CreateNewParserLinkResponse } from '../types/CreateNewParserLinkResponse';
 import { RemoveParserLinkRequest } from '../types/RemoveParserLinkRequest';
 import { RemoveParserLinkResponse } from '../types/RemoveParserLinkResponse';
+import { ScraperLink } from '../types/ScraperLink';
+import { UpdateParserLinkEndpointResponse } from '../types/UpdateParserLinkEndpointResponse';
+import { UpdateParserLinkEndpointRequest } from '../types/UpdateParserLinkEndpointRequest';
+import { LinkWithChangedActivityResponse } from '../types/LinkWithChangedActivityResponse';
+import { LinkWithChangedActivityRequest } from '../types/LinkWithChangedActivityRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -91,6 +96,39 @@ export class VehicleScrapersService {
     });
   }
 
+  public changeLinkActivity(
+    link: ScraperLink,
+    request: LinkWithChangedActivityRequest,
+  ): Observable<LinkWithChangedActivityResponse> {
+    const requestUrl = `${this._apiUrl}/scraper-link/activity`;
+    let params: HttpParams = new HttpParams()
+      .set('linkName', link.name)
+      .set('parserName', link.parserName)
+      .set('parserType', link.parserType);
+    return this._httpClient.patch<LinkWithChangedActivityResponse>(
+      requestUrl,
+      request,
+      { params: params },
+    );
+  }
+
+  public updateScraperLink(
+    scraperLink: ScraperLink,
+    request: UpdateParserLinkEndpointRequest,
+  ): Observable<UpdateParserLinkEndpointResponse> {
+    const requestUrl = `${this._apiUrl}/scraper-link`;
+    let params: HttpParams = new HttpParams()
+      .set('name', scraperLink.parserName)
+      .set('type', scraperLink.parserType)
+      .set('linkName', scraperLink.name)
+      .set('linkUrl', scraperLink.url);
+    return this._httpClient.put<UpdateParserLinkEndpointResponse>(
+      requestUrl,
+      request,
+      { params: params },
+    );
+  }
+
   public static defaultScraper(): Scraper {
     return {
       name: '',
@@ -106,6 +144,21 @@ export class VehicleScrapersService {
       totalSeconds: 0,
       type: '',
       waitDays: 0,
+    };
+  }
+
+  public static defaultScraperLink(): ScraperLink {
+    return {
+      name: '',
+      hours: 0,
+      url: '',
+      totalSeconds: 0,
+      seconds: 0,
+      processed: 0,
+      parserName: '',
+      parserType: '',
+      minutes: 0,
+      activity: false,
     };
   }
 }

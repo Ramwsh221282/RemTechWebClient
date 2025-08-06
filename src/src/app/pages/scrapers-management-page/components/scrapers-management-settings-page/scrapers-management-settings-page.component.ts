@@ -28,7 +28,9 @@ export class ScrapersManagementSettingsPageComponent {
         .fetch()
         .pipe(takeUntilDestroyed(this._destoryRef))
         .subscribe({
-          next: (data: Scraper[]): void => this._scrapers.set(data),
+          next: (data: Scraper[]): void => {
+            this._scrapers.set(data);
+          },
         });
     });
   }

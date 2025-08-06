@@ -50,10 +50,22 @@
 
   <div class="space-y-4">
     <app-scraper-links-list [scraper_setter]="scraper" (onLinkRemoved)="acceptScraperChangedState($event)"
+                            (onLinkEditChange)="acceptLinkEditClick($event)"
+                            (linkToEditSelect)="acceptLinkToEdit($event)"
+                            (linkActivityChanged)="acceptScraperChangedState($event)"
                             (onLinkCreateChange)="acceptCreatingLink($event)" [scraper_links_setter]="scraper.links"/>
   </div>
 </div>
 
-<app-scraper-add-link-dialog [visbility_setter]="isCreatingLink" (onLinkAdd)="acceptScraperChangedState($event)"
+<app-scraper-add-link-dialog [visbility_setter]="isCreatingLink"
+
+                             (onLinkAdd)="acceptScraperChangedState($event)"
                              [scraper_setter]="scraper"
                              (visibilityChange)="acceptCreatingLink($event)"/>
+<app-scraper-edit-link-dialog *ngIf="scraperLinkToEdit" (onSave)="acceptScraperChangedState($event)"
+                              (onDialogClose)="onEditClose()"
+                              [visibility_setter]="isEditingLink" [scraper_setter]="scraper"
+                              [scraper_link_setter]="scraperLinkToEdit"/>
+
+
+
