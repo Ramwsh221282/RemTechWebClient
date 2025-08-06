@@ -3,6 +3,7 @@
     ({{ ' ' + links.length + ' ' }}
     )</h2>
   <button
+    (click)="click()"
     class="cursor-pointer flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow transition duration-150 ease-in-out">
     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -11,7 +12,6 @@
   </button>
 </div>
 
-<!-- Таблица ссылок -->
 <div class="overflow-x-auto bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
   <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
     <thead class="bg-gray-100 dark:bg-gray-800">
@@ -55,7 +55,7 @@
           class="text-sm text-gray-500 dark:text-gray-400 max-w-sm truncate hover:whitespace-normal hover:overflow-visible">
           <a [href]="link.url" target="_blank"
              class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">
-            {{ link.url }}
+            Click
           </a>
         </div>
       </td>
@@ -82,14 +82,16 @@
       </td>
       <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <div class="flex justify-end space-x-2">
-          <button class="text-amber-600 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-200">
+          <button
+            class="cursor-pointer text-amber-600 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-200">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
             </svg>
           </button>
-          <button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">
+          <button (click)="confirmRemove($event, link)"
+                  class="cursor-pointer text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -107,3 +109,5 @@
     </tbody>
   </table>
 </div>
+<p-toast [position]="'bottom-right'"/>
+<p-confirm-dialog/>

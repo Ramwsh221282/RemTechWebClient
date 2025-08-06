@@ -2,7 +2,9 @@ import {
   Component,
   DestroyRef,
   effect,
+  EventEmitter,
   inject,
+  Output,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -24,17 +26,14 @@ import { ScraperStateSelectComponent } from './components/scraper-state-select/s
 import { ScraperLinksListComponent } from './components/scraper-links-list/scraper-links-list.component';
 import { ScraperActivateButtonComponent } from './components/scraper-activate-button/scraper-activate-button.component';
 import { ScraperDeactivateButtonComponent } from './components/scraper-deactivate-button/scraper-deactivate-button.component';
+import { ScraperAddLinkDialogComponent } from './components/scraper-add-link-dialog/scraper-add-link-dialog.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-scrapers-management-concrete-scraper-page',
   imports: [
-    DatePipe,
-    NgClass,
-    Button,
-    NgIf,
     FormsModule,
     ScraperDomainInfoComponent,
-    NgForOf,
     ScraperLastRunInfoComponent,
     ScraperNextRunInfoComponent,
     ScraperWaitDaysSelectComponent,
@@ -44,30 +43,28 @@ import { ScraperDeactivateButtonComponent } from './components/scraper-deactivat
     ScraperLinksListComponent,
     ScraperActivateButtonComponent,
     ScraperDeactivateButtonComponent,
+    ScraperAddLinkDialogComponent,
   ],
   templateUrl: './scrapers-management-concrete-scraper-page.component.html',
   styleUrl: './scrapers-management-concrete-scraper-page.component.scss',
+  providers: [MessageService],
 })
 export class ScrapersManagementConcreteScraperPageComponent {
+  @Output() parserLinkRemoved: EventEmitter<Scraper> =
+    new EventEmitter<Scraper>();
   private readonly _scraper: WritableSignal<Scraper>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly _isCreatingLink: WritableSignal<boolean>;
+  private readonly _messageService: MessageService;
 
-  constructor(activatedRoute: ActivatedRoute, service: VehicleScrapersService) {
-    this._scraper = signal({
-      name: '',
-      domain: '',
-      hours: 0,
-      lastRun: new Date(),
-      nextRun: new Date(),
-      links: [],
-      minutes: 0,
-      processed: 0,
-      seconds: 0,
-      state: '',
-      totalSeconds: 0,
-      type: '',
-      waitDays: 0,
-    });
+  constructor(
+    activatedRoute: ActivatedRoute,
+    service: VehicleScrapersService,
+    messageService: MessageService,
+  ) {
+    this._messageService = messageService;
+    this._scraper = signal(VehicleScrapersService.defaultScraper());
+    this._isCreatingLink = signal(false);
     effect((): void => {
       activatedRoute.params
         .pipe(takeUntilDestroyed(this._destroyRef))
@@ -86,6 +83,14 @@ export class ScrapersManagementConcreteScraperPageComponent {
             });
         });
     });
+  }
+
+  public acceptCreatingLink(flag: boolean): void {
+    this._isCreatingLink.set(flag);
+  }
+
+  public get isCreatingLink(): boolean {
+    return this._isCreatingLink();
   }
 
   public acceptScraperChangedState($event: Scraper): void {

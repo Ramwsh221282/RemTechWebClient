@@ -8,30 +8,30 @@
     </h1>
 
     <div class="flex items-center gap-2 flex-wrap">
-      <app-scraper-state-select [scraper_setter]="scraper" />
+      <app-scraper-state-select [scraper_setter]="scraper"/>
       <app-scraper-activate-button (onParserStateChange)="acceptScraperChangedState($event)"
-                                   [scraper_setter]="scraper" />
+                                   [scraper_setter]="scraper"/>
       <app-scraper-deactivate-button (scraperDeactivated)="acceptScraperChangedState($event)"
-                                     [scraper_setter]="scraper" />
+                                     [scraper_setter]="scraper"/>
     </div>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-      <app-scraper-domain-info [scraper_setter]="scraper" />
+      <app-scraper-domain-info [scraper_setter]="scraper"/>
     </div>
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-      <app-scraper-last-run-info [scraper_setter]="scraper" />
+      <app-scraper-last-run-info [scraper_setter]="scraper"/>
     </div>
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-      <app-scraper-next-run-info [scraper_setter]="scraper" />
+      <app-scraper-next-run-info [scraper_setter]="scraper"/>
       <div class="mt-2">
         <label for="waitDaysSelect" class="text-xs text-gray-500 dark:text-gray-400">Дней ожидания:</label>
-        <app-scraper-wait-days-select (parserChanged)="acceptScraperChangedState($event)" [scraper_setter]="scraper" />
+        <app-scraper-wait-days-select (parserChanged)="acceptScraperChangedState($event)" [scraper_setter]="scraper"/>
       </div>
     </div>
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-      <app-scraper-processed-amount [scraper_setter]="scraper" />
+      <app-scraper-processed-amount [scraper_setter]="scraper"/>
     </div>
   </div>
   <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-inner">
@@ -43,13 +43,17 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <app-scraper-elapsed-time [scraper_setter]="scraper" />
+        <app-scraper-elapsed-time [scraper_setter]="scraper"/>
       </div>
     </div>
   </div>
 
-  <!-- Раздел управления ссылками -->
   <div class="space-y-4">
-    <app-scraper-links-list [scraper_links_setter]="scraper.links" />
+    <app-scraper-links-list [scraper_setter]="scraper" (onLinkRemoved)="acceptScraperChangedState($event)"
+                            (onLinkCreateChange)="acceptCreatingLink($event)" [scraper_links_setter]="scraper.links"/>
   </div>
 </div>
+
+<app-scraper-add-link-dialog [visbility_setter]="isCreatingLink" (onLinkAdd)="acceptScraperChangedState($event)"
+                             [scraper_setter]="scraper"
+                             (visibilityChange)="acceptCreatingLink($event)"/>

@@ -7,6 +7,10 @@ import { ParserStateToChangeRequest } from '../types/ParserStateToChangeRequest'
 import { ParserStateChangeResult } from '../types/ParserStateChangedResult';
 import { ParserWaitDaysUpdateRequest } from '../types/ParserWaitDaysUpdateRequest';
 import { ParserWaitDaysUpdateResult } from '../types/ParserWaitDaysUpdateResult';
+import { CreateNewParserLinkRequest } from '../types/CreateNewParserLinkRequest';
+import { CreateNewParserLinkResponse } from '../types/CreateNewParserLinkResponse';
+import { RemoveParserLinkRequest } from '../types/RemoveParserLinkRequest';
+import { RemoveParserLinkResponse } from '../types/RemoveParserLinkResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +24,6 @@ export class VehicleScrapersService {
   }
 
   public fetch(): Observable<Scraper[]> {
-    const requestUrl = `${this._apiUrl}/vehicles`;
     return this._httpClient.get<Scraper[]>(this._apiUrl);
   }
 
@@ -57,6 +60,35 @@ export class VehicleScrapersService {
       request,
       { params: params },
     );
+  }
+
+  public addParserLink(
+    scraper: Scraper,
+    request: CreateNewParserLinkRequest,
+  ): Observable<CreateNewParserLinkResponse> {
+    const requestUrl = `${this._apiUrl}/scraper-link`;
+    let params: HttpParams = new HttpParams()
+      .set('name', scraper.name)
+      .set('type', scraper.type);
+    return this._httpClient.post<CreateNewParserLinkResponse>(
+      requestUrl,
+      request,
+      { params: params },
+    );
+  }
+
+  public removeParserLink(
+    scraper: Scraper,
+    request: RemoveParserLinkRequest,
+  ): Observable<RemoveParserLinkResponse> {
+    const requestUrl = `${this._apiUrl}/scraper-link`;
+    let params: HttpParams = new HttpParams()
+      .set('name', scraper.name)
+      .set('type', scraper.type);
+    return this._httpClient.delete<RemoveParserLinkResponse>(requestUrl, {
+      params: params,
+      body: request,
+    });
   }
 
   public static defaultScraper(): Scraper {
