@@ -43,6 +43,7 @@ import { BasicVehicleModelsSource } from './pages/vehicles-catalogue-page/servic
 import { VehicleCharacteristicsSource } from './pages/vehicles-catalogue-page/types/VehicleCharacteristics';
 import { MailingManagementService } from './pages/mailing-management-page/services/MailingManagementService';
 import { JwtTokenManagingInterceptor } from './shared/middleware/JwtTokenManagingInterceptor';
+import { VehicleScrapersService } from './pages/scrapers-management-page/components/scrapers-management-settings-page/services/vehicle-scrapers.service';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -74,6 +75,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
 
     provideHttpClient(withInterceptors([JwtTokenManagingInterceptor])),
+    VehicleScrapersService,
     MailingManagementService,
     VehicleCharacteristicsSource,
     BasicVehicleBrandsSource,

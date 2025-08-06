@@ -10,6 +10,7 @@ import { SparesPageRoutes } from './pages/spares-page/spares-page-routes';
 import { VehicleCatalogueSelectRoutes } from './pages/vehicles-catalogue-select-page/vehicles-catalogue-select-routes';
 import { MailingManagementPageRoutes } from './pages/mailing-management-page/routing/MailingManagementPageRoutes';
 import { SignInPageRoutes } from './pages/sign-in-page/SignInPareRoutes';
+import { ScrapersManagementPageRoutes } from './pages/scrapers-management-page/ScrapersManagementPageRoutes';
 
 export const routes: Routes = [
   ...MainPageRoutes,
@@ -23,4 +24,5 @@ export const routes: Routes = [
   ...VehicleCatalogueSelectRoutes,
   ...MailingManagementPageRoutes,
   ...SignInPageRoutes,
+  ...ScrapersManagementPageRoutes,
 ];
