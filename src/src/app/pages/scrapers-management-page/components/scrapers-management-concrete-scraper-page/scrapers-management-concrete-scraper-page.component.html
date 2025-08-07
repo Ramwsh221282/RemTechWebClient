@@ -34,6 +34,7 @@
       <app-scraper-processed-amount [scraper_setter]="scraper"/>
     </div>
   </div>
+  <label (click)="instantlyEnableClick()" class="hover: underline cursor-pointer text-lg">Включить немедленно</label>
   <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-inner">
     <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Статистика работы</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -66,6 +67,7 @@
                               (onDialogClose)="onEditClose()"
                               [visibility_setter]="isEditingLink" [scraper_setter]="scraper"
                               [scraper_link_setter]="scraperLinkToEdit"/>
+<p-toast [position]="'bottom-right'"/>
 
 
 

@@ -16,6 +16,7 @@ import { UpdateParserLinkEndpointResponse } from '../types/UpdateParserLinkEndpo
 import { UpdateParserLinkEndpointRequest } from '../types/UpdateParserLinkEndpointRequest';
 import { LinkWithChangedActivityResponse } from '../types/LinkWithChangedActivityResponse';
 import { LinkWithChangedActivityRequest } from '../types/LinkWithChangedActivityRequest';
+import { InstantlyEnabledParserResponse } from '../types/InstantlyEnabledParserResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ import { LinkWithChangedActivityRequest } from '../types/LinkWithChangedActivity
 export class VehicleScrapersService {
   private readonly _httpClient: HttpClient;
   private readonly _apiUrl: string;
+
   constructor(httpClient: HttpClient) {
     this._httpClient = httpClient;
     this._apiUrl = `${apiUrl}/scrapers`;
@@ -125,6 +127,20 @@ export class VehicleScrapersService {
     return this._httpClient.put<UpdateParserLinkEndpointResponse>(
       requestUrl,
       request,
+      { params: params },
+    );
+  }
+
+  public enableInstantly(
+    scraper: Scraper,
+  ): Observable<InstantlyEnabledParserResponse> {
+    const requestUrl = `${this._apiUrl}/instant`;
+    let params: HttpParams = new HttpParams()
+      .set('name', scraper.name)
+      .set('type', scraper.type);
+    return this._httpClient.patch<InstantlyEnabledParserResponse>(
+      requestUrl,
+      null,
       { params: params },
     );
   }

@@ -64,7 +64,7 @@ export class ScraperWaitDaysSelectComponent implements OnInit {
           );
         },
         error: (err: HttpErrorResponse): void => {
-          const message = err.message as string;
+          const message = err.error.message as string;
           MessageServiceUtils.showError(this._messageService, message);
         },
       });

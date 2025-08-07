@@ -2,10 +2,11 @@ import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Scraper } from '../../../scrapers-management-settings-page/types/Scraper';
 import { VehicleScrapersService } from '../../../scrapers-management-settings-page/services/vehicle-scrapers.service';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-scraper-last-run-info',
-  imports: [DatePipe],
+  imports: [DatePipe, Toast],
   templateUrl: './scraper-last-run-info.component.html',
   styleUrl: './scraper-last-run-info.component.scss',
 })
@@ -23,4 +24,6 @@ export class ScraperLastRunInfoComponent {
   public get lastRunDate(): Date {
     return this._scraper().lastRun;
   }
+
+  public click(): void {}
 }

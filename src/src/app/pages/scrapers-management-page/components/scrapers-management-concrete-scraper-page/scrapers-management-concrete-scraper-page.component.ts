@@ -30,6 +30,9 @@ import { ScraperAddLinkDialogComponent } from './components/scraper-add-link-dia
 import { MessageService } from 'primeng/api';
 import { ScraperLink } from '../scrapers-management-settings-page/types/ScraperLink';
 import { ScraperEditLinkDialogComponent } from './components/scraper-edit-link-dialog/scraper-edit-link-dialog.component';
+import { InstantlyEnabledParserResponse } from '../scrapers-management-settings-page/types/InstantlyEnabledParserResponse';
+import { MessageServiceUtils } from '../../../../shared/utils/message-service-utils';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-scrapers-management-concrete-scraper-page',
@@ -48,6 +51,7 @@ import { ScraperEditLinkDialogComponent } from './components/scraper-edit-link-d
     ScraperAddLinkDialogComponent,
     ScraperEditLinkDialogComponent,
     NgIf,
+    Toast,
   ],
   templateUrl: './scrapers-management-concrete-scraper-page.component.html',
   styleUrl: './scrapers-management-concrete-scraper-page.component.scss',
@@ -61,6 +65,7 @@ export class ScrapersManagementConcreteScraperPageComponent {
   private readonly _isCreatingLink: WritableSignal<boolean>;
   private readonly _isEditingLink: WritableSignal<boolean>;
   private readonly _linkToEdit: WritableSignal<ScraperLink | null>;
+  private readonly _service: VehicleScrapersService;
   private readonly _messageService: MessageService;
 
   constructor(
@@ -68,9 +73,10 @@ export class ScrapersManagementConcreteScraperPageComponent {
     service: VehicleScrapersService,
     messageService: MessageService,
   ) {
+    this._service = service;
+    this._messageService = messageService;
     this._linkToEdit = signal(null);
     this._isEditingLink = signal(false);
-    this._messageService = messageService;
     this._scraper = signal(VehicleScrapersService.defaultScraper());
     this._isCreatingLink = signal(false);
     effect((): void => {
@@ -91,6 +97,29 @@ export class ScrapersManagementConcreteScraperPageComponent {
             });
         });
     });
+  }
+
+  public instantlyEnableClick(): void {
+    const current: Scraper = this._scraper();
+    this._service
+      .enableInstantly(current)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (response: InstantlyEnabledParserResponse): void => {
+          current.nextRun = response.nextRun;
+          current.lastRun = response.lastRun;
+          current.state = response.state;
+          this._scraper.set(current);
+          MessageServiceUtils.showSuccess(
+            this._messageService,
+            `Парсер ${current.name} ${current.type} немедленно включен.`,
+          );
+        },
+        error: (err: HttpErrorResponse): void => {
+          const message: string = err.error.message as string;
+          MessageServiceUtils.showError(this._messageService, message);
+        },
+      });
   }
 
   public get scraperLinkToEdit(): ScraperLink | null {
