@@ -10,6 +10,7 @@ import {
   VehiclesCatalogueQueryWithCharacteristics,
   VehiclesCatalogueQueryWithLocation,
   VehiclesCatalogueQueryWithPrice,
+  VehiclesCatalogueQueryWithTextSearch,
 } from './Models/Query/VehiclesCatalogueQuery';
 import { VehiclesCatalogueToolbarComponent } from './components/vehicles-catalogue-toolbar/vehicles-catalogue-toolbar.component';
 import { Panel } from 'primeng/panel';
@@ -20,6 +21,7 @@ import {
   VehiclesCatalogueQueryCharacteristicsList,
   VehiclesCatalogueQueryLocationId,
   VehiclesCatalogueQueryPriceSpecification,
+  VehiclesCatalogueTextSearchQuery,
 } from './Models/QueryArguments/QueryArguments';
 import { VehiclesCatalogueAggregatedDataGridComponent } from './components/vehicles-catalogue-aggregated-data-grid/vehicles-catalogue-aggregated-data-grid.component';
 import {
@@ -36,6 +38,7 @@ import { VehiclesCatalogueRegionsSelectComponent } from './components/vehicles-c
 import { VehiclesCatlaoguePricesFilterComponent } from './components/vehicles-catlaogue-prices-filter/vehicles-catlaogue-prices-filter.component';
 import { Paginator, PaginatorState } from 'primeng/paginator';
 import { NgIf } from '@angular/common';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-vehicles-catalogue-page',
@@ -49,6 +52,7 @@ import { NgIf } from '@angular/common';
     VehiclesCatlaoguePricesFilterComponent,
     Paginator,
     NgIf,
+    InputText,
   ],
   templateUrl: './vehicles-catalogue-page.component.html',
   styleUrl: './vehicles-catalogue-page.component.scss',
@@ -155,6 +159,13 @@ export class VehiclesCataloguePageComponent implements OnInit {
         $event,
         currentAggregatedDataQuery,
       ),
+    );
+  }
+
+  public acceptTextSearch($event: VehiclesCatalogueTextSearchQuery): void {
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    this._query.set(
+      new VehiclesCatalogueQueryWithTextSearch(currentVehiclesQuery, $event),
     );
   }
 

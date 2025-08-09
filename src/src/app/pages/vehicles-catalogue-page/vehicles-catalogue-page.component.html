@@ -7,7 +7,7 @@
   >
     <app-vehicles-catalogue-regions-select [kind_id_setter]="currentKindId" [brand_id_setter]="currentBrandId"
                                            [model_id_setter]="currentModelId"
-                                           (regionChange)="acceptRegionChange($event)" />
+                                           (regionChange)="acceptRegionChange($event)"/>
   </app-vehicles-catalogue-toolbar>
   <div class="grid grid-cols-12 row-span-1 gap-1 p-1">
     <div class="col-span-12 md:col-span-3">
@@ -17,7 +17,7 @@
         [model_id_setter]="currentModelId"
         (characteristicsListChange)="acceptCharacteristicsList($event)"
       >
-        <app-vehicles-catlaogue-prices-filter (priceFilterChanged)="acceptPriceFilterChange($event)" />
+        <app-vehicles-catlaogue-prices-filter (priceFilterChanged)="acceptPriceFilterChange($event)"/>
       </app-vehicle-characteristics-form>
     </div>
     <div class="col-span-12 md:col-span-9">
@@ -27,14 +27,15 @@
                                                        [brand_id_setter]="currentBrandId"
                                                        [model_id_setter]="currentModelId"
                                                        [query_setter]="aggregatedDataQuery"
-                                                       (currentItemsCountChanged)="acceptItemsCountChange($event)" />
+                                                       (currentItemsCountChanged)="acceptItemsCountChange($event)"/>
         </ng-template>
         <app-vehicles-data-view [kind_id_setter]="currentKindId"
                                 [brand_id_setter]="currentBrandId"
                                 [model_id_setter]="currentModelId"
-                                [query_setter]="vehiclesQuery">
+                                [query_setter]="vehiclesQuery"
+                                (textSearchChange)="acceptTextSearch($event)">
           <p-paginator *ngIf="currentItemsCount > 20" [rows]="20" [totalRecords]="currentItemsCount"
-                       (onPageChange)="acceptPageChange($event)" />
+                       (onPageChange)="acceptPageChange($event)"/>
         </app-vehicles-data-view>
       </p-panel>
     </div>

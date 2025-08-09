@@ -38,6 +38,17 @@ export class VehiclesCatalogueQueryLocationId {
   }
 }
 
+export class VehiclesCatalogueTextSearchQuery {
+  private readonly _searchTerm: string | null;
+  constructor(searchTerm: string | null) {
+    this._searchTerm = searchTerm;
+  }
+
+  public print(): object | null {
+    return this._searchTerm === null ? null : { textSearch: this._searchTerm };
+  }
+}
+
 export class VehiclesCatalogueQueryPriceSpecification {
   private readonly _isNds: boolean | null;
   private readonly _startFrom: number | null;

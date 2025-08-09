@@ -39,6 +39,12 @@ import { CatalogueNavigationChange } from '../../types/CatalogueNavigationChange
 export class VehiclesCatalogueToolbarComponent {
   @Output() navigationChanged: EventEmitter<CatalogueNavigationChange> =
     new EventEmitter<CatalogueNavigationChange>();
+  @Output() onCurrentKindNameFetched: EventEmitter<string> =
+    new EventEmitter<string>();
+  @Output() onCurrentBrandNameFetched: EventEmitter<string> =
+    new EventEmitter<string>();
+  @Output() onCurrentModelNameFetched: EventEmitter<string> =
+    new EventEmitter<string>();
   private readonly _currentKindId: WritableSignal<string>;
   private readonly _currentBrandId: WritableSignal<string>;
   private readonly _currentModelId: WritableSignal<string>;
@@ -82,7 +88,10 @@ export class VehiclesCatalogueToolbarComponent {
               const currentKind: BasicVehicleKind | undefined = kinds.find(
                 (k: BasicVehicleKind): boolean => k.id === kindId,
               );
-              if (currentKind) this._currentKind.set(currentKind);
+              if (currentKind) {
+                this._currentKind.set(currentKind);
+                this.onCurrentKindNameFetched.emit(currentKind.name);
+              }
               this._isKindFirstlyInited = true;
             }
           },
@@ -103,7 +112,10 @@ export class VehiclesCatalogueToolbarComponent {
                 const currentBrand: BasicVehicleBrand | undefined = brands.find(
                   (b: BasicVehicleBrand): boolean => b.id === currentBrandId,
                 );
-                if (currentBrand) this._currentBrand.set(currentBrand);
+                if (currentBrand) {
+                  this._currentBrand.set(currentBrand);
+                  this.onCurrentBrandNameFetched.emit(currentBrand.name);
+                }
                 this._isBrandsFirstlyInited = true;
               }
             },
@@ -126,7 +138,10 @@ export class VehiclesCatalogueToolbarComponent {
                 const currentModel: BasicVehicleModel | undefined = models.find(
                   (m: BasicVehicleModel): boolean => m.id === currentModelId,
                 );
-                if (currentModel) this._currentModel.set(currentModel);
+                if (currentModel) {
+                  this._currentModel.set(currentModel);
+                  this.onCurrentModelNameFetched.emit(currentModel.name);
+                }
                 this._isModelsFirstlyInited = true;
               }
             },

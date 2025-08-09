@@ -1,4 +1,14 @@
 <p-data-view #dv [value]="vehicles" [layout]="'grid'">
+  <ng-template #header>
+    <form class="w-full flex flex-row gap-2" [formGroup]="textSearchForm" (ngSubmit)="textSearchSubmit()">
+      <input [formControlName]="'term'" pInputText
+             [placeholder]="'Поиск по тексту. Например харверстер 2019 года выпуска.'" [fluid]="true">
+      <p-button [type]="'submit'" [style]="{ color: 'black' }" [rounded]="true" [size]="'small'"
+                [icon]="'pi pi-search'"/>
+      <p-button [type]="'submit'" [style]="{ color: 'black' }" [rounded]="true" [size]="'small'"
+                [icon]="'pi pi-times'"/>
+    </form>
+  </ng-template>
   <ng-template #grid let-items>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-1">
       <div *ngFor="let item of items"
@@ -13,7 +23,7 @@
           } @else {
             <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                  [src]="'images/no_photo.png'"
-                 [alt]="item.model.name" />
+                 [alt]="item.model.name"/>
           }
           <div
             class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -39,8 +49,8 @@
             </span>
               </div>
               <div class="flex flex-row gap-1 w-full">
-                <p-badge [value]="`${'Цена:' + item.price.price}`" [severity]="'secondary'" />
-                <p-badge [value]="itemNdsString(item)" [severity]="'secondary'" />
+                <p-badge [value]="`${'Цена:' + item.price.price}`" [severity]="'secondary'"/>
+                <p-badge [value]="itemNdsString(item)" [severity]="'secondary'"/>
               </div>
               <label
                 class="text-sm font-medium text-gray-900 dark:text-white transition-colors">{{ item.region.name + ' ' + item.region.kind }}</label>
@@ -59,7 +69,7 @@
   </ng-template>
   <ng-template #footer>
     <ng-content>
-      
+
     </ng-content>
   </ng-template>
 </p-data-view>

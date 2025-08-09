@@ -4,6 +4,7 @@ import {
   VehiclesCatalogueQueryLocationId,
   VehiclesCatalogueQueryPriceSpecification,
   VehiclesCatalogueQuerySortOrder,
+  VehiclesCatalogueTextSearchQuery,
 } from '../QueryArguments/QueryArguments';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -41,6 +42,38 @@ export class VehiclesCatalogueQueryWithCharacteristics
   }
 
   public query(
+    kindId: string,
+    brandId: string,
+    modelId: string,
+    httpClient: HttpClient,
+  ): Observable<CatalogueVehicle[]> {
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const body = this.bodyObject();
+    return httpClient.post<CatalogueVehicle[]>(url, body);
+  }
+}
+
+export class VehiclesCatalogueQueryWithTextSearch
+  implements VehiclesCatalogueQuery
+{
+  private readonly _query: VehiclesCatalogueQuery;
+  private readonly _search: VehiclesCatalogueTextSearchQuery;
+  constructor(
+    query: VehiclesCatalogueQuery,
+    search: VehiclesCatalogueTextSearchQuery,
+  ) {
+    this._query = query;
+    this._search = search;
+  }
+
+  bodyObject(): object {
+    return {
+      ...this._query.bodyObject(),
+      text: this._search.print(),
+    };
+  }
+
+  query(
     kindId: string,
     brandId: string,
     modelId: string,
