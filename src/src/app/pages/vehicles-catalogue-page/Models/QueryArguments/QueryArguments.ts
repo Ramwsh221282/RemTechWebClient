@@ -126,6 +126,16 @@ export class VehiclesCatalogueQueryPriceSpecification {
   }
 }
 
+export class VehicleModelQueryArgument {
+  private readonly _modelId: string | null;
+  constructor(modelId: string | null) {
+    this._modelId = modelId;
+  }
+  public print(): object | null {
+    return this._modelId === null ? null : { id: this._modelId };
+  }
+}
+
 export class VehiclesCatalogueQueryCharacteristicsList {
   private readonly _characteristics: VehiclesCatalogueQueryCharacteristic[];
 

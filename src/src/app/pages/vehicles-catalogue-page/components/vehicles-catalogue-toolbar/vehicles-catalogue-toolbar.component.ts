@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { StringUtils } from '../../../../shared/utils/string-utils';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Select } from 'primeng/select';
+import { Select, SelectChangeEvent } from 'primeng/select';
 import { BasicVehicleKindsSource } from '../../services/data-sources/BasicVehicleKindsSource';
 import { BasicVehicleKind } from '../../types/BasicVehicleKind';
 import { BasicVehicleBrandsSource } from '../../services/data-sources/BasicVehicleBrandsSource';
@@ -23,15 +23,19 @@ import { Toolbar } from 'primeng/toolbar';
 import { VehiclesSelectNavigationChangeDialogComponent } from '../vehicles-select-navigation-change-dialog/vehicles-select-navigation-change-dialog.component';
 import { NgIf } from '@angular/common';
 import { CatalogueNavigationChange } from '../../types/CatalogueNavigationChange';
+import { VehicleBrand } from '../../../vehicles-catalogue-select-page/data/types/vehiclebrands';
+import { VehicleKind } from '../../../vehicles-catalogue-select-page/data/types/vehiclekind';
+import { VehicleCatalogueQueryWithOtherModel } from '../../Models/Query/VehiclesCatalogueQuery';
+import { VehicleModelQueryArgument } from '../../Models/QueryArguments/QueryArguments';
 
 @Component({
   selector: 'app-vehicles-catalogue-toolbar',
   imports: [
-    Select,
     Button,
     Toolbar,
     VehiclesSelectNavigationChangeDialogComponent,
     NgIf,
+    Select,
   ],
   templateUrl: './vehicles-catalogue-toolbar.component.html',
   styleUrl: './vehicles-catalogue-toolbar.component.scss',
@@ -43,13 +47,11 @@ export class VehiclesCatalogueToolbarComponent {
     new EventEmitter<string>();
   @Output() onCurrentBrandNameFetched: EventEmitter<string> =
     new EventEmitter<string>();
-  @Output() onCurrentModelNameFetched: EventEmitter<string> =
-    new EventEmitter<string>();
+  @Output() modelSelected: EventEmitter<VehicleModelQueryArgument> =
+    new EventEmitter();
   private readonly _currentKindId: WritableSignal<string>;
   private readonly _currentBrandId: WritableSignal<string>;
-  private readonly _currentModelId: WritableSignal<string>;
   private readonly _currentKind: WritableSignal<BasicVehicleKind | null>;
-  private readonly _currentModel: WritableSignal<BasicVehicleModel | null>;
   private readonly _currentBrand: WritableSignal<BasicVehicleBrand | null>;
   private readonly _kinds: WritableSignal<BasicVehicleKind[]>;
   private readonly _brands: WritableSignal<BasicVehicleBrand[]>;
@@ -58,7 +60,6 @@ export class VehiclesCatalogueToolbarComponent {
   private readonly _changeNavigationDialogVisibility: WritableSignal<boolean>;
   private _isKindFirstlyInited: boolean = false;
   private _isBrandsFirstlyInited: boolean = false;
-  private _isModelsFirstlyInited: boolean = false;
 
   constructor(
     kindsSource: BasicVehicleKindsSource,
@@ -68,9 +69,7 @@ export class VehiclesCatalogueToolbarComponent {
     this._changeNavigationDialogVisibility = signal(false);
     this._currentKindId = signal('');
     this._currentBrandId = signal('');
-    this._currentModelId = signal('');
     this._currentKind = signal(null);
-    this._currentModel = signal(null);
     this._currentBrand = signal(null);
     this._kinds = signal([]);
     this._brands = signal([]);
@@ -122,28 +121,17 @@ export class VehiclesCatalogueToolbarComponent {
           });
       }
     });
+
     effect((): void => {
-      if (this._isModelsFirstlyInited) return;
-      const currentBrand: BasicVehicleBrand | null = this._currentBrand();
-      const currentKind: BasicVehicleKind | null = this._currentKind();
-      const currentModelId: string = this._currentModelId();
-      if (currentBrand && currentKind) {
+      const brand: BasicVehicleBrand | null = this._currentBrand();
+      const kind: BasicVehicleKind | null = this._currentKind();
+      if (brand && kind) {
         modelsSource
-          .fetch(currentBrand.id, currentKind.id)
+          .fetch(brand.id, kind.id)
           .pipe(takeUntilDestroyed(this._destroyRef))
           .subscribe({
             next: (models: BasicVehicleModel[]): void => {
               this._models.set(models);
-              if (!StringUtils.isEmptyOrWhiteSpace(currentModelId)) {
-                const currentModel: BasicVehicleModel | undefined = models.find(
-                  (m: BasicVehicleModel): boolean => m.id === currentModelId,
-                );
-                if (currentModel) {
-                  this._currentModel.set(currentModel);
-                  this.onCurrentModelNameFetched.emit(currentModel.name);
-                }
-                this._isModelsFirstlyInited = true;
-              }
             },
           });
       }
@@ -162,15 +150,26 @@ export class VehiclesCatalogueToolbarComponent {
     }
   }
 
-  @Input({ required: true }) set model_id_setter(value: string) {
-    if (!this._isModelsFirstlyInited) {
-      this._currentModelId.set(value);
-    }
-  }
-
   public get currentKindName(): string {
     const kind: BasicVehicleKind | null = this._currentKind();
     return kind === null ? '' : kind.name;
+  }
+
+  public get models(): BasicVehicleModel[] {
+    const models: BasicVehicleModel[] = [
+      { id: '', name: 'Любая' },
+      ...this._models(),
+    ];
+    return models;
+  }
+
+  public onModelSelect($event: SelectChangeEvent): void {
+    const model: BasicVehicleModel = $event.value as BasicVehicleModel;
+    if (model.name === 'Любая') {
+      this.modelSelected.emit(new VehicleModelQueryArgument(null));
+      return;
+    }
+    this.modelSelected.emit(new VehicleModelQueryArgument(model.id));
   }
 
   public get currentKind(): BasicVehicleKind | null {
@@ -184,15 +183,6 @@ export class VehiclesCatalogueToolbarComponent {
 
   public get currentBrand(): BasicVehicleBrand | null {
     return this._currentBrand();
-  }
-
-  public get currentModel(): BasicVehicleModel | null {
-    return this._currentModel();
-  }
-
-  public get currentModelName(): string {
-    const model: BasicVehicleModel | null = this._currentModel();
-    return model === null ? '' : model.name;
   }
 
   public get changeNavigationDialogVisibility(): boolean {
@@ -214,10 +204,8 @@ export class VehiclesCatalogueToolbarComponent {
   public acceptNavigationChange($event: CatalogueNavigationChange): void {
     const kind = $event.kind;
     const brand = $event.brand;
-    const model = $event.model;
     this._currentKind.set(kind);
     this._currentBrand.set(brand);
-    this._currentModel.set(model);
     this.navigationChanged.emit($event);
     this.turnOffChangeNavigationDialogVisibility();
   }

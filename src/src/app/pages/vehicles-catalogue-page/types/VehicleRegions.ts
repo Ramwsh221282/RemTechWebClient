@@ -17,15 +17,10 @@ export class VehicleRegionsSource {
   constructor(httpClient: HttpClient) {
     this._httpClient = httpClient;
   }
-  public fetch(
-    kindId: string,
-    brandId: string,
-    modelId: string,
-  ): Observable<VehicleRegion[]> {
+  public fetch(kindId: string, brandId: string): Observable<VehicleRegion[]> {
     let params: HttpParams = new HttpParams()
       .set('kindId', kindId)
-      .set('brandId', brandId)
-      .set('modelId', modelId);
+      .set('brandId', brandId);
     const requestUrl: string = `${apiUrl}/locations`;
     return this._httpClient.get<VehicleRegion[]>(requestUrl, {
       params: params,

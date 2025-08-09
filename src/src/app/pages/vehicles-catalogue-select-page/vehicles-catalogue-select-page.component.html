@@ -1,5 +1,4 @@
 <app-vehicles-catalogue-selection-bar [kind_setter]="currentKind" [brand_setter]="currentBrand"
-                                      [model_setter]="currentModel"
                                       (goToCatalogueClicked)="navigateToCatalogue()"/>
 
 <div class="my-5"></div>
@@ -8,15 +7,10 @@
 <app-vehicle-brands-select-page-panel *ngIf="kindSelected"
                                       (selectedBrand)="acceptSelectedVehicleBrand($event)"
                                       [kind_setter]="currentKind"/>
-<app-vehicle-models-select-page-panel *ngIf="kindSelected && brandSelected"
-                                      (modelSelected)="acceptSelectedVehicleModel($event)"
-                                      [kind_setter]="currentKind"
-                                      [brand_setter]="currentBrand"/>
 <app-go-to-vehicle-catalogue-dialog *ngIf="shouldOpenGoToCatalogueSelectDialog"
                                     [visibility_setter]="shouldOpenGoToCatalogueSelectDialog"
                                     (goToCatalogueClicked)="navigateToCatalogue()"
                                     [brand_setter]="currentBrand"
                                     [kind_setter]="currentKind"
-                                    [model_setter]="currentModel"
                                     (changeParameterClicked)="acceptChangeParametersClick()"/>
 <app-adaptive-toast/>

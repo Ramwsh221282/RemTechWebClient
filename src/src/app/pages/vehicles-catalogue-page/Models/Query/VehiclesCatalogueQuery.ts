@@ -1,5 +1,6 @@
 import { CatalogueVehicle } from '../../types/CatalogueVehicle';
 import {
+  VehicleModelQueryArgument,
   VehiclesCatalogueQueryCharacteristicsList,
   VehiclesCatalogueQueryLocationId,
   VehiclesCatalogueQueryPriceSpecification,
@@ -15,7 +16,6 @@ export interface VehiclesCatalogueQuery {
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]>;
 }
@@ -41,13 +41,12 @@ export class VehiclesCatalogueQueryWithCharacteristics
     };
   }
 
-  public query(
+  query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -76,10 +75,9 @@ export class VehiclesCatalogueQueryWithTextSearch
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -96,13 +94,12 @@ export class VehiclesCatalogueQueryWithPrice implements VehiclesCatalogueQuery {
     this._query = query;
     this._price = price;
   }
-  public query(
+  query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -136,13 +133,12 @@ export class VehiclesCatalogueQueryWithSortOrder
     };
   }
 
-  public query(
+  query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -164,10 +160,9 @@ export class VehiclesCatalogueQueryWithLocation
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -183,27 +178,29 @@ export class VehiclesCatalogueQueryWithLocation
 export class VehicleCatalogueQueryWithOtherModel
   implements VehiclesCatalogueQuery
 {
-  private readonly _modelId: string;
+  private readonly _argument: VehicleModelQueryArgument;
   private readonly _origin: VehiclesCatalogueQuery;
-  constructor(modelId: string, origin: VehiclesCatalogueQuery) {
-    this._modelId = modelId;
+  constructor(
+    argument: VehicleModelQueryArgument,
+    origin: VehiclesCatalogueQuery,
+  ) {
+    this._argument = argument;
     this._origin = origin;
   }
 
   bodyObject(): object {
     return {
       ...this._origin.bodyObject(),
-      modelId: { id: this._modelId },
+      modelId: this._argument.print(),
     };
   }
 
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -229,11 +226,10 @@ export class VehicleCatalogueQueryWithOtherPage
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
-    const body: object = this.bodyObject();
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
+    const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
 }
@@ -242,15 +238,12 @@ export class VehicleCatalogueQueryWithOtherBrand
   implements VehiclesCatalogueQuery
 {
   private readonly _brandId: string;
-  private readonly _origin: VehiclesCatalogueQuery;
-  constructor(brandId: string, origin: VehiclesCatalogueQuery) {
+  constructor(brandId: string) {
     this._brandId = brandId;
-    this._origin = origin;
   }
 
   bodyObject(): object {
     return {
-      ...this._origin.bodyObject(),
       brandId: { id: this._brandId },
     };
   }
@@ -258,10 +251,9 @@ export class VehicleCatalogueQueryWithOtherBrand
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -285,10 +277,9 @@ export class VehicleCatalogueQueryOtherKind implements VehiclesCatalogueQuery {
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -297,28 +288,20 @@ export class VehicleCatalogueQueryOtherKind implements VehiclesCatalogueQuery {
 export class BaseVehiclesCatalogueQuery implements VehiclesCatalogueQuery {
   private readonly _kindId: string;
   private readonly _brandId: string;
-  private readonly _modelId: string;
   private readonly _currentPage: number;
 
-  public constructor(
-    kindId: string,
-    brandId: string,
-    modelId: string,
-    currentPage: number,
-  ) {
+  public constructor(kindId: string, brandId: string, currentPage: number) {
     this._kindId = kindId;
     this._brandId = brandId;
-    this._modelId = modelId;
     this._currentPage = currentPage;
   }
 
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<CatalogueVehicle[]> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue`;
     const body = this.bodyObject();
     return httpClient.post<CatalogueVehicle[]>(url, body);
   }
@@ -327,12 +310,11 @@ export class BaseVehiclesCatalogueQuery implements VehiclesCatalogueQuery {
     return {
       kindId: { id: this._kindId },
       brandId: { id: this._brandId },
-      modelId: { id: this._modelId },
       pagination: { page: this._currentPage },
     };
   }
 
   public static default(): BaseVehiclesCatalogueQuery {
-    return new BaseVehiclesCatalogueQuery('', '', '', 0);
+    return new BaseVehiclesCatalogueQuery('', '', 0);
   }
 }

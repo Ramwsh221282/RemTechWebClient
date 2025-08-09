@@ -26,12 +26,10 @@ export class VehicleCharacteristicsSource {
   public fetch(
     kindId: string,
     brandId: string,
-    modelId: string,
   ): Observable<VehicleCharacteristic[]> {
     let params: HttpParams = new HttpParams()
       .set('kindId', kindId)
-      .set('brandId', brandId)
-      .set('modelId', modelId);
+      .set('brandId', brandId);
     const requestUrl = `${apiUrl}/vehicle-characteristics`;
     return this._httpClient.get<VehicleCharacteristic[]>(requestUrl, {
       params: params,

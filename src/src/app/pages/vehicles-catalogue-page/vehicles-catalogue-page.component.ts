@@ -18,6 +18,7 @@ import { VehicleCharacteristicsFormComponent } from './components/vehicle-charac
 import { VehiclesDataViewComponent } from './components/vehicles-data-view/vehicles-data-view.component';
 import { CatalogueNavigationChange } from './types/CatalogueNavigationChange';
 import {
+  VehicleModelQueryArgument,
   VehiclesCatalogueQueryCharacteristicsList,
   VehiclesCatalogueQueryLocationId,
   VehiclesCatalogueQueryPriceSpecification,
@@ -52,7 +53,6 @@ import { InputText } from 'primeng/inputtext';
     VehiclesCatlaoguePricesFilterComponent,
     Paginator,
     NgIf,
-    InputText,
   ],
   templateUrl: './vehicles-catalogue-page.component.html',
   styleUrl: './vehicles-catalogue-page.component.scss',
@@ -84,21 +84,13 @@ export class VehiclesCataloguePageComponent implements OnInit {
     this._activatedRoute.params.subscribe((params) => {
       const kindId = params['kindId'] as string;
       const brandId = params['brandId'] as string;
-      const modelId = params['modelId'] as string;
       const page = 1;
       this._currentKindId.set(kindId);
-      this._currentModelId.set(modelId);
       this._currentBrandId.set(brandId);
       this._currentPage.set(page);
-      const query = new BaseVehiclesCatalogueQuery(
-        kindId,
-        brandId,
-        modelId,
-        page,
-      );
+      const query = new BaseVehiclesCatalogueQuery(kindId, brandId, page);
       const aggregatedDataQuery = new VehiclesAggregatedDataBasicQuery(
         kindId,
-        modelId,
         brandId,
       );
       this._aggregatedDataQuery.set(aggregatedDataQuery);
@@ -116,27 +108,14 @@ export class VehiclesCataloguePageComponent implements OnInit {
       this._aggregatedDataQuery();
     this._currentKindId.set($event.kind.id);
     this._currentBrandId.set($event.brand.id);
-    this._currentModelId.set($event.model.id);
     const vehiclesQueryChanged = new VehicleCatalogueQueryOtherKind(
       $event.kind.id,
-      new VehicleCatalogueQueryWithOtherBrand(
-        $event.brand.id,
-        new VehicleCatalogueQueryWithOtherModel(
-          $event.model.id,
-          currentVehiclesQuery,
-        ),
-      ),
+      new VehicleCatalogueQueryWithOtherBrand($event.brand.id),
     );
     const aggregatedDataQueryChanged =
       new VehiclesAggregatedDataKindChangedQuery(
         $event.kind.id,
-        new VehiclesAggregatedDataBrandChangedQuery(
-          $event.brand.id,
-          new VehiclesAggregatedDataModelChangedQuery(
-            $event.model.id,
-            currentAggregatedDataQuery,
-          ),
-        ),
+        new VehiclesAggregatedDataBrandChangedQuery($event.brand.id),
       );
     this._query.set(vehiclesQueryChanged);
     this._aggregatedDataQuery.set(aggregatedDataQueryChanged);
@@ -156,6 +135,21 @@ export class VehiclesCataloguePageComponent implements OnInit {
     );
     this._aggregatedDataQuery.set(
       new VehiclesAggregatedDataCharacteristicsChangedQuery(
+        $event,
+        currentAggregatedDataQuery,
+      ),
+    );
+  }
+
+  public acceptModelSelect($event: VehicleModelQueryArgument): void {
+    const currentVehiclesQuery: VehiclesCatalogueQuery = this._query();
+    const currentAggregatedDataQuery: VehiclesAggregatedDataQuery =
+      this._aggregatedDataQuery();
+    this._query.set(
+      new VehicleCatalogueQueryWithOtherModel($event, currentVehiclesQuery),
+    );
+    this._aggregatedDataQuery.set(
+      new VehiclesAggregatedDataModelChangedQuery(
         $event,
         currentAggregatedDataQuery,
       ),

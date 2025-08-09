@@ -24,7 +24,7 @@
         [optionLabel]="'name'"
         [options]="kinds"
         (onChange)="kindChanged($event)"
-        styleClass="w-full min-w-[200px] sm:min-w-full" />
+        styleClass="w-full min-w-[200px] sm:min-w-full"/>
       <p-select
         [size]="'small'"
         [placeholder]="'Марка'"
@@ -32,20 +32,12 @@
         [optionLabel]="'name'"
         [options]="brands"
         (onChange)="brandChanged($event)"
-        styleClass="w-full min-w-[200px] sm:min-w-full" />
-      <p-select
-        [size]="'small'"
-        [ngModel]="currentModel"
-        [placeholder]="'Модель'"
-        [optionLabel]="'name'"
-        [options]="models"
-        (onChange)="modelChanged($event)"
-        styleClass="w-full min-w-[200px] sm:min-w-full" />
+        styleClass="w-full min-w-[200px] sm:min-w-full"/>
     </div>
     <p-button
       (onClick)="confirmChange()"
       [size]="'small'"
       [label]="'Применить'"
-      styleClass="w-full bg-blue-600 hover:bg-blue-700 border-blue-600" />
+      styleClass="w-full bg-blue-600 hover:bg-blue-700 border-blue-600"/>
   </div>
 </p-dialog>

@@ -30,7 +30,6 @@ export class VehiclesCatalogueAggregatedDataGridComponent {
     new EventEmitter<number>();
   private readonly _kindId: WritableSignal<string>;
   private readonly _brandId: WritableSignal<string>;
-  private readonly _modelId: WritableSignal<string>;
   private readonly _query: WritableSignal<VehiclesAggregatedDataQuery>;
   private readonly _data: WritableSignal<VehiclesAggregatedData>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
@@ -38,7 +37,6 @@ export class VehiclesCatalogueAggregatedDataGridComponent {
   constructor(httpClient: HttpClient) {
     this._kindId = signal('');
     this._brandId = signal('');
-    this._modelId = signal('');
     this._query = signal(VehiclesAggregatedDataBasicQuery.default());
     this._data = signal({
       averagePrice: 0,
@@ -50,16 +48,14 @@ export class VehiclesCatalogueAggregatedDataGridComponent {
     effect((): void => {
       const kindId: string = this._kindId();
       const brandId: string = this._brandId();
-      const modelId: string = this._modelId();
       if (
         StringUtils.isEmptyOrWhiteSpace(kindId) ||
-        StringUtils.isEmptyOrWhiteSpace(brandId) ||
-        StringUtils.isEmptyOrWhiteSpace(modelId)
+        StringUtils.isEmptyOrWhiteSpace(brandId)
       )
         return;
       const query: VehiclesAggregatedDataQuery = this._query();
       query
-        .query(kindId, brandId, modelId, httpClient)
+        .query(kindId, brandId, httpClient)
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (data: VehiclesAggregatedData): void => {
@@ -76,10 +72,6 @@ export class VehiclesCatalogueAggregatedDataGridComponent {
 
   @Input({ required: true }) set brand_id_setter(brand_id: string) {
     this._brandId.set(brand_id);
-  }
-
-  @Input({ required: true }) set model_id_setter(model_id: string) {
-    this._modelId.set(model_id);
   }
 
   @Input({ required: true }) set query_setter(

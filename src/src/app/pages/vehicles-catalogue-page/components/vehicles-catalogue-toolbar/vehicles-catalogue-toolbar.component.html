@@ -2,7 +2,7 @@
   <ng-template #start>
     <section class="flex flex-row gap-4 items-center">
       <p-button [style]="{color:'black'}" [size]="'small'" [label]="'Поменять навигацию'"
-                (click)="turnChangeNavigationDialogVisibility()" />
+                (click)="turnChangeNavigationDialogVisibility()"/>
       <label class="inline-flex gap-1">
         <span class="font-bold">Тип техники:</span>
         <span class="underline">{{ currentKindName }}</span>
@@ -11,10 +11,9 @@
         <span class="font-bold">Марка:</span>
         <span class="underline">{{ currentBrandName }}</span>
       </label>
-      <label class="inline-flex gap-1">
-        <span class="font-bold">Модель:</span>
-        <span class="underline">{{ currentModelName }}</span>
-      </label>
+      <p-select (onChange)="onModelSelect($event)" [options]="models" [optionLabel]="'name'" [placeholder]="'Модели'">
+
+      </p-select>
     </section>
   </ng-template>
   <ng-template #end>
@@ -28,5 +27,4 @@
                                               [visibility_setter]="changeNavigationDialogVisibility"
                                               [current_brand_setter]="currentBrand"
                                               [current_kind_setter]="currentKind"
-                                              [current_model_setter]="currentModel"
-                                              (dialogClosed)="turnOffChangeNavigationDialogVisibility()" />
+                                              (dialogClosed)="turnOffChangeNavigationDialogVisibility()"/>

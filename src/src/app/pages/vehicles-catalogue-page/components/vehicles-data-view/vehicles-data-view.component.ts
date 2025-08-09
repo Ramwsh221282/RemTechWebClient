@@ -40,7 +40,6 @@ export class VehiclesDataViewComponent {
     term: new FormControl(''),
   });
   private readonly _kindId: WritableSignal<string>;
-  private readonly _modelId: WritableSignal<string>;
   private readonly _brandId: WritableSignal<string>;
   private readonly _query: WritableSignal<VehiclesCatalogueQuery>;
   private readonly _vehicles: WritableSignal<CatalogueVehicle[]>;
@@ -50,21 +49,18 @@ export class VehiclesDataViewComponent {
     this._vehicles = signal([]);
     this._kindId = signal('');
     this._brandId = signal('');
-    this._modelId = signal('');
     this._query = signal(BaseVehiclesCatalogueQuery.default());
     effect((): void => {
       const kindId: string = this._kindId();
       const brandId: string = this._brandId();
-      const modelId: string = this._modelId();
       if (
         StringUtils.isEmptyOrWhiteSpace(kindId) ||
-        StringUtils.isEmptyOrWhiteSpace(modelId) ||
         StringUtils.isEmptyOrWhiteSpace(brandId)
       )
         return;
       const query: VehiclesCatalogueQuery = this._query();
       query
-        .query(kindId, brandId, modelId, httpClient)
+        .query(kindId, brandId, httpClient)
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (data: CatalogueVehicle[]): void => {
@@ -91,16 +87,17 @@ export class VehiclesDataViewComponent {
     );
   }
 
+  public clearClick(): void {
+    this.textSearchForm.reset();
+    this.textSearchChange.emit(new VehiclesCatalogueTextSearchQuery(null));
+  }
+
   @Input({ required: true }) set kind_id_setter(value: string) {
     this._kindId.set(value);
   }
 
   @Input({ required: true }) set brand_id_setter(value: string) {
     this._brandId.set(value);
-  }
-
-  @Input({ required: true }) set model_id_setter(value: string) {
-    this._modelId.set(value);
   }
 
   @Input({ required: true }) set query_setter(value: VehiclesCatalogueQuery) {

@@ -44,7 +44,7 @@ interface PickingCharacteristicsEntry {
 
 @Component({
   selector: 'app-vehicle-characteristics-form',
-  imports: [Panel, Select, InputNumber, Checkbox, Button, FormsModule, NgIf],
+  imports: [Panel, Select, Button, FormsModule, NgIf],
   templateUrl: './vehicle-characteristics-form.component.html',
   styleUrl: './vehicle-characteristics-form.component.scss',
 })
@@ -54,7 +54,6 @@ export class VehicleCharacteristicsFormComponent {
     new EventEmitter();
   private readonly _characteristics: WritableSignal<PickingCharacteristics[]>;
   private readonly _kindId: WritableSignal<string>;
-  private readonly _modelId: WritableSignal<string>;
   private readonly _brandId: WritableSignal<string>;
   private readonly _characteristicsList: WritableSignal<VehiclesCatalogueQueryCharacteristicsList>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
@@ -66,19 +65,16 @@ export class VehicleCharacteristicsFormComponent {
     );
     this._kindId = signal('');
     this._brandId = signal('');
-    this._modelId = signal('');
     effect(() => {
       const kindId = this._kindId();
       const brandId: string = this._brandId();
-      const modelId: string = this._modelId();
       if (
         StringUtils.isEmptyOrWhiteSpace(kindId) ||
-        StringUtils.isEmptyOrWhiteSpace(brandId) ||
-        StringUtils.isEmptyOrWhiteSpace(modelId)
+        StringUtils.isEmptyOrWhiteSpace(brandId)
       )
         return;
       source
-        .fetch(kindId, brandId, modelId)
+        .fetch(kindId, brandId)
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (data: VehicleCharacteristic[]): void => {
@@ -94,10 +90,6 @@ export class VehicleCharacteristicsFormComponent {
 
   @Input({ required: true }) set brand_id_setter(value: string) {
     this._brandId.set(value);
-  }
-
-  @Input({ required: true }) set model_id_setter(value: string) {
-    this._modelId.set(value);
   }
 
   public get characteristics(): PickingCharacteristics[] {

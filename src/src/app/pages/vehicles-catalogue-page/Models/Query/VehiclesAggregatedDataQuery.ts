@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { VehiclesAggregatedData } from '../../types/VehiclesAggregatedData';
 import { HttpClient } from '@angular/common/http';
 import {
+  VehicleModelQueryArgument,
   VehiclesCatalogueQueryCharacteristicsList,
   VehiclesCatalogueQueryLocationId,
   VehiclesCatalogueQueryPriceSpecification,
@@ -12,7 +13,6 @@ export interface VehiclesAggregatedDataQuery {
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData>;
   bodyObject(): object;
@@ -42,10 +42,9 @@ export class VehiclesAggregatedDataCharacteristicsChangedQuery
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -74,10 +73,9 @@ export class VehiclesAggregatedDataRegionChangedQuery
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -106,10 +104,9 @@ export class VehiclesAggregatedDataPriceChangedQuery
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -118,27 +115,29 @@ export class VehiclesAggregatedDataPriceChangedQuery
 export class VehiclesAggregatedDataModelChangedQuery
   implements VehiclesAggregatedDataQuery
 {
-  private readonly _modelId: string;
+  private readonly _argument: VehicleModelQueryArgument;
   private readonly _origin: VehiclesAggregatedDataQuery;
-  constructor(modelId: string, origin: VehiclesAggregatedDataQuery) {
-    this._modelId = modelId;
+  constructor(
+    argument: VehicleModelQueryArgument,
+    origin: VehiclesAggregatedDataQuery,
+  ) {
+    this._argument = argument;
     this._origin = origin;
   }
 
   bodyObject(): object {
     return {
       ...this._origin.bodyObject(),
-      modelId: { id: this._modelId },
+      modelId: this._argument.print(),
     };
   }
 
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -148,16 +147,13 @@ export class VehiclesAggregatedDataBrandChangedQuery
   implements VehiclesAggregatedDataQuery
 {
   private readonly _brandId: string;
-  private readonly _origin: VehiclesAggregatedDataQuery;
 
-  constructor(brandId: string, origin: VehiclesAggregatedDataQuery) {
+  constructor(brandId: string) {
     this._brandId = brandId;
-    this._origin = origin;
   }
 
   bodyObject(): object {
     return {
-      ...this._origin.bodyObject(),
       brandId: { id: this._brandId },
     };
   }
@@ -165,10 +161,9 @@ export class VehiclesAggregatedDataBrandChangedQuery
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -195,10 +190,9 @@ export class VehiclesAggregatedDataKindChangedQuery
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -209,20 +203,17 @@ export class VehiclesAggregatedDataBasicQuery
 {
   private readonly _kindId: string;
   private readonly _brandId: string;
-  private readonly _modelId: string;
-  constructor(kindId: string, modelId: string, brandId: string) {
+  constructor(kindId: string, brandId: string) {
     this._kindId = kindId;
     this._brandId = brandId;
-    this._modelId = modelId;
   }
 
   query(
     kindId: string,
     brandId: string,
-    modelId: string,
     httpClient: HttpClient,
   ): Observable<VehiclesAggregatedData> {
-    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/models/${modelId}/catalogue/aggregated`;
+    const url = `${apiUrl}/vehicles/kinds/${kindId}/brands/${brandId}/catalogue/aggregated`;
     const body: object = this.bodyObject();
     return httpClient.post<VehiclesAggregatedData>(url, body);
   }
@@ -231,11 +222,10 @@ export class VehiclesAggregatedDataBasicQuery
     return {
       kindId: { id: this._kindId },
       brandId: { id: this._brandId },
-      modelId: { id: this._modelId },
     };
   }
 
   public static default(): VehiclesAggregatedDataBasicQuery {
-    return new VehiclesAggregatedDataBasicQuery('', '', '');
+    return new VehiclesAggregatedDataBasicQuery('', '');
   }
 }

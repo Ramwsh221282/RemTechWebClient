@@ -5,5 +5,4 @@ import { BasicVehicleModel } from './BasicVehicleModel';
 export interface CatalogueNavigationChange {
   kind: BasicVehicleKind;
   brand: BasicVehicleBrand;
-  model: BasicVehicleModel;
 }

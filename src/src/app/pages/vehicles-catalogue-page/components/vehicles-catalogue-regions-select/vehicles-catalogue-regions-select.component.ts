@@ -30,21 +30,18 @@ export class VehiclesCatalogueRegionsSelectComponent {
 
   private readonly _kindId: WritableSignal<string>;
   private readonly _brandId: WritableSignal<string>;
-  private readonly _modelId: WritableSignal<string>;
   private readonly _regions: WritableSignal<VehicleRegion[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   constructor(source: VehicleRegionsSource) {
     this._kindId = signal('');
     this._brandId = signal('');
-    this._modelId = signal('');
     this._regions = signal([]);
     effect((): void => {
       const kindId: string = this._kindId();
       const brandId: string = this._brandId();
-      const modelId: string = this._modelId();
-      if (StringUtils.anyEmpty([kindId, brandId, modelId])) return;
+      if (StringUtils.anyEmpty([kindId, brandId])) return;
       source
-        .fetch(kindId, brandId, modelId)
+        .fetch(kindId, brandId)
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (regions: VehicleRegion[]): void => {
@@ -77,8 +74,5 @@ export class VehiclesCatalogueRegionsSelectComponent {
   }
   @Input({ required: true }) set brand_id_setter(value: string) {
     this._brandId.set(value);
-  }
-  @Input({ required: true }) set model_id_setter(value: string) {
-    this._modelId.set(value);
   }
 }

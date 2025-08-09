@@ -15,7 +15,7 @@ import { VehicleBrand } from '../../data/types/vehiclebrands';
 
 @Component({
   selector: 'app-go-to-vehicle-catalogue-dialog',
-  imports: [Dialog, InputText, Button],
+  imports: [Dialog, Button],
   templateUrl: './go-to-vehicle-catalogue-dialog.component.html',
   styleUrl: './go-to-vehicle-catalogue-dialog.component.scss',
 })
@@ -36,21 +36,14 @@ export class GoToVehicleCatalogueDialogComponent {
     this._brandName.set(name);
   }
 
-  @Input({ required: true }) set model_setter(value: VehicleModel) {
-    const name = value ? value.name : '';
-    this._modelName.set(name);
-  }
-
   private readonly _visibility: WritableSignal<boolean>;
   private readonly _kindName: WritableSignal<string>;
   private readonly _brandName: WritableSignal<string>;
-  private readonly _modelName: WritableSignal<string>;
 
   constructor() {
     this._visibility = signal(false);
     this._kindName = signal('');
     this._brandName = signal('');
-    this._modelName = signal('');
   }
 
   public get kindName(): string {
@@ -59,10 +52,6 @@ export class GoToVehicleCatalogueDialogComponent {
 
   public get brandName(): string {
     return this._brandName();
-  }
-
-  public get modelName(): string {
-    return this._modelName();
   }
 
   public get visibility(): boolean {

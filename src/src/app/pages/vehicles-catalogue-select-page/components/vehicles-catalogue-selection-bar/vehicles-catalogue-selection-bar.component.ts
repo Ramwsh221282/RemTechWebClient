@@ -13,7 +13,6 @@ import { Badge } from 'primeng/badge';
 import { Panel } from 'primeng/panel';
 import { VehicleBrand } from '../../data/types/vehiclebrands';
 import { VehicleKind } from '../../data/types/vehiclekind';
-import { VehicleModel } from '../../data/types/vehiclemodel';
 
 @Component({
   selector: 'app-vehicles-catalogue-selection-bar',
@@ -32,10 +31,6 @@ export class VehiclesCatalogueSelectionBarComponent {
     this._brand.set(value);
   }
 
-  @Input({ required: true }) set model_setter(value: VehicleModel | null) {
-    this._model.set(value);
-  }
-
   private readonly _severity: WritableSignal<
     | 'info'
     | 'success'
@@ -50,26 +45,21 @@ export class VehiclesCatalogueSelectionBarComponent {
   >;
   private readonly _brand: WritableSignal<VehicleBrand | null>;
   private readonly _kind: WritableSignal<VehicleKind | null>;
-  private readonly _model: WritableSignal<VehicleModel | null>;
   private readonly _buttonAvailability: WritableSignal<boolean>;
   private readonly _kindName: WritableSignal<string>;
-  private readonly _modelName: WritableSignal<string>;
   private readonly _brandName: WritableSignal<string>;
 
   constructor() {
     this._severity = signal('danger');
     this._brand = signal(null);
     this._kind = signal(null);
-    this._model = signal(null);
     this._kindName = signal('');
-    this._modelName = signal('');
     this._brandName = signal('');
     this._buttonAvailability = signal(false);
     effect(() => {
       const brand: VehicleBrand | null = this._brand();
       const kind: VehicleKind | null = this._kind();
-      const model: VehicleModel | null = this._model();
-      if (!brand || !kind || !model) {
+      if (!brand || !kind) {
         this._severity.set('danger');
         this._buttonAvailability.set(false);
         return;
@@ -85,14 +75,6 @@ export class VehiclesCatalogueSelectionBarComponent {
         return;
       }
       this._brandName.set(brand.name);
-    });
-    effect(() => {
-      const model: VehicleModel | null = this._model();
-      if (!model) {
-        this._modelName.set('Модель не выбрана');
-        return;
-      }
-      this._modelName.set(model.name);
     });
     effect(() => {
       const kind: VehicleKind | null = this._kind();
@@ -123,10 +105,6 @@ export class VehiclesCatalogueSelectionBarComponent {
 
   public get brandName(): string {
     return this._brandName();
-  }
-
-  public get modelName(): string {
-    return this._modelName();
   }
 
   public get buttonAvailability(): boolean {

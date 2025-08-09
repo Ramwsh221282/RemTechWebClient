@@ -37,7 +37,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
   private readonly _currentModel: WritableSignal<BasicVehicleModel | undefined>;
   private readonly _kinds: WritableSignal<BasicVehicleKind[]>;
   private readonly _brands: WritableSignal<BasicVehicleBrand[]>;
-  private readonly _models: WritableSignal<BasicVehicleModel[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   private readonly _brandsSource: BasicVehicleBrandsSource;
   private readonly _modelsSource: BasicVehicleModelsSource;
@@ -57,7 +56,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
     this._currentModel = signal(undefined);
     this._kinds = signal([]);
     this._brands = signal([]);
-    this._models = signal([]);
     effect((): void => {
       kindsSource
         .fetch()
@@ -83,23 +81,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
                         );
                         if (newCurrentBrand) {
                           this._currentBrand.set(newCurrentBrand);
-                          modelsSource
-                            .fetch(currentBrand.id, newCurrentKind.id)
-                            .pipe(takeUntilDestroyed(this._destroyRef))
-                            .subscribe({
-                              next: (models: BasicVehicleModel[]): void => {
-                                this._models.set(models);
-                                const currentModel = this._currentModel();
-                                if (currentModel) {
-                                  const newCurrentModel = models.find(
-                                    (m) => m.id === currentModel.id,
-                                  );
-                                  if (newCurrentModel) {
-                                    this._currentModel.set(newCurrentModel);
-                                  }
-                                }
-                              },
-                            });
                         }
                       }
                     },
@@ -123,7 +104,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
           this._currentBrand.set(brands[0]);
           this._modelsSource.fetch(brands[0].id, kind.id).subscribe({
             next: (models: BasicVehicleModel[]): void => {
-              this._models.set(models);
               this._currentModel.set(models[0]);
             },
           });
@@ -141,16 +121,10 @@ export class VehiclesSelectNavigationChangeDialogComponent {
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (models: BasicVehicleModel[]): void => {
-            this._models.set(models);
             this._currentModel.set(models[0]);
           },
         });
     }
-  }
-
-  public modelChanged($event: SelectChangeEvent): void {
-    const model: BasicVehicleModel = $event.value as BasicVehicleModel;
-    this._currentModel.set(model);
   }
 
   @Input({ required: true }) set visibility_setter(value: boolean) {
@@ -169,12 +143,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
     }
   }
 
-  @Input() set current_model_setter(value: BasicVehicleModel | null) {
-    if (value) {
-      this._currentModel.set(value);
-    }
-  }
-
   public get currentKind(): BasicVehicleKind | undefined {
     return this._currentKind();
   }
@@ -183,20 +151,12 @@ export class VehiclesSelectNavigationChangeDialogComponent {
     return this._currentBrand();
   }
 
-  public get currentModel(): BasicVehicleModel | undefined {
-    return this._currentModel();
-  }
-
   public get kinds(): BasicVehicleKind[] {
     return this._kinds();
   }
 
   public get brands(): BasicVehicleBrand[] {
     return this._brands();
-  }
-
-  public get models(): BasicVehicleModel[] {
-    return this._models();
   }
 
   public get visibility(): boolean {
@@ -215,7 +175,6 @@ export class VehiclesSelectNavigationChangeDialogComponent {
       this.navigationParamsChange.emit({
         kind: currentKind,
         brand: currentBrand,
-        model: currentModel,
       });
     }
   }

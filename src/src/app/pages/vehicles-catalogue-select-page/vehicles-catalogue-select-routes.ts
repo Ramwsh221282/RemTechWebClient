@@ -9,7 +9,7 @@ export const VehicleCatalogueSelectRoutes: Routes = [
       ),
   },
   {
-    path: 'vehicles/kinds/:kindId/brands/:brandId/models/:modelId/catalogue',
+    path: 'vehicles/kinds/:kindId/brands/:brandId/catalogue',
     loadComponent: () =>
       import(
         '../vehicles-catalogue-page/vehicles-catalogue-page.component'

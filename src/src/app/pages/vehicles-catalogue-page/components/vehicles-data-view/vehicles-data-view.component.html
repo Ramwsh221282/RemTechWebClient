@@ -5,7 +5,7 @@
              [placeholder]="'Поиск по тексту. Например харверстер 2019 года выпуска.'" [fluid]="true">
       <p-button [type]="'submit'" [style]="{ color: 'black' }" [rounded]="true" [size]="'small'"
                 [icon]="'pi pi-search'"/>
-      <p-button [type]="'submit'" [style]="{ color: 'black' }" [rounded]="true" [size]="'small'"
+      <p-button [type]="'button'" (click)="clearClick()" [style]="{ color: 'black' }" [rounded]="true" [size]="'small'"
                 [icon]="'pi pi-times'"/>
     </form>
   </ng-template>
