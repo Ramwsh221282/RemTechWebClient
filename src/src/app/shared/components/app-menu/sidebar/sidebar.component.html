@@ -3,7 +3,7 @@
     <div class="flex flex-col h-full">
       <div class="flex items-center justify-between px-6 pt-4 shrink-0">
         <span class="inline-flex items-center gap-2">
-          <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo" />
+          <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo"/>
           <span>Навигационное меню</span>
         </span>
         <span>
@@ -14,7 +14,7 @@
                     [outlined]="true"
                     [style]="{ color: 'black' }"
                     (onClick)="closeClick()"
-                    styleClass="h-8 w-8" />
+                    styleClass="h-8 w-8"/>
         </span>
       </div>
       <div class="overflow-auto">
@@ -40,23 +40,23 @@
             />
           </li>
           <li>
-            <app-side-bar-button [label]="'Авторизация'" [navigationRoute]="'sign-in'" [icon]="'pi pi-sign-in'" />
+            <app-side-bar-button [label]="'Авторизация'" [navigationRoute]="'sign-in'" [icon]="'pi pi-sign-in'"/>
           </li>
           <li>
             <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'"
-                                 [navigationRoute]="'vehicles'" />
+                                 [navigationRoute]="'vehicles'"/>
           </li>
           <li>
             <app-side-bar-button [label]="'Запчасти'" [icon]="'pi pi-wrench'"
-                                 [navigationRoute]="'spares/catalogue'" />
+                                 [navigationRoute]="'spares'"/>
           </li>
           <li>
             <app-side-bar-button [label]="'Управление парсерами'" [icon]="'pi pi-warehouse'"
-                                 [navigationRoute]="'scrapers'" />
+                                 [navigationRoute]="'scrapers'"/>
           </li>
           <li>
             <app-side-bar-button [label]="'Управление почтой сервиса'" [icon]="'pi pi-at'"
-                                 [navigationRoute]="'mailing-management/greeting'" />
+                                 [navigationRoute]="'mailing-management/greeting'"/>
           </li>
         </ul>
       </div>

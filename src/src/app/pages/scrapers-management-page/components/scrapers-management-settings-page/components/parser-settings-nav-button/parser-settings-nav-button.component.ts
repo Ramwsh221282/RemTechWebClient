@@ -42,29 +42,14 @@ export class ParserSettingsNavButtonComponent {
     return this._scraper().name;
   }
 
+  public get type(): string {
+    return this._scraper().type;
+  }
+
   public onClick(): void {
     const scraper: Scraper = this._scraper();
     const name: string = scraper.name;
     const type: string = scraper.type;
     this._router.navigate(['/scrapers', 'settings', name, type]);
   }
-
-  // public navigateToCatalogue(): void {
-  //   const currentBrand: VehicleBrand | null = this._selectedVehicleBrand();
-  //   const currentModel: VehicleModel | null = this._selectedVehicleModel();
-  //   const currentKind: VehicleKind | null = this._selectedVehicleKind();
-  //   if (!currentModel || !currentKind || !currentBrand) {
-  //     return;
-  //   }
-  //   this._router.navigate([
-  //     '/vehicles',
-  //     'kinds',
-  //     currentKind.id,
-  //     'brands',
-  //     currentBrand.id,
-  //     'models',
-  //     currentModel.id,
-  //     'catalogue',
-  //   ]);
-  // }
 }

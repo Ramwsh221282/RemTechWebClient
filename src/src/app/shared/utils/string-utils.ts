@@ -1,5 +1,7 @@
 ﻿export class StringUtils {
   public static isEmptyOrWhiteSpace(value: string): boolean {
+    if (!value) return true;
+    if (value.length === 0) return true;
     return value.trim().length === 0;
   }
 

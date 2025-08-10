@@ -1,141 +1,109 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { PanelModule } from 'primeng/panel';
-import { SparesFilterFormComponent } from "./spares-filter-form/spares-filter-form.component";
-import { SparesPriceCriteriaFilterInputComponent } from "./spares-filter-form/spares-price-criteria-filter-input/spares-price-criteria-filter-input.component";
-import { SparesTypeSelectFilterComponent } from "./spares-filter-form/spares-type-select-filter/spares-type-select-filter.component";
-import { SparesOemFilterInputComponent } from "./spares-filter-form/spares-oem-filter-input/spares-oem-filter-input.component";
-import { SparePaginationPayload, SparePaginationPayloadFactory } from './types/spare-pagination-payload';
-import { SparesHttpService } from './services/spares-http.service';
-import { Envelope } from '../../shared/types/Envelope';
-import { SparePagedViewModel, SparePriceViewModel } from './types/spare-paged-viewmodel';
-import { finalize } from 'rxjs';
-import { SpareViewModel } from './types/spare-viewmodel';
-import { SparesListComponent } from "./spares-list/spares-list.component";
-import { DecimalPipe, NgIf } from '@angular/common';
-import { SparesTypePayload } from './types/spares-type-payload';
-import { SparePriceRangePayload } from './types/spare-price-range-payload';
-import { SpareOemPayload } from './types/spare-oem-payload';
-import { SpareSortPayload } from './types/spare-sort-payload';
-import { SpareTextSearchPayload } from './types/spare-text-search-payload';
-import { Sorting, SortingFactory } from '../../shared/types/Sorting';
-import { SpareListPaginationComponent } from "./spares-list/spare-list-pagination/spare-list-pagination.component";
-import { SparePriceChartComponent } from "./spare-price-chart/spare-price-chart.component";
-import { SparePhotoDialogComponent } from "./spare-photo-dialog/spare-photo-dialog.component";
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { Spare } from './types/Spare';
+import { SparesService } from './services/SparesService';
+import { takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MailingManagementCheckSenderFormComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-check-sender-form/mailing-management-check-sender-form.component';
+import { MailingManagementCreateSenderFormComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-create-sender-form/mailing-management-create-sender-form.component';
+import { MailingManagementSendersStatusListComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-senders-status-list/mailing-management-senders-status-list.component';
+import { SparesSearchInputComponent } from './components/spares-search-input/spares-search-input.component';
+import { SparePhotoComponent } from './components/spare-photo/spare-photo.component';
+import { SpareContentComponent } from './components/spare-content/spare-content.component';
+import { SpareTitleComponent } from './components/spare-title/spare-title.component';
+import { SpareDetailsComponent } from './components/spare-details/spare-details.component';
+import { SpareSourceComponent } from './components/spare-source/spare-source.component';
+import { Paginator, PaginatorState } from 'primeng/paginator';
 
 @Component({
   selector: 'app-spares-page',
-  imports: [PanelModule, SparesFilterFormComponent, SparesPriceCriteriaFilterInputComponent, SparesTypeSelectFilterComponent, SparesOemFilterInputComponent, SparesListComponent, DecimalPipe, SpareListPaginationComponent, SparePriceChartComponent, SparePhotoDialogComponent, NgIf, ProgressSpinnerModule],
+  imports: [
+    NgForOf,
+    SparesSearchInputComponent,
+    SparePhotoComponent,
+    SpareContentComponent,
+    SpareTitleComponent,
+    SpareDetailsComponent,
+    SpareSourceComponent,
+    Paginator,
+    NgIf,
+  ],
   templateUrl: './spares-page.component.html',
   styleUrl: './spares-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SparesPageComponent implements OnInit {
-  readonly paginationSignal: WritableSignal<SparePaginationPayload>
-  readonly sparesSignal: WritableSignal<SpareViewModel[]>
-  readonly isLoadingSignal: WritableSignal<boolean>
-  readonly priceAvgSignal: WritableSignal<number>;
-  readonly priceMinSignal: WritableSignal<number>;
-  readonly priceMaxSignal: WritableSignal<number>;
-  readonly totalCountSignal: WritableSignal<number>;
-  readonly totalPagesCount: WritableSignal<number>;
-  readonly spareTypeFilter: WritableSignal<SparesTypePayload | null>;
-  readonly sparePriceRangeFilter: WritableSignal<SparePriceRangePayload | null>
-  readonly oemPayloadFilter: WritableSignal<SpareOemPayload | null>;
-  readonly sortPayloadFilter: WritableSignal<SpareSortPayload | null>;
-  readonly textSearchPayloadFilter: WritableSignal<SpareTextSearchPayload | null>;
-  readonly sorting: WritableSignal<Sorting>;
-  readonly sparePrices: WritableSignal<SparePriceViewModel[]>;
-  readonly selectedSpare: WritableSignal<SpareViewModel | null>
+export class SparesPageComponent {
+  private readonly _spares: WritableSignal<Spare[]>;
+  private readonly _service: SparesService;
+  private readonly _destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly _textSearchString: WritableSignal<string | null>;
+  private readonly _page: WritableSignal<number>;
+  private readonly _totalCount: WritableSignal<number>;
 
-  constructor(private readonly _httpService: SparesHttpService) {
-    this.selectedSpare = signal(null);
-    this.sparePrices = signal([]);
-    this.sorting = signal(SortingFactory.default());
-    this.textSearchPayloadFilter = signal(null);
-    this.paginationSignal = signal(SparePaginationPayloadFactory.empty());
-    this.oemPayloadFilter = signal(null)
-    this.spareTypeFilter = signal(null);
-    this.sparePriceRangeFilter = signal(null);
-    this.sortPayloadFilter = signal(null);
-    this.sparesSignal = signal([]);
-    this.isLoadingSignal = signal(false);
-    this.priceAvgSignal = signal(0);
-    this.priceMaxSignal = signal(0);
-    this.totalCountSignal = signal(0);
-    this.totalPagesCount = signal(0);
-    this.priceMinSignal = signal(0);
+  constructor(service: SparesService) {
+    this._totalCount = signal(0);
+    this._spares = signal([]);
+    this._textSearchString = signal(null);
+    this._page = signal(1);
+    this._service = service;
+    effect(() => {
+      const page: number = this._page();
+      const textSearch: string | null = this._textSearchString();
+      this._service
+        .fetch(page, textSearch)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (data: Spare[]): void => {
+            this._spares.set(data);
+          },
+        });
+    });
+    effect(() => {
+      const textSearch: string | null = this._textSearchString();
+      this._service
+        .count(textSearch)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (count: number): void => {
+            this._totalCount.set(count);
+          },
+        });
+    });
   }
 
-  ngOnInit(): void {
-    this.fetchItems();
+  public get totalCount(): number {
+    return this._totalCount();
   }
 
-  private fetchItems(): void {
-    this.isLoadingSignal.set(true)
-    this._httpService.fetchSparesPagedViewModel(this.paginationSignal(), this.spareTypeFilter(), this.oemPayloadFilter(), this.sortPayloadFilter(), this.textSearchPayloadFilter(), this.sparePriceRangeFilter())
-      .pipe(finalize(() => {
-        this.isLoadingSignal.set(false)
-      }))
-      .subscribe({
-        next: (envelope: Envelope<SparePagedViewModel>): void => {
-          if (envelope.code === 200) {
-            const data: SparePagedViewModel = envelope.data;
-            this.sparesSignal.set(data.spares);
-            this.priceAvgSignal.set(data.priceAvg);
-            this.priceMinSignal.set(data.priceMin);
-            this.priceMaxSignal.set(data.priceMax);
-            this.totalPagesCount.set(data.pagesCount);
-            this.totalCountSignal.set(data.totalCount);
-            this.sparePrices.set(data.prices);
-          }
-        }
-      })
-  }
-
-  public spareDeselected(): void {
-    this.selectedSpare.set(null);
-  }
-
-  public spareSelected(spare: SpareViewModel): void {
-    this.selectedSpare.set(spare);
-  }
-
-  public handleSpareTypeChange($event: SparesTypePayload | null): void {
-    this.spareTypeFilter.set($event);
-    this.fetchItems();
-  }
-
-  public handleSparePriceRangeChange($event: SparePriceRangePayload | null): void {
-    this.sparePriceRangeFilter.set($event);
-    this.fetchItems();
-  }
-
-  public handleOemFilterChange($event: SpareOemPayload | null): void {
-    this.oemPayloadFilter.set($event);
-    this.fetchItems();
-  }
-
-  public handleSortChange($event: SpareSortPayload | null): void {
-    this.sortPayloadFilter.set($event);
-    if (!$event) {
-      this.sorting.set(SortingFactory.default());
+  public acceptPageChange(paginator: PaginatorState): void {
+    const page: number | undefined = paginator.page;
+    const totalPages: number | undefined = paginator.pageCount;
+    if (!page || !totalPages) {
+      this._page.set(1);
+      return;
     }
-    if ($event) {
-      this.sorting.set({ mode: $event.sortMode })
+    if (totalPages - page === 1) {
+      this._page.set(totalPages);
+      return;
     }
-    this.fetchItems();
+    const incremented: number = page + 1;
+    this._page.set(incremented);
+    window.scrollTo(0, 0);
   }
 
-  public handleTextSearchChange($event: SpareTextSearchPayload | null): void {
-    this.textSearchPayloadFilter.set($event);
-    this.fetchItems();
+  public acceptTextSearch(text: string | null): void {
+    console.log('accepted');
+    this._textSearchString.set(text);
   }
 
-  public handlePageChange($event: number): void {
-    const pagination = this.paginationSignal();
-    const updated = { ...pagination, page: $event };
-    this.paginationSignal.set(updated);
-    this.fetchItems();
+  public get spares(): Spare[] {
+    return this._spares();
   }
 }

@@ -1,54 +1,24 @@
-<section class="flex flex-col gap-1">
+<div class="max-w-4xl mx-auto p-6 space-y-8">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Каталог запчастей</h1>
+  </div>
+  <div class="mb-6">
+    <app-spares-search-input (onTextSearchSubmit)="acceptTextSearch($event)"/>
+  </div>
+  <div class="space-y-4">
+    <div *ngFor="let spare of spares"
+         class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition duration-200">
+      <div class="flex flex-col md:flex-row md:items-start gap-4">
+        <app-spare-photo [spare_setter]="spare"/>
+        <app-spare-content [spare_setter]="spare">
+          <app-spare-title [spare_setter]="spare"/>
+          <app-spare-details [spare_setter]="spare"/>
+          <app-spare-source [spare_setter]="spare"/>
+        </app-spare-content>
+      </div>
+    </div>
+    <p-paginator *ngIf="totalCount > 50" [rows]="50" [totalRecords]="totalCount"
+                 (onPageChange)="acceptPageChange($event)"/>
+  </div>
 
-    <p-panel class="w-full h-full sticky-panel" styleClass="h-12">
-        <ng-template #header>
-            <div class="inline-flex gap-2 font-bold text-sm -m-0 p-0">
-                <a class="-my-1 cursor-pointer">{{ 'Количество' }}</a>
-                <a class="-my-1 cursor-pointer">{{ (totalCountSignal() | number:'1.0-0') }}</a>
-                <a class="-my-1 cursor-pointer">{{ 'Ср. цена' }}</a>
-                <a class="-my-1 cursor-pointer">{{ (priceAvgSignal() | number:'1.0-0') + ' Р.' }}</a>
-                <a class="-my-1 cursor-pointer">{{ 'Мин. цена' }}</a>
-                <a class="-my-1 cursor-pointer">{{ (priceMinSignal() | number:'1.0-0') + ' Р.' }}</a>
-                <a class="-my-1 cursor-pointer">{{ 'Макс. цена' }}</a>
-                <a class="-my-1 cursor-pointer">{{ (priceMaxSignal() | number:'1.0-0') + ' Р.' }}</a>
-            </div>
-        </ng-template>
-    </p-panel>
-
-    <section class="flex">
-        <div class="w-1/4">
-
-            @if (isLoadingSignal()) {
-            <p-panel>
-                <div class="flex flex-col h-197 items-center justify-center">
-                    <p-progress-spinner [ariaLabel]="'Loading'" />
-                </div>
-            </p-panel>
-            }
-            @else {
-            <app-spares-filter-form>
-                <app-spares-price-criteria-filter-input (priceRangeEvent)="handleSparePriceRangeChange($event)" />
-                <app-spares-type-select-filter (spareTypeSelectedEvent)="handleSpareTypeChange($event)" />
-                <app-spares-oem-filter-input (spareOemFilterEvent)="handleOemFilterChange($event)" />
-                <app-spare-price-chart [prices]="sparePrices()" />
-            </app-spares-filter-form>
-            }
-
-
-        </div>
-
-        <div class="w-3/4 ml-0.75">
-            <app-spares-list (textSearchEvent)="handleTextSearchChange($event)" (sortEvent)="handleSortChange($event)"
-                [sorting]="sorting()" [isLoading]="isLoadingSignal()" [spares]="sparesSignal()"
-                (spareSelected)="spareSelected($event)">
-                <app-spare-list-pagination (pageChangeEvent)="handlePageChange($event)"
-                    [totalCount]="totalCountSignal()" [pageSize]="10" />
-            </app-spares-list>
-        </div>
-
-    </section>
-
-</section>
-
-<app-spare-photo-dialog *ngIf="selectedSpare()" [visibility]="selectedSpare() !== null"
-    [selectedSpare]="selectedSpare()" (onClose)="spareDeselected()" />
+</div>

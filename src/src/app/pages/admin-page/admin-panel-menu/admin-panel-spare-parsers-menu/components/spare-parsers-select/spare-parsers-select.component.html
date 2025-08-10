@@ -1,8 +1,0 @@
-<p-panel [header]="'Парсеры запчастей'" styleClass="items-center justify-center">
-  <p-select [options]="parsersSignal()"
-            [optionLabel]="'name'"
-            [ngModel]="parsersSignal()[0]"
-            [placeholder]="'Выбрать парсер'"
-            (onChange)="handleSelect($event)">
-  </p-select>
-</p-panel>

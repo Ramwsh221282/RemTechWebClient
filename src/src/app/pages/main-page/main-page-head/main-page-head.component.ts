@@ -12,5 +12,6 @@ import { MainPageHeadOverlayComponent } from './main-page-head-overlay/main-page
   ],
   templateUrl: './main-page-head.component.html',
   styleUrl: './main-page-head.component.scss',
+  standalone: true,
 })
 export class MainPageHeadComponent {}
