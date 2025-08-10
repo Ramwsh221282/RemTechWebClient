@@ -1,5 +1,5 @@
 <button
-  (click)="click()"
+  (click)="click($event)"
   class="cursor-pointer flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg shadow transition duration-150 ease-in-out">
   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
        xmlns="http://www.w3.org/2000/svg">
@@ -10,4 +10,5 @@
   </svg>
   Выключить
 </button>
+<p-confirm-dialog />
 <p-toast [position]="'bottom-right'" />
