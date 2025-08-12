@@ -14,46 +14,7 @@
 
 <div class="max-w-7xl mx-auto p-0 space-y-8">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <div class="lg:col-span-1">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Быстрый поиск</h2>
-
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Категория</label>
-            <select
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option>Спецтехника</option>
-              <option>Запчасти</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Тип техники</label>
-            <select
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option>Экскаваторы</option>
-              <option>Погрузчики</option>
-              <option>Краны</option>
-              <option>Бульдозеры</option>
-              <option>Другое</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Марка</label>
-            <input type="text"
-                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                   placeholder="Введите марку">
-          </div>
-
-          <button
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200">
-            Найти предложения
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-fast-navigation/>
     <div class="lg:col-span-2">
       <app-recent-items-list/>
     </div>

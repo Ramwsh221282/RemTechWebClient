@@ -54,6 +54,12 @@ import { PaginationComponent } from '../../shared/components/pagination/paginati
   styleUrl: './vehicles-page.component.scss',
 })
 export class VehiclesPageComponent {
+  private readonly _currentCategoryId: WritableSignal<string | undefined> =
+    signal(undefined);
+  private readonly _currentBrandId: WritableSignal<string | undefined> =
+    signal(undefined);
+  private readonly _currentModelId: WritableSignal<string | undefined> =
+    signal(undefined);
   private readonly _brandIdPart: WritableSignal<BrandIdPart>;
   private readonly _categoryIdPart: WritableSignal<CategoryIdPart>;
   private readonly _locationIdPart: WritableSignal<LocationIdPart>;
@@ -80,14 +86,19 @@ export class VehiclesPageComponent {
     this._textSearchPart = signal(new TextSearchPart(undefined));
     this._totalAmount = signal(0);
     effect(() => {
-      activatedRoute.params
+      activatedRoute.queryParams
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
           next: (params: any): void => {
             const brandId: string | undefined = params['brandId'];
             const categoryId: string | undefined = params['categoryId'];
             const textSearch: string | undefined = params['textSearch'];
+            const modelId: string | undefined = params['modelId'];
             const page: number | undefined = params['page'];
+            this._currentCategoryId.set(categoryId);
+            this._currentModelId.set(modelId);
+            this._currentBrandId.set(brandId);
+            this._modelIdPart.set(new ModelIdPart(modelId));
             this._brandIdPart.set(new BrandIdPart(brandId));
             this._categoryIdPart.set(new CategoryIdPart(categoryId));
             this._textSearchPart.set(new TextSearchPart(textSearch));
@@ -211,6 +222,18 @@ export class VehiclesPageComponent {
     const part: BrandIdPart = new BrandIdPart($event);
     this._brandIdPart.set(part);
     this.resetPage();
+  }
+
+  public get currentCategoryId(): string | undefined {
+    return this._currentCategoryId();
+  }
+
+  public get currentBrandId(): string | undefined {
+    return this._currentBrandId();
+  }
+
+  public get currentModelId(): string | undefined {
+    return this._currentModelId();
   }
 
   private resetPage(): void {

@@ -4,6 +4,7 @@ import {
   effect,
   EventEmitter,
   inject,
+  Input,
   Output,
   signal,
   WritableSignal,
@@ -22,8 +23,14 @@ import { CatalogueModel } from '../../types/CatalogueModel';
   styleUrl: './vehicle-model-filter-form-part.component.scss',
 })
 export class VehicleModelFilterFormPartComponent {
+  @Input({ required: true }) set current_model_id(value: string | undefined) {
+    this._currentModelId.set(value);
+  }
+
   @Output() onModelSelect: EventEmitter<string | undefined> =
     new EventEmitter();
+  private readonly _currentModelId: WritableSignal<string | undefined> =
+    signal(undefined);
   private readonly _models: WritableSignal<CatalogueModel[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   constructor(service: CatalogueVehiclesService) {
@@ -35,6 +42,13 @@ export class VehicleModelFilterFormPartComponent {
         .subscribe({
           next: (data: CatalogueModel[]): void => {
             this._models.set(data);
+            const current = this._currentModelId();
+            if (current) {
+              const index = data.findIndex((m) => m.id === current);
+              if (index >= 0) {
+                this.selectedModel = data[index];
+              }
+            }
           },
         });
     });

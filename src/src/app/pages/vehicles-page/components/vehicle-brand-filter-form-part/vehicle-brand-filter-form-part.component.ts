@@ -4,6 +4,7 @@ import {
   effect,
   EventEmitter,
   inject,
+  Input,
   Output,
   signal,
   WritableSignal,
@@ -21,10 +22,15 @@ import { CatalogueBrand } from '../../types/CatalogueBrand';
   styleUrl: './vehicle-brand-filter-form-part.component.scss',
 })
 export class VehicleBrandFilterFormPartComponent {
+  @Input({ required: true }) set current_brand_id(value: string | undefined) {
+    this._currentBrandId.set(value);
+  }
   @Output() onBrandChange: EventEmitter<string | undefined> =
     new EventEmitter();
   private readonly _brands: WritableSignal<CatalogueBrand[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly _currentBrandId: WritableSignal<string | undefined> =
+    signal(undefined);
   constructor(service: CatalogueVehiclesService) {
     this._brands = signal([]);
     effect(() => {
@@ -34,6 +40,13 @@ export class VehicleBrandFilterFormPartComponent {
         .subscribe({
           next: (data: CatalogueBrand[]): void => {
             this._brands.set(data);
+            const current = this._currentBrandId();
+            if (current) {
+              const index = data.findIndex((b) => b.id === current);
+              if (index >= 0) {
+                this.selectedBrand = data[index];
+              }
+            }
           },
         });
     });

@@ -29,6 +29,27 @@ export class CatalogueVehiclesService {
     });
   }
 
+  public fetchCategoryBrands(categoryId: string): Observable<CatalogueBrand[]> {
+    const requestUrl: string = `${this._apiUrl}/category-brands`;
+    const params: HttpParams = new HttpParams().set('categoryId', categoryId);
+    return this._httpClient.get<CatalogueBrand[]>(requestUrl, {
+      params: params,
+    });
+  }
+
+  public fetchModelsCategoryBrands(
+    categoryId: string,
+    brandId: string,
+  ): Observable<CatalogueModel[]> {
+    const requestUrl: string = `${this._apiUrl}/category-brand-models`;
+    const params: HttpParams = new HttpParams()
+      .set('categoryId', categoryId)
+      .set('brandId', brandId);
+    return this._httpClient.get<CatalogueModel[]>(requestUrl, {
+      params: params,
+    });
+  }
+
   public fetchConcrete(id: string): Observable<CatalogueVehicle> {
     const requestUrl: string = `${this._apiUrl}/item`;
     const params: HttpParams = new HttpParams().set('vehicleId', id);

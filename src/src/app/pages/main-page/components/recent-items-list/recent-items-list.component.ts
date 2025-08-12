@@ -16,12 +16,7 @@ import { Paginator } from 'primeng/paginator';
 
 @Component({
   selector: 'app-recent-items-list',
-  imports: [
-    ReceintItemCardComponent,
-    ReceintItemsPaginationComponent,
-    NgIf,
-    Paginator,
-  ],
+  imports: [ReceintItemCardComponent, ReceintItemsPaginationComponent],
   templateUrl: './recent-items-list.component.html',
   styleUrl: './recent-items-list.component.scss',
 })

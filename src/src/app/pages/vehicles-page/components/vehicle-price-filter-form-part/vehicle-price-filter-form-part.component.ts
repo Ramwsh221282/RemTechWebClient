@@ -83,13 +83,11 @@ export class VehiclePriceFilterFormPartComponent {
   onPriceFromChange(event: Event) {
     const value = (event.target as HTMLInputElement).value.replace(/\D/g, '');
     this.priceFrom = value ? parseInt(value, 10) : null;
-    console.log(this.priceFrom);
   }
 
   onPriceToChange(event: Event) {
     const value = (event.target as HTMLInputElement).value.replace(/\D/g, '');
     this.priceTo = value ? parseInt(value, 10) : null;
-    console.log(this.priceTo);
   }
 
   public submit(): void {

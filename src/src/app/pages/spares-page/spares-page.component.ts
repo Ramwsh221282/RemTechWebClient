@@ -3,18 +3,13 @@ import {
   DestroyRef,
   effect,
   inject,
-  OnInit,
   signal,
   WritableSignal,
 } from '@angular/core';
-import { DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { Spare } from './types/Spare';
 import { SparesService } from './services/SparesService';
-import { takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MailingManagementCheckSenderFormComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-check-sender-form/mailing-management-check-sender-form.component';
-import { MailingManagementCreateSenderFormComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-create-sender-form/mailing-management-create-sender-form.component';
-import { MailingManagementSendersStatusListComponent } from '../mailing-management-page/components/mailing-management-settings-child-page/mailing-management-senders-status-list/mailing-management-senders-status-list.component';
 import { SparesSearchInputComponent } from './components/spares-search-input/spares-search-input.component';
 import { SparePhotoComponent } from './components/spare-photo/spare-photo.component';
 import { SpareContentComponent } from './components/spare-content/spare-content.component';
@@ -22,6 +17,7 @@ import { SpareTitleComponent } from './components/spare-title/spare-title.compon
 import { SpareDetailsComponent } from './components/spare-details/spare-details.component';
 import { SpareSourceComponent } from './components/spare-source/spare-source.component';
 import { Paginator, PaginatorState } from 'primeng/paginator';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-spares-page',
@@ -47,12 +43,28 @@ export class SparesPageComponent {
   private readonly _page: WritableSignal<number>;
   private readonly _totalCount: WritableSignal<number>;
 
-  constructor(service: SparesService) {
+  constructor(service: SparesService, activatedRoute: ActivatedRoute) {
     this._totalCount = signal(0);
     this._spares = signal([]);
     this._textSearchString = signal(null);
     this._page = signal(1);
     this._service = service;
+    effect(() => {
+      activatedRoute.queryParams
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (params) => {
+            const textSearch: string | undefined = params['textSearch'];
+            const page: string | undefined = params['page'];
+            if (textSearch) {
+              this._textSearchString.set(textSearch);
+            }
+            if (page) {
+              this._page.set(Number(page));
+            }
+          },
+        });
+    });
     effect(() => {
       const page: number = this._page();
       const textSearch: string | null = this._textSearchString();

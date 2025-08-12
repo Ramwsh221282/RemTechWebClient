@@ -4,6 +4,7 @@ import {
   effect,
   EventEmitter,
   inject,
+  Input,
   Output,
   signal,
   WritableSignal,
@@ -21,8 +22,16 @@ import { Select, SelectChangeEvent } from 'primeng/select';
   styleUrl: './vehicle-category-filter-form-part.component.scss',
 })
 export class VehicleCategoryFilterFormPartComponent {
+  @Input({ required: true }) set current_categoryId(
+    categoryId: string | undefined,
+  ) {
+    this._currentCategoryId.set(categoryId);
+  }
+
   @Output() onCategorySelect: EventEmitter<string | undefined> =
     new EventEmitter();
+  private readonly _currentCategoryId: WritableSignal<string | undefined> =
+    signal(undefined);
   private readonly _categories: WritableSignal<CatalogueCategory[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   constructor(service: CatalogueVehiclesService) {
@@ -34,6 +43,13 @@ export class VehicleCategoryFilterFormPartComponent {
         .subscribe({
           next: (data: CatalogueCategory[]): void => {
             this._categories.set(data);
+            const current: string | undefined = this._currentCategoryId();
+            if (current) {
+              const index = data.findIndex((c) => c.id === current);
+              if (index >= 0) {
+                this.selectedCategory = data[index];
+              }
+            }
           },
         });
     });
