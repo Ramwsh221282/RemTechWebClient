@@ -1,9 +1,6 @@
 import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { Scraper } from '../../types/Scraper';
 import { Router } from '@angular/router';
-import { VehicleBrand } from '../../../../../vehicles-catalogue-select-page/data/types/vehiclebrands';
-import { VehicleModel } from '../../../../../vehicles-catalogue-select-page/data/types/vehiclemodel';
-import { VehicleKind } from '../../../../../vehicles-catalogue-select-page/data/types/vehiclekind';
 
 @Component({
   selector: 'app-parser-settings-nav-button',

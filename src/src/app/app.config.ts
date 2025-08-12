@@ -15,17 +15,16 @@ import { definePreset } from '@primeng/themes';
 import { UsersService } from './shared/services/users.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthStatusService } from './shared/services/auth-status.service';
-import { ApiVehicleKindSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclekindsource';
-import { ApiVehicleBrandsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclebrandssource';
-import { ApiVehicleModelsSource } from './pages/vehicles-catalogue-select-page/data/sources/apivehiclemodelssource';
-import { BasicVehicleBrandsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleBrandsSource';
-import { BasicVehicleKindsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleKindsSource';
-import { BasicVehicleModelsSource } from './pages/vehicles-catalogue-page/services/data-sources/BasicVehicleModelsSource';
-import { VehicleCharacteristicsSource } from './pages/vehicles-catalogue-page/types/VehicleCharacteristics';
 import { MailingManagementService } from './pages/mailing-management-page/services/MailingManagementService';
 import { JwtTokenManagingInterceptor } from './shared/middleware/JwtTokenManagingInterceptor';
 import { VehicleScrapersService } from './pages/scrapers-management-page/components/scrapers-management-settings-page/services/vehicle-scrapers.service';
 import { SparesService } from './pages/spares-page/services/SparesService';
+import { ContainedItemsService } from './pages/main-page/services/contained-items-service';
+import { PopularBrandsService } from './pages/main-page/services/popular-brands-service';
+import { PopularCategoriesService } from './pages/main-page/services/popular-categories-service';
+import { AllCategoriesService } from './pages/all-categories-page/services/AllCategoriesService';
+import { AllBrandsService } from './pages/all-brands-page/services/AllBrandsService';
+import { CatalogueVehiclesService } from './pages/vehicles-page/services/CatalogueVehiclesService';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -56,16 +55,15 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideHttpClient(withInterceptors([JwtTokenManagingInterceptor])),
+    CatalogueVehiclesService,
+    AllBrandsService,
+    AllCategoriesService,
+    PopularBrandsService,
+    PopularCategoriesService,
+    ContainedItemsService,
     SparesService,
     VehicleScrapersService,
     MailingManagementService,
-    VehicleCharacteristicsSource,
-    BasicVehicleBrandsSource,
-    BasicVehicleKindsSource,
-    BasicVehicleModelsSource,
-    ApiVehicleKindSource,
-    ApiVehicleBrandsSource,
-    ApiVehicleModelsSource,
     AppMenuService,
     UsersService,
     CookieService,
