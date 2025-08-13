@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { AdminAccessGuard } from '../../../shared/guards/AdminAccessGuard';
+import { RootExistsGuard } from '../../../shared/guards/RootExistsGuard';
 
 export const MailingManagementPageRoutes: Routes = [
   {
@@ -7,6 +9,7 @@ export const MailingManagementPageRoutes: Routes = [
       import('../mailing-management-page.component').then(
         (c) => c.MailingManagementPageComponent,
       ),
+    canActivate: [RootExistsGuard, AdminAccessGuard],
     children: [
       {
         path: 'greeting',

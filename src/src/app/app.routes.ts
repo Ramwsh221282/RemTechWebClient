@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainPageRoutes } from './pages/main-page/main-page-routes';
 import { RegistrationConfirmationRoute } from './pages/registration-confirmation-page/registration-confirmation-route';
-import { UserRegisterRoutes } from './pages/user-register-page/user-register-route';
-import { UserAuthRoutes } from './pages/user-auth-page/user-auth-routes';
 import { ForbiddenPageRoutes } from './pages/forbidden-page/forbidden-page-routes';
 import { MailingManagementPageRoutes } from './pages/mailing-management-page/routing/MailingManagementPageRoutes';
 import { SignInPageRoutes } from './pages/sign-in-page/SignInPareRoutes';
@@ -12,8 +10,12 @@ import { AllCategoriesRoute } from './pages/all-categories-page/AllCategoriesRou
 import { AllBrandsPageRoutes } from './pages/all-brands-page/AllBrandsPageRoutes';
 import { VehiclesPageRoutes } from './pages/vehicles-page/VehiclesPageRoutes';
 import { ConcreteVehicleRoute } from './pages/concrete-vehicle-page/ConcreteVehicleRoute';
+import { CreateRootUserRoutes } from './pages/create-root-user-page/CreateRootUserRoutes';
+import { SomethingWentWrongRoutes } from './pages/something-went-wrong-page/SomethingWentWrongRoutes';
 
 export const routes: Routes = [
+  ...SomethingWentWrongRoutes,
+  ...CreateRootUserRoutes,
   ...VehiclesPageRoutes,
   ...ConcreteVehicleRoute,
   ...AllBrandsPageRoutes,
@@ -21,8 +23,6 @@ export const routes: Routes = [
   ...SparesPageRoutes,
   ...MainPageRoutes,
   ...RegistrationConfirmationRoute,
-  ...UserRegisterRoutes,
-  ...UserAuthRoutes,
   ...ForbiddenPageRoutes,
   ...MailingManagementPageRoutes,
   ...SignInPageRoutes,

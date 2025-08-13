@@ -3,7 +3,6 @@ import { ButtonModule } from 'primeng/button';
 import { AppMenuService } from '../app-menu.service';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AuthStatusService } from '../../../services/auth-status.service';
 
 @Component({
   selector: 'app-header',
@@ -13,14 +12,9 @@ import { AuthStatusService } from '../../../services/auth-status.service';
 })
 export class HeaderComponent {
   private readonly _appMenuService: AppMenuService;
-  private readonly _authStatusService: AuthStatusService;
 
-  constructor(
-    appMenuService: AppMenuService,
-    authStatusService: AuthStatusService,
-  ) {
+  constructor(appMenuService: AppMenuService) {
     this._appMenuService = appMenuService;
-    this._authStatusService = authStatusService;
   }
 
   public onMenuButtonClick = (event: MouseEvent) => {
@@ -29,6 +23,6 @@ export class HeaderComponent {
   };
 
   public get isAuthorized(): boolean {
-    return this._authStatusService.isUserLoggedIn();
+    return true;
   }
 }

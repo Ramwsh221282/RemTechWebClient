@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { RootExistsGuard } from '../../shared/guards/RootExistsGuard';
 
 export const AllBrandsPageRoutes: Routes = [
   {
@@ -7,5 +8,6 @@ export const AllBrandsPageRoutes: Routes = [
       import('./all-brands-page.component').then(
         (c) => c.AllBrandsPageComponent,
       ),
+    canActivate: [RootExistsGuard],
   },
 ];

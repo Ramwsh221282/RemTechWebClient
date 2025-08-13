@@ -11,10 +11,11 @@ import { VehicleScrapersService } from './services/vehicle-scrapers.service';
 import { Scraper } from './types/Scraper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParserSettingsNavButtonComponent } from './components/parser-settings-nav-button/parser-settings-nav-button.component';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-scrapers-management-settings-page',
-  imports: [RouterOutlet, ParserSettingsNavButtonComponent],
+  imports: [RouterOutlet, ParserSettingsNavButtonComponent, NgForOf],
   templateUrl: './scrapers-management-settings-page.component.html',
   styleUrl: './scrapers-management-settings-page.component.scss',
 })

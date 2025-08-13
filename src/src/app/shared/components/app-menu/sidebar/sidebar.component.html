@@ -2,64 +2,125 @@
   <ng-template #headless>
     <div class="flex flex-col h-full">
       <div class="flex items-center justify-between px-6 pt-4 shrink-0">
-        <span class="inline-flex items-center gap-2">
-          <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo"/>
-          <span>Навигационное меню</span>
-        </span>
+                <span class="inline-flex items-center gap-2">
+                    <span class="font-semibold text-2xl text-primary">
+                                <img [ngSrc]="'logos/logo1.png'" [width]="50" [height]="50" alt="logo"/>
+                    </span>
+                </span>
         <span>
-          <p-button type="button"
-                    [icon]="'pi pi-times'"
-                    [severity]="'contrast'"
-                    [rounded]="true"
-                    [outlined]="true"
-                    [style]="{ color: 'black' }"
-                    (onClick)="closeClick()"
-                    styleClass="h-8 w-8"/>
-        </span>
+                    <p-button type="button" (click)="closeClick()" icon="pi pi-times" rounded="true"
+                              outlined="true" styleClass="h-8 w-8"></p-button>
+                </span>
       </div>
-      <div class="overflow-auto">
-        <ul class="list-none p-4 m-0 flex flex-col gap-2">
+      <div class="overflow-y-auto">
+        <ul class="list-none p-4 m-0">
           <li>
-            <p-button
-              [style]="{color:'black'}"
-              [icon]="'pi pi-home'"
-              [fluid]="true"
-              [size]="'large'"
-              [routerLink]="''"
-              label="Главная">
-            </p-button>
+            <div
+              pRipple
+              pStyleClass="@next"
+              enterFromClass="hidden"
+              enterActiveClass="animate-slidedown"
+              leaveToClass="hidden"
+              leaveActiveClass="animate-slideup"
+              class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 p-ripple"
+            >
+              <span class="font-medium">Меню</span>
+            </div>
+            <ul class="list-none p-0 m-0 overflow-hidden">
+              <li>
+                <a pRipple
+                   [routerLink]="''"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-home mr-2"></i>
+                  <span class="font-medium">Главная</span>
+                </a>
+              </li>
+              <li>
+                <a pRipple
+                   [routerLink]="'vehicles'"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-truck mr-2"></i>
+                  <span class="font-medium">Техника</span>
+                </a>
+              </li>
+              <li>
+                <a pRipple
+                   [routerLink]="'spares'"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-wrench mr-2"></i>
+                  <span class="font-medium">Запчасти</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  pRipple
+                  *ngIf="isAdminUser()"
+                  pStyleClass="@next"
+                  enterFromClass="hidden"
+                  enterActiveClass="animate-slidedown"
+                  leaveToClass="hidden"
+                  leaveActiveClass="animate-slideup"
+                  class="flex items-center p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple"
+                >
+                  <i class="pi pi-warehouse mr-2"></i>
+                  <span class="font-medium">Управление</span>
+                </a>
+              </li>
+              <li>
+                <a pRipple
+                   *ngIf="isAdminUser()"
+                   [routerLink]="'scrapers'"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-warehouse mr-2"></i>
+                  <span class="font-medium">Управление парсерами</span>
+                </a>
+              </li>
+              <li>
+                <a pRipple
+                   *ngIf="isAdminUser()"
+                   [routerLink]="'mailing-management/greeting'"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-at mr-2"></i>
+                  <span class="font-medium">Управление почтой сервиса</span>
+                </a>
+              </li>
+            </ul>
           </li>
+        </ul>
+        <ul class="list-none p-4 m-0">
           <li>
-            <!--            *ngIf="!isAuthorized"-->
-            <p-button
-              [style]="{color:'black'}"
-              [fluid]="true"
-              [size]="'large'"
-              [icon]="'pi pi-user'"
-              [label]="'Профиль'"
-            />
-          </li>
-          <li>
-            <app-side-bar-button [label]="'Авторизация'" [navigationRoute]="'sign-in'" [icon]="'pi pi-sign-in'"/>
-          </li>
-          <li>
-            <app-side-bar-button [label]="'Техника'" [icon]="'pi pi-truck'"
-                                 [navigationRoute]="'vehicles'"/>
-          </li>
-          <li>
-            <app-side-bar-button [label]="'Запчасти'" [icon]="'pi pi-wrench'"
-                                 [navigationRoute]="'spares'"/>
-          </li>
-          <li>
-            <app-side-bar-button [label]="'Управление парсерами'" [icon]="'pi pi-warehouse'"
-                                 [navigationRoute]="'scrapers'"/>
-          </li>
-          <li>
-            <app-side-bar-button [label]="'Управление почтой сервиса'" [icon]="'pi pi-at'"
-                                 [navigationRoute]="'mailing-management/greeting'"/>
+            <div
+              pRipple
+              pStyleClass="@next"
+              enterFromClass="hidden"
+              enterActiveClass="animate-slidedown"
+              leaveToClass="hidden"
+              leaveActiveClass="animate-slideup"
+              class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 p-ripple"
+            >
+              <span class="font-medium">Учетная запись</span>
+            </div>
+            <ul class="list-none p-0 m-0 overflow-hidden">
+              <li>
+                <a pRipple
+                   [routerLink]="'sign-in'"
+                   class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                  <i class="pi pi-sign-in mr-2"></i>
+                  <span class="font-medium">Авторизация</span>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
+      <!--      <div class="mt-auto">-->
+      <!--        <hr class="mb-4 mx-4 border-t border-0 border-surface"/>-->
+      <!--        <a pRipple-->
+      <!--           class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">-->
+      <!--          <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"/>-->
+      <!--          <span class="font-bold">Amy Elsner</span>-->
+      <!--        </a>-->
+      <!--      </div>-->
     </div>
   </ng-template>
 </p-drawer>

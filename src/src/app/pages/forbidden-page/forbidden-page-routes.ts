@@ -1,4 +1,5 @@
 ﻿import { Routes } from '@angular/router';
+import { RootExistsGuard } from '../../shared/guards/RootExistsGuard';
 
 export const ForbiddenPageRoutes: Routes = [
   {

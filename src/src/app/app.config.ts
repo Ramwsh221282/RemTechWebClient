@@ -12,9 +12,7 @@ import { routes } from './app.routes';
 import { AppMenuService } from './shared/components/app-menu/app-menu.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { definePreset } from '@primeng/themes';
-import { UsersService } from './shared/services/users.service';
 import { CookieService } from 'ngx-cookie-service';
-import { AuthStatusService } from './shared/services/auth-status.service';
 import { MailingManagementService } from './pages/mailing-management-page/services/MailingManagementService';
 import { JwtTokenManagingInterceptor } from './shared/middleware/JwtTokenManagingInterceptor';
 import { VehicleScrapersService } from './pages/scrapers-management-page/components/scrapers-management-settings-page/services/vehicle-scrapers.service';
@@ -25,6 +23,7 @@ import { PopularCategoriesService } from './pages/main-page/services/popular-cat
 import { AllCategoriesService } from './pages/all-categories-page/services/AllCategoriesService';
 import { AllBrandsService } from './pages/all-brands-page/services/AllBrandsService';
 import { CatalogueVehiclesService } from './pages/vehicles-page/services/CatalogueVehiclesService';
+import { UsersService } from './pages/sign-in-page/services/UsersService';
 
 const myPreset = definePreset(Aura, {
   semantic: {
@@ -55,6 +54,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideHttpClient(withInterceptors([JwtTokenManagingInterceptor])),
+    UsersService,
     CatalogueVehiclesService,
     AllBrandsService,
     AllCategoriesService,
@@ -65,8 +65,6 @@ export const appConfig: ApplicationConfig = {
     VehicleScrapersService,
     MailingManagementService,
     AppMenuService,
-    UsersService,
     CookieService,
-    AuthStatusService,
   ],
 };

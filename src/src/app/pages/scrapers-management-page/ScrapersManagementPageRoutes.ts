@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { AdminAccessGuard } from '../../shared/guards/AdminAccessGuard';
+import { RootExistsGuard } from '../../shared/guards/RootExistsGuard';
 
 export const ScrapersManagementPageRoutes: Routes = [
   {
@@ -7,6 +9,7 @@ export const ScrapersManagementPageRoutes: Routes = [
       import('./scrapers-management-page.component').then(
         (c) => c.ScrapersManagementPageComponent,
       ),
+    canActivate: [RootExistsGuard, AdminAccessGuard],
     children: [
       {
         path: 'greeting',

@@ -18,11 +18,26 @@ export function JwtTokenManagingInterceptor(
     tap((event: HttpEvent<unknown>): void => {
       if (!(event instanceof HttpResponse)) return;
       if (event.status !== 200) return;
-      if (!req.url.includes('api/users/auth')) return;
-      const token: string | null = event.headers.get('Authorization');
-      if (!token) return;
-      cookiesService.delete('RemTechAccessToken');
-      cookiesService.set('RemTechAccessToken', token);
+      if (
+        req.url.includes('sign-in') ||
+        req.url.includes('sign-up') ||
+        req.url.includes('admin-verify') ||
+        req.url.includes('root-up')
+      ) {
+        const tokenId: string | null = event.headers.get(
+          'Authorization_Token_Id',
+        );
+        const tokenValue: string | null = event.headers.get(
+          'Authorization_Token_Value',
+        );
+        if (!tokenId || !tokenValue) return;
+        console.log(tokenId);
+        cookiesService.delete('RemTechAccessToken');
+        cookiesService.delete('RemTechAccessTokenId');
+        cookiesService.set('RemTechAccessToken', tokenValue);
+        cookiesService.set('RemTechAccessTokenId', tokenId);
+      }
+      return;
     }),
   );
 }
