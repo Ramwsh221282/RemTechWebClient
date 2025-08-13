@@ -69,6 +69,7 @@ export class SignInFormComponent {
           );
         },
         error: (err: HttpErrorResponse): void => {
+          console.log(err);
           const message: string = err.error.message;
           MessageServiceUtils.showError(this._messageService, message);
         },

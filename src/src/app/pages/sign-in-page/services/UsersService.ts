@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { apiUrl } from '../../../shared/api/api-endpoint';
 import { Observable } from 'rxjs';
 import { StringUtils } from '../../../shared/utils/string-utils';
+import { TokensService } from '../../../shared/services/TokensService';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ export class UsersService {
   private readonly _httpClient: HttpClient;
   private readonly _apiUrl: string;
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private readonly tokensService: TokensService,
+  ) {
     this._httpClient = httpClient;
     this._apiUrl = `${apiUrl}/users`;
   }
@@ -29,6 +33,13 @@ export class UsersService {
   public checkRoot(): Observable<boolean> {
     const requestUrl = `${this._apiUrl}/root-get`;
     return this._httpClient.get<boolean>(requestUrl);
+  }
+
+  public refreshSession(): Observable<any> {
+    const requestUrl = `${this._apiUrl}/refresh-session`;
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = this.tokensService.addToken(headers);
+    return this._httpClient.get<any>(requestUrl, { headers: headers });
   }
 
   public upRoot(

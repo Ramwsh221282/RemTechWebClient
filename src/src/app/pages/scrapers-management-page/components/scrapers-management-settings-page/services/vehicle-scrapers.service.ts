@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { apiUrl } from '../../../../../shared/api/api-endpoint';
 import { Scraper } from '../types/Scraper';
 import { Observable } from 'rxjs';
@@ -17,6 +17,7 @@ import { UpdateParserLinkEndpointRequest } from '../types/UpdateParserLinkEndpoi
 import { LinkWithChangedActivityResponse } from '../types/LinkWithChangedActivityResponse';
 import { LinkWithChangedActivityRequest } from '../types/LinkWithChangedActivityRequest';
 import { InstantlyEnabledParserResponse } from '../types/InstantlyEnabledParserResponse';
+import { TokensService } from '../../../../../shared/services/TokensService';
 
 @Injectable({
   providedIn: 'root',
@@ -31,12 +32,12 @@ export class VehicleScrapersService {
   }
 
   public fetch(): Observable<Scraper[]> {
-    return this._httpClient.get<Scraper[]>(this._apiUrl);
+    return this._httpClient.get<Scraper[]>(this._apiUrl, {});
   }
 
   public fetchConcrete(name: string, type: string): Observable<Scraper> {
     const requestUrl = `${this._apiUrl}/${name}/${type}`;
-    return this._httpClient.get<Scraper>(requestUrl);
+    return this._httpClient.get<Scraper>(requestUrl, {});
   }
 
   public changeState(

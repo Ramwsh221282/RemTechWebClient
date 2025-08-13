@@ -16,6 +16,8 @@ import { RouterLink } from '@angular/router';
 import { UsersService } from '../../../../pages/sign-in-page/services/UsersService';
 import { CookieService } from 'ngx-cookie-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { defer, Observable } from 'rxjs';
+import { TokensService } from '../../../services/TokensService';
 
 @Component({
   selector: 'app-sidebar',
@@ -28,29 +30,41 @@ export class SidebarComponent {
   @Output() closeClicked: EventEmitter<void> = new EventEmitter();
   @Input({ required: true }) isExpanded: boolean = false;
 
-  public isAdminUser: WritableSignal<boolean>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
-  constructor(usersService: UsersService, cookieService: CookieService) {
-    this.isAdminUser = signal(false);
+  constructor(
+    public readonly usersService: UsersService,
+    public readonly tokensService: TokensService,
+    private readonly cookieService: CookieService,
+  ) {
     effect(() => {
-      const tokenId: string | undefined = cookieService.get(
-        'RemTechAccessTokenId',
-      );
-      if (tokenId === undefined) {
-        this.isAdminUser.set(false);
-        return;
-      }
-      usersService
-        .verifyAdminAccess(tokenId)
+      defer(() => this.waitForToken())
         .pipe(takeUntilDestroyed(this._destroyRef))
         .subscribe({
-          next: (_): void => {
-            this.isAdminUser.set(true);
+          next: (): void => {
+            tokensService.setAdmin();
           },
-          error: (_): void => {
-            this.isAdminUser.set(false);
+          error: (): void => {
+            tokensService.setNotAdmin();
           },
         });
+    });
+  }
+
+  private waitForToken(): Observable<any> {
+    return new Observable((observer) => {
+      const checkToken = () => {
+        const tokenId = this.cookieService.get('RemTechAccessTokenId');
+        if (tokenId) {
+          this.usersService.verifyAdminAccess(tokenId).subscribe({
+            next: (result) => observer.next(result),
+            error: (error) => observer.error(error),
+          });
+        } else {
+          // Повторяем проверку через 100ms
+          setTimeout(checkToken, 100);
+        }
+      };
+      checkToken();
     });
   }
 
