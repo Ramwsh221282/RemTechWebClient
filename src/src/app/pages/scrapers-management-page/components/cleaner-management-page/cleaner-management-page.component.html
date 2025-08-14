@@ -25,6 +25,9 @@
     <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
       <app-cleaner-processed-amount [cleaner_setter]="cleaner"/>
     </div>
+    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+      <app-cleaner-threshold (cleanerUpdated)="acceptCleanerUpdate($event)" [cleaner_setter]="cleaner"/>
+    </div>
   </div>
   <label (click)="instantlyEnableClick()" class="hover: underline cursor-pointer text-lg">Включить немедленно</label>
   <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-inner">

@@ -8,4 +8,5 @@ export interface Cleaner {
   hours: number;
   minutes: number;
   seconds: number;
+  itemsThreshold: number;
 }

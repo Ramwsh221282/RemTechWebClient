@@ -21,6 +21,7 @@ import { CleanerElapsedTimeComponent } from './components/cleaner-elapsed-time/c
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageServiceUtils } from '../../../../shared/utils/message-service-utils';
+import { CleanerThresholdComponent } from './components/cleaner-threshold/cleaner-threshold.component';
 
 @Component({
   selector: 'app-cleaner-management-page',
@@ -34,6 +35,7 @@ import { MessageServiceUtils } from '../../../../shared/utils/message-service-ut
     CleanerWaitDaysSelectComponent,
     CleanerProcessedAmountComponent,
     CleanerElapsedTimeComponent,
+    CleanerThresholdComponent,
   ],
   templateUrl: './cleaner-management-page.component.html',
   styleUrl: './cleaner-management-page.component.scss',

@@ -30,7 +30,14 @@ export class CleanersService {
       hours: 0,
       minutes: 0,
       seconds: 0,
+      itemsThreshold: 0,
     };
+  }
+
+  public changeThreshold(threshold: number): Observable<Cleaner> {
+    const requestUrl: string = `${this._apiUrl}/treshold`;
+    const body = { Threshold: threshold };
+    return this._httpClient.patch<Cleaner>(requestUrl, body);
   }
 
   public changeWaitDays(waitDays: number): Observable<Cleaner> {
