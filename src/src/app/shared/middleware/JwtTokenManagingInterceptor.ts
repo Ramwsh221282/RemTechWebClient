@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { inject } from '@angular/core';
 import { TokensService } from '../services/TokensService';
 import { UsersService } from '../../pages/sign-in-page/services/UsersService';
+import { Router } from '@angular/router';
 
 export function JwtTokenManagingInterceptor(
   req: HttpRequest<unknown>,
@@ -19,6 +20,7 @@ export function JwtTokenManagingInterceptor(
   const cookiesService: CookieService = inject(CookieService);
   const tokensService: TokensService = inject(TokensService);
   const usersService: UsersService = inject(UsersService);
+  const router: Router = inject(Router);
 
   const currentToken: string | null = cookiesService.get(
     'RemTechAccessTokenId',
@@ -30,6 +32,32 @@ export function JwtTokenManagingInterceptor(
   return next(modifiedToken).pipe(
     tap((event: HttpEvent<unknown>): void => {
       if (!(event instanceof HttpResponse)) return;
+
+      if (req.url.includes('verify')) {
+        if (event.status === 200) {
+          const responseBody = event.body;
+          if (responseBody === false) {
+            tokensService.setNotAdmin();
+            return;
+          } else {
+            const tokenId: string | null = event.headers.get(
+              'Authorization_Token_Id',
+            );
+            const tokenValue: string | null = event.headers.get(
+              'Authorization_Token_Value',
+            );
+            tokensService.hasTokenSignal.set(false);
+            updateTokensFromHeaders(
+              tokenId,
+              tokenValue,
+              cookiesService,
+              tokensService,
+              router,
+            );
+            return;
+          }
+        }
+      }
 
       if (event.status === 200) {
         if (req.url.includes('sign-in') || req.url.includes('sign-up')) {
@@ -44,6 +72,7 @@ export function JwtTokenManagingInterceptor(
             tokenValue,
             cookiesService,
             tokensService,
+            router,
           );
           return;
         }
@@ -69,19 +98,20 @@ export function JwtTokenManagingInterceptor(
           tokenValue,
           cookiesService,
           tokensService,
+          router,
         );
       }
     }),
 
     catchError((error: HttpErrorResponse) => {
       if (shouldRefreshToken(error, req)) {
-        console.log('handling token refresh');
         return handleTokenRefresh(
           req,
           next,
           cookiesService,
           tokensService,
           usersService,
+          router,
         );
       }
 
@@ -113,14 +143,16 @@ function updateTokensFromHeaders(
   tokenValue: string | null,
   cookiesService: CookieService,
   tokensService: TokensService,
+  router: Router,
 ): void {
   if (tokenId && tokenValue) {
-    cookiesService.deleteAll('RemTechAccessToken');
-    cookiesService.deleteAll('RemTechAccessTokenId');
-
-    cookiesService.set('RemTechAccessToken', tokenValue);
-    cookiesService.set('RemTechAccessTokenId', tokenId);
+    cookiesService.delete('RemTechAccessToken');
+    cookiesService.delete('RemTechAccessTokenId');
+    cookiesService.set('RemTechAccessToken', tokenValue, { path: '/' });
+    cookiesService.set('RemTechAccessTokenId', tokenId, { path: '/' });
     tokensService.tokenId.set(tokenId);
+    tokensService.hasTokenSignal.set(true);
+    router.navigate(['']);
   }
 }
 
@@ -143,6 +175,7 @@ function handleTokenRefresh(
   cookiesService: CookieService,
   tokensService: TokensService,
   usersService: UsersService,
+  router: Router,
 ): Observable<HttpEvent<unknown>> {
   return usersService.refreshSession().pipe(
     switchMap((refreshResponse: HttpResponse<unknown>) => {
@@ -158,6 +191,7 @@ function handleTokenRefresh(
           tokenValue,
           cookiesService,
           tokensService,
+          router,
         );
         console.log('tokens updated');
       }
@@ -167,6 +201,8 @@ function handleTokenRefresh(
     }),
     catchError((refreshError) => {
       clearAllTokens(cookiesService, tokensService);
+      tokensService.hasTokenSignal.set(false);
+      tokensService.setNotAdmin();
       return throwError(() => refreshError);
     }),
   );
@@ -179,4 +215,6 @@ function clearAllTokens(
   cookiesService.deleteAll('RemTechAccessToken');
   cookiesService.deleteAll('RemTechAccessTokenId');
   tokensService.tokenId.set('');
+  tokensService.hasTokenSignal.set(false);
+  tokensService.setNotAdmin();
 }

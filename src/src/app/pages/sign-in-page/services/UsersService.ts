@@ -30,6 +30,17 @@ export class UsersService {
     return this._httpClient.post(requestUrl, body);
   }
 
+  public signOut(): Observable<any> {
+    const requestUrl = `${this._apiUrl}/sign-out`;
+    return this._httpClient.get(requestUrl);
+  }
+
+  public verify(token: string): Observable<any> {
+    const requestUrl = `${this._apiUrl}/verify`;
+    const headers = new HttpHeaders().set('RemTechAccessTokenId', token);
+    return this._httpClient.get<any>(requestUrl, { headers: headers });
+  }
+
   public checkRoot(): Observable<boolean> {
     const requestUrl = `${this._apiUrl}/root-get`;
     return this._httpClient.get<boolean>(requestUrl);
