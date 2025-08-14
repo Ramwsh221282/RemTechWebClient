@@ -5,6 +5,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
@@ -34,7 +35,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
   animations: [],
   providers: [ConfirmationService],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   @Output() closeClicked: EventEmitter<void> = new EventEmitter();
   @Input({ required: true }) isExpanded: boolean = false;
 
@@ -73,6 +74,10 @@ export class SidebarComponent {
           },
         });
     });
+  }
+
+  ngOnInit(): void {
+    const tokenId = this.cookieService.get('RemTechAccessTokenId');
   }
 
   private waitForToken(): Observable<any> {

@@ -12,6 +12,13 @@ export const ScrapersManagementPageRoutes: Routes = [
     canActivate: [RootExistsGuard, AdminAccessGuard],
     children: [
       {
+        path: 'cleaner',
+        loadComponent: () =>
+          import(
+            './components/cleaner-management-page/cleaner-management-page.component'
+          ).then((c) => c.CleanerManagementPageComponent),
+      },
+      {
         path: 'greeting',
         loadComponent: () =>
           import(

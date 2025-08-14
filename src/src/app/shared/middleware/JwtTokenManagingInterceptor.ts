@@ -20,7 +20,6 @@ export function JwtTokenManagingInterceptor(
   const cookiesService: CookieService = inject(CookieService);
   const tokensService: TokensService = inject(TokensService);
   const usersService: UsersService = inject(UsersService);
-  const router: Router = inject(Router);
 
   const currentToken: string | null = cookiesService.get(
     'RemTechAccessTokenId',
@@ -32,6 +31,29 @@ export function JwtTokenManagingInterceptor(
   return next(modifiedToken).pipe(
     tap((event: HttpEvent<unknown>): void => {
       if (!(event instanceof HttpResponse)) return;
+
+      if (req.url.includes('verify-admin')) {
+        if (event.status === 200) {
+          const tokenId: string | null = event.headers.get(
+            'Authorization_Token_Id',
+          );
+          const tokenValue: string | null = event.headers.get(
+            'Authorization_Token_Value',
+          );
+          tokensService.hasTokenSignal.set(true);
+          tokensService.setAdmin();
+          updateTokensFromHeaders(
+            tokenId,
+            tokenValue,
+            cookiesService,
+            tokensService,
+          );
+          return;
+        } else {
+          tokensService.setNotAdmin();
+          return;
+        }
+      }
 
       if (req.url.includes('verify')) {
         if (event.status === 200) {
@@ -52,7 +74,6 @@ export function JwtTokenManagingInterceptor(
               tokenValue,
               cookiesService,
               tokensService,
-              router,
             );
             return;
           }
@@ -72,21 +93,12 @@ export function JwtTokenManagingInterceptor(
             tokenValue,
             cookiesService,
             tokensService,
-            router,
           );
           return;
         }
       }
 
-      if (event.status !== 200) return;
-
-      if (
-        req.url.includes('sign-in') ||
-        req.url.includes('sign-up') ||
-        req.url.includes('admin-verify') ||
-        req.url.includes('root-up') ||
-        req.url.includes('refresh-session')
-      ) {
+      if (req.url.includes('root-up') || req.url.includes('refresh-session')) {
         const tokenId: string | null = event.headers.get(
           'Authorization_Token_Id',
         );
@@ -98,7 +110,6 @@ export function JwtTokenManagingInterceptor(
           tokenValue,
           cookiesService,
           tokensService,
-          router,
         );
       }
     }),
@@ -111,7 +122,6 @@ export function JwtTokenManagingInterceptor(
           cookiesService,
           tokensService,
           usersService,
-          router,
         );
       }
 
@@ -143,7 +153,6 @@ function updateTokensFromHeaders(
   tokenValue: string | null,
   cookiesService: CookieService,
   tokensService: TokensService,
-  router: Router,
 ): void {
   if (tokenId && tokenValue) {
     cookiesService.delete('RemTechAccessToken');
@@ -152,7 +161,6 @@ function updateTokensFromHeaders(
     cookiesService.set('RemTechAccessTokenId', tokenId, { path: '/' });
     tokensService.tokenId.set(tokenId);
     tokensService.hasTokenSignal.set(true);
-    router.navigate(['']);
   }
 }
 
@@ -175,7 +183,6 @@ function handleTokenRefresh(
   cookiesService: CookieService,
   tokensService: TokensService,
   usersService: UsersService,
-  router: Router,
 ): Observable<HttpEvent<unknown>> {
   return usersService.refreshSession().pipe(
     switchMap((refreshResponse: HttpResponse<unknown>) => {
@@ -191,9 +198,7 @@ function handleTokenRefresh(
           tokenValue,
           cookiesService,
           tokensService,
-          router,
         );
-        console.log('tokens updated');
       }
       const newTokenId = cookiesService.get('RemTechAccessTokenId');
       const updatedReq = addAuthorizationHeader(originalReq, newTokenId);

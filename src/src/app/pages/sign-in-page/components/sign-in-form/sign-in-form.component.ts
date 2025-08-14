@@ -7,6 +7,9 @@ import { MessageServiceUtils } from '../../../../shared/utils/message-service-ut
 import { UsersService } from '../../services/UsersService';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { TokensService } from '../../../../shared/services/TokensService';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -26,7 +29,13 @@ export class SignInFormComponent {
   private readonly _service: UsersService;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
 
-  constructor(messageService: MessageService, service: UsersService) {
+  constructor(
+    messageService: MessageService,
+    service: UsersService,
+    private readonly _router: Router,
+    private readonly _tokensService: TokensService,
+    private readonly _cookiesService: CookieService,
+  ) {
     this._messageService = messageService;
     this._service = service;
   }
@@ -67,9 +76,19 @@ export class SignInFormComponent {
             this._messageService,
             'Авторизация успешна.',
           );
+          const tokenId = this._cookiesService.get('RemTechAccessTokenId');
+          this._service.verifyAdminAccess(tokenId).subscribe({
+            next: (_): void => {
+              this._tokensService.setAdmin();
+              this._router.navigate(['']);
+            },
+            error: (err): void => {
+              this._tokensService.setNotAdmin();
+              this._router.navigate(['']);
+            },
+          });
         },
         error: (err: HttpErrorResponse): void => {
-          console.log(err);
           const message: string = err.error.message;
           MessageServiceUtils.showError(this._messageService, message);
         },
