@@ -17,8 +17,8 @@
               *ngIf="vehicle.photos.length"
               [src]="vehicle.photos[currentPhotoIndex]"
               alt="Фото техники"
-              class="object-cover w-full h-full transition-opacity duration-300"
-            >
+              class="object-contain mx-auto transition-opacity duration-300"
+            />
 
             <button
               *ngIf="vehicle.photos.length > 1"
