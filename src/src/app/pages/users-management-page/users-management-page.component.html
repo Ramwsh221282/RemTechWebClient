@@ -1,45 +1,27 @@
 <div class="max-w-4xl mx-auto p-6 space-y-8">
-  <!-- Панель фильтров и действий -->
   <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 shadow-sm">
     <div class="flex flex-wrap gap-4 items-end">
-      <!-- Секция фильтров -->
       <div class="flex flex-wrap gap-3 flex-1 min-w-[300px]">
 
-        <!-- Фильтр по имени -->
         <app-name-filter-input [name_setter]="currentNameFilter" (onNameFilterChange)="changeNameFilter($event)"/>
 
-        <!-- Фильтр по email -->
         <app-email-filter-input [email_setter]="currentEmailFilter" (onEmailInputChange)="changeEmailFilter($event)"/>
 
-        <!-- Фильтр по роли -->
         <app-role-filter-select [role_setter]="currentRoleFilter" (rolesFetched)="acceptRoles($event)"
                                 (roleSelected)="changeRoleFilter($event)"/>
       </div>
 
-      <!-- Кнопка добавления -->
       <div>
-        <button
-          (click)="handleAddUserClick()"
-          class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center dark:bg-blue-600 dark:hover:bg-blue-700"
-        >
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg>
-          Добавить пользователя
-        </button>
+        <app-add-user-button (userAddClicked)="handleAddUserClick()"/>
       </div>
     </div>
   </div>
 
-  <!-- Список пользователей -->
+
   <div class="space-y-3">
     @for (user of _users(); track user.id) {
-      <div
-        class="flex flex-col sm:flex-row sm:items-start p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-        <!-- ... остальная часть кода с пользователями ... -->
-      </div>
+      <app-user-card [user_setter]="user" (editUserClick)="changeUserToEdit($event)"/>
     }
-
     @if (_users().length === 0) {
       <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,3 +36,6 @@
   </div>
 </div>
 <app-add-user-dialog [visible_setter]="isAddingUser" [roles]="availableRoles" (onClose)="handleAddUserFormClose()"/>
+<app-edit-user-dialog *ngIf="userToEdit !== null" [visible_setter]="userToEdit !== null" [roles_setter]="availableRoles"
+                      [edit_user_setter]="userToEdit"
+                      (userEditApplied)="changeUserToEdit($event)"/>

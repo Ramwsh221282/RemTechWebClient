@@ -14,6 +14,11 @@ import { NameFilterInputComponent } from './components/name-filter-input/name-fi
 import { RoleFilterSelectComponent } from './components/role-filter-select/role-filter-select.component';
 import { ReadRoleResponse } from './types/ReadRoleResponse';
 import { AddUserDialogComponent } from './components/add-user-dialog/add-user-dialog.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
+import { AddUserButtonComponent } from './components/add-user-button/add-user-button.component';
+import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user-dialog.component';
+import { NgIf } from '@angular/common';
+import { UpdateUserProfileResult } from '../sign-in-page/types/UpdateUserProfileResult';
 
 @Component({
   selector: 'app-users-management-page',
@@ -22,6 +27,10 @@ import { AddUserDialogComponent } from './components/add-user-dialog/add-user-di
     NameFilterInputComponent,
     RoleFilterSelectComponent,
     AddUserDialogComponent,
+    UserCardComponent,
+    AddUserButtonComponent,
+    EditUserDialogComponent,
+    NgIf,
   ],
   templateUrl: './users-management-page.component.html',
   styleUrl: './users-management-page.component.scss',
@@ -33,9 +42,11 @@ export class UsersManagementPageComponent {
   private readonly _page: WritableSignal<number>;
   private readonly _isAddingUser: WritableSignal<boolean>;
   private readonly _availableRoles: WritableSignal<ReadRoleResponse[]>;
+  private readonly _userToEdit: WritableSignal<ReadUserResponse | null>;
   public readonly _users: WritableSignal<ReadUserResponse[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
   constructor(service: UsersService) {
+    this._userToEdit = signal(null);
     this._availableRoles = signal([]);
     this._isAddingUser = signal(false);
     this._nameFilter = signal(null);
@@ -62,6 +73,10 @@ export class UsersManagementPageComponent {
           },
         });
     });
+  }
+
+  public changeUserToEdit(user: ReadUserResponse | null): void {
+    this._userToEdit.set(user);
   }
 
   public acceptRoles(roles: ReadRoleResponse[]): void {
@@ -92,12 +107,29 @@ export class UsersManagementPageComponent {
     return this._nameFilter();
   }
 
+  public get userToEdit(): ReadUserResponse | null {
+    return this._userToEdit();
+  }
+
   public get currentRoleFilter(): ReadRoleResponse | null {
     return this._roleFilter();
   }
 
   public changeNameFilter(name: string | null): void {
     this._nameFilter.set(name);
+  }
+
+  public handleUserUpdated(user: UpdateUserProfileResult): void {
+    const users: ReadUserResponse[] = this._users();
+    const userIndex = users.findIndex((u) => u.id === user.userId);
+    if (userIndex === -1) return;
+    users[userIndex] = {
+      ...users[userIndex],
+      email: user.userEmail,
+      name: user.userName,
+      role: user.userRole,
+    };
+    this._users.set(users);
   }
 
   public changeEmailFilter(name: string | null): void {

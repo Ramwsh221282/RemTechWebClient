@@ -7,6 +7,8 @@ import { TokensService } from '../../../shared/services/TokensService';
 import { UserInfo } from '../types/UserInfo';
 import { ReadUserResponse } from '../../users-management-page/types/ReadUserResponse';
 import { ReadRoleResponse } from '../../users-management-page/types/ReadRoleResponse';
+import { UpdateUserProfileResult } from '../types/UpdateUserProfileResult';
+import { UpdateUserRequest } from '../types/UpdateUserRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +28,13 @@ export class UsersService {
   public readRoles(): Observable<ReadRoleResponse[]> {
     const requestUrl: string = `${this._apiUrl}/roles`;
     return this._httpClient.get<ReadRoleResponse[]>(requestUrl);
+  }
+
+  public updateUserProfile(
+    request: UpdateUserRequest,
+  ): Observable<UpdateUserProfileResult> {
+    const requestUrl: string = `${this._apiUrl}/profile`;
+    return this._httpClient.put<UpdateUserProfileResult>(requestUrl, request);
   }
 
   public createUserByAdmin(
