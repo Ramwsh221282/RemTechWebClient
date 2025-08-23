@@ -20,8 +20,11 @@
 
   <div class="space-y-3">
     @for (user of _users(); track user.id) {
-      <app-user-card [user_setter]="user" (editUserClick)="changeUserToEdit($event)"/>
+      <app-user-card [user_setter]="user" (editUserClick)="changeUserToEdit($event)"
+                     (userRemoved)="handleUserRemoved($event)"/>
     }
+    <app-pagination *ngIf="totalCount > 30" [page_size]="30" [total_count]="totalCount" [current_page]="currentPage"
+                    (pageChanged)="changePage($event)"/>
     @if (_users().length === 0) {
       <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,4 +41,4 @@
 <app-add-user-dialog [visible_setter]="isAddingUser" [roles]="availableRoles" (onClose)="handleAddUserFormClose()"/>
 <app-edit-user-dialog *ngIf="userToEdit !== null" [visible_setter]="userToEdit !== null" [roles_setter]="availableRoles"
                       [edit_user_setter]="userToEdit"
-                      (userEditApplied)="changeUserToEdit($event)"/>
+                      (userEditApplied)="changeUserToEdit($event)" (userUpdated)="handleUserUpdated($event)"/>

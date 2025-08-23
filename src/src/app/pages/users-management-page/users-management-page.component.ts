@@ -19,6 +19,10 @@ import { AddUserButtonComponent } from './components/add-user-button/add-user-bu
 import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user-dialog.component';
 import { NgIf } from '@angular/common';
 import { UpdateUserProfileResult } from '../sign-in-page/types/UpdateUserProfileResult';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageServiceUtils } from '../../shared/utils/message-service-utils';
+import { HttpErrorResponse } from '@angular/common/http';
+import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-users-management-page',
@@ -31,9 +35,11 @@ import { UpdateUserProfileResult } from '../sign-in-page/types/UpdateUserProfile
     AddUserButtonComponent,
     EditUserDialogComponent,
     NgIf,
+    PaginationComponent,
   ],
   templateUrl: './users-management-page.component.html',
   styleUrl: './users-management-page.component.scss',
+  providers: [ConfirmationService, MessageService],
 })
 export class UsersManagementPageComponent {
   public readonly _nameFilter: WritableSignal<string | null>;
@@ -45,7 +51,9 @@ export class UsersManagementPageComponent {
   private readonly _userToEdit: WritableSignal<ReadUserResponse | null>;
   public readonly _users: WritableSignal<ReadUserResponse[]>;
   private readonly _destroyRef: DestroyRef = inject(DestroyRef);
-  constructor(service: UsersService) {
+  private readonly _totalCount: WritableSignal<number>;
+  constructor(private readonly service: UsersService) {
+    this._totalCount = signal(0);
     this._userToEdit = signal(null);
     this._availableRoles = signal([]);
     this._isAddingUser = signal(false);
@@ -73,6 +81,27 @@ export class UsersManagementPageComponent {
           },
         });
     });
+    effect(() => {
+      const nameFilter: string | null = this._nameFilter();
+      const roleFilter: ReadRoleResponse | null = this._roleFilter();
+      const emailFilter: string | null = this._emailFilter();
+      service
+        .readUsersCount(
+          nameFilter,
+          emailFilter,
+          roleFilter ? roleFilter.name : null,
+        )
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (count: number): void => {
+            this._totalCount.set(count);
+          },
+        });
+    });
+  }
+
+  public get totalCount(): number {
+    return this._totalCount();
   }
 
   public changeUserToEdit(user: ReadUserResponse | null): void {
@@ -119,6 +148,12 @@ export class UsersManagementPageComponent {
     this._nameFilter.set(name);
   }
 
+  public handleUserRemoved(user: ReadUserResponse): void {
+    const users: ReadUserResponse[] = this._users();
+    const filtered = users.filter((u) => u.id !== user.id);
+    this._users.set(filtered);
+  }
+
   public handleUserUpdated(user: UpdateUserProfileResult): void {
     const users: ReadUserResponse[] = this._users();
     const userIndex = users.findIndex((u) => u.id === user.userId);
@@ -138,6 +173,10 @@ export class UsersManagementPageComponent {
 
   public changeRoleFilter(role: ReadRoleResponse | null): void {
     this._roleFilter.set(role);
+  }
+
+  public get currentPage(): number {
+    return this._page();
   }
 
   public changePage(page: number): void {

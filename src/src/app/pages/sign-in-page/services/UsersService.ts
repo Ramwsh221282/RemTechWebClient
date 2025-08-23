@@ -37,6 +37,27 @@ export class UsersService {
     return this._httpClient.put<UpdateUserProfileResult>(requestUrl, request);
   }
 
+  public readUsersCount(
+    nameFilter?: string | null,
+    emailFilter?: string | null,
+    roleFilter?: string | null,
+  ): Observable<number> {
+    const requestUrl: string = `${this._apiUrl}/count`;
+    let params: HttpParams = new HttpParams();
+    if (nameFilter) params = params.set('nameFilter', nameFilter);
+    if (emailFilter) params = params.set('emailFilter', emailFilter);
+    if (roleFilter) params = params.set('roleFilter', roleFilter);
+    return this._httpClient.get<number>(requestUrl, {
+      params: params,
+    });
+  }
+
+  public removeUserProfile(id: string): Observable<any> {
+    const requestUrl: string = `${this._apiUrl}/profile`;
+    const params: HttpParams = new HttpParams().set('userId', id);
+    return this._httpClient.delete<any>(requestUrl, { params: params });
+  }
+
   public createUserByAdmin(
     email: string,
     name: string,
