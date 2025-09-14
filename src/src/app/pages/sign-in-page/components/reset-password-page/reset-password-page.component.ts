@@ -46,16 +46,22 @@ export class ResetPasswordPageComponent {
     const formValues = this.form.value;
     const login: string = formValues.login;
     const email: string = formValues.email;
-    if (!this.areInputsValid(login, email)) {
+    if (
+      StringUtils.isEmptyOrWhiteSpace(login) &&
+      StringUtils.isEmptyOrWhiteSpace(email)
+    ) {
       const error: string = 'Необходимо указать или email, или логин.';
       MessageServiceUtils.showError(this._messageService, error);
       return;
     }
-    if (!this.isEmailValid(email)) {
-      const error: string = 'Формат почты некорректный.';
-      MessageServiceUtils.showError(this._messageService, error);
-      return;
+    if (!StringUtils.isEmptyOrWhiteSpace(email)) {
+      if (StringUtils.isEmailValid(email) == false) {
+        const error: string = 'Формат почты некорректный.';
+        MessageServiceUtils.showError(this._messageService, error);
+        return;
+      }
     }
+
     this.requestResetPassword(login, email);
   }
 
